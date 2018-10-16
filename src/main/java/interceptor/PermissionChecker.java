@@ -26,7 +26,6 @@ public class PermissionChecker implements Interceptor {
     private static final String[] NOT_NEED_CHECK_URLS = new String[]{"/", "",
           //  "/perms/myaccount",
 
-
     };
     private static final String[] NOT_NEED_CHECK_FIRST_URLS = new String[]{
            // "/jfShopFind",

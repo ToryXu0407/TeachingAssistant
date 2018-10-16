@@ -3,11 +3,16 @@
 <html>
 <head>
     <script type="text/javascript" src="https://cdn-hangzhou.goeasy.io/goeasy.js"></script>
+    <link rel="stylesheet" href="../assets/js/kindeditor-4.1.7/themes/default/default.css"/>
+    <script type="text/javascript" src="../assets/js/kindeditor-4.1.7/kindeditor.js"></script>
+    <script type="text/javascript" src="../assets/js/kindeditor-4.1.7/kindeditor-all.js"></script>
+    <script type="text/javascript" src="../assets/js/kindeditor-4.1.7/kindeditor-all-min.js"></script>
+    <script type="text/javascript" src="../assets/js/kindeditor-4.1.7/kindeditor-min.js"></script>
     <script type="text/javascript">
         var goeasy = new GoEasy({
             appkey: 'BC-554a3c0772034f42bf753a901bb0b5b7',
-            userId:'123',
-            userData:'he is him'
+            userId:'${userid}',
+            userData:'${username}'
         });
         function chaxun() {
             goeasy.hereNow(
@@ -61,20 +66,24 @@
             },
             onMessage: function(message){
                 //收到消息的第一行，打出日志，以这个时间作为检查的标准
-                writeToScreen(message.content);
+                //如果不是本人发的，则显示到屏幕上
+                var username = message.content.split(":",1);
+                if(username!='${username}'){
+                    writeToScreen(message.content);
+                }
             }
         });
         function publishMessage() {
             var publishMessage = document.getElementById("content").value;
             goeasy.publish({
                 channel: 'letschat',
-                message: publishMessage,
+                message:  '${username}: '+publishMessage,
                 onFailed: function (error) {
                     alert(error.code+" : "+error.content);
                     writeToScreen('<span style="color:red;">系统出错啦</span>' + msg.data);
                 },
                 onSuccess: function(){
-                    writeToScreen(publishMessage);
+                    writeToScreen('${username}: '+publishMessage);
                     document.getElementById("content").value='';
                 }
             });
@@ -83,9 +92,38 @@
         function writeToScreen(message) {
             var pre = document.createElement("p");
             pre.style.wordWrap = "break-word";
-            pre.innerHTML = message;
+            var username = message.split(":",1);
+            //如果是本人发的，则放到对话框的邮编
+            if(username=='${username}'){
+                pre.style.setProperty('text-align','right');
+            }
+            pre.innerHTML =message;
             output.appendChild(pre);
         }
+        /*使用须知*/
+        var editor;
+        KindEditor.ready(function (K) {
+            editor = K.create('#content', {
+                allowFileManager: true,
+                resizeType: 1,
+                allowPreviewEmoticons: true,
+                allowImageUpload: true,
+                allowFileManage: true,
+                uploadJson: 'uploadImage',
+                imageSizeLimit: '1MB', //批量上传图片单张最大容量
+                imageUploadLimit: 10, //批量上传图片同时上传最多个数
+
+                // items: [
+                //     'source', '|', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+                //     'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+                //     'insertunorderedlist', '|', 'emoticons', 'image', 'multiimage', 'link']
+
+                items: [
+                    'source', '|', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+                    'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+                    'insertunorderedlist', 'lineheight', '|', 'emoticons', 'image', 'multiimage', 'link']
+            });
+        });
     </script>
 </head>
 <body>
@@ -96,8 +134,7 @@
 <br/>
 <div style="text-align: left;">
     <form action="">
-        <input id="content" name="message" value="" type="text"
-               style="width: 400px; height: 60px; border: 1px solid;"> <br />
+        <textarea id="content" name="content" style="width: 70%; height: 30%;"></textarea>
         <br /> <input onclick="publishMessage()" value="发送" type="button" />
     </form>
     <button onclick="chaxun()">查询</button>
