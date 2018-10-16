@@ -8,6 +8,7 @@
     <script type="text/javascript" src="../assets/js/kindeditor-4.1.7/kindeditor-all.js"></script>
     <script type="text/javascript" src="../assets/js/kindeditor-4.1.7/kindeditor-all-min.js"></script>
     <script type="text/javascript" src="../assets/js/kindeditor-4.1.7/kindeditor-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript">
         var goeasy = new GoEasy({
             appkey: 'BC-554a3c0772034f42bf753a901bb0b5b7',
@@ -52,7 +53,6 @@
 //当有客户端状态发生变化
                 onPresence: function (presenceEvents) {
                     var data = JSON.stringify(presenceEvents)
-                    console.log("agga" + presenceEvents);
                     alert('Presence:' + data);
                 }
             });
@@ -74,7 +74,9 @@
             }
         });
         function publishMessage() {
-            var publishMessage = document.getElementById("content").value;
+            editor.sync();
+            var publishMessage =$("#content").val();
+            alert(publishMessage);
             goeasy.publish({
                 channel: 'letschat',
                 message:  '${username}: '+publishMessage,
