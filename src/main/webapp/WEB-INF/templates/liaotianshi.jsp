@@ -131,7 +131,7 @@
 <body>
 <h2>聊天室</h2>
 <div
-        style="width: 400px; height: 260px; overflow: scroll; border: 1px solid;"
+        style="width: 1000px; height: 400px; overflow: scroll; border: 1px solid;"
         id="output"></div>
 <br/>
 <div style="text-align: left;">
