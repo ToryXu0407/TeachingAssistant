@@ -5,9 +5,6 @@
     <script type="text/javascript" src="https://cdn-hangzhou.goeasy.io/goeasy.js"></script>
     <link rel="stylesheet" href="../assets/js/kindeditor-4.1.7/themes/default/default.css"/>
     <script type="text/javascript" src="../assets/js/kindeditor-4.1.7/kindeditor.js"></script>
-    <script type="text/javascript" src="../assets/js/kindeditor-4.1.7/kindeditor-all.js"></script>
-    <script type="text/javascript" src="../assets/js/kindeditor-4.1.7/kindeditor-all-min.js"></script>
-    <script type="text/javascript" src="../assets/js/kindeditor-4.1.7/kindeditor-min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript">
         var goeasy = new GoEasy({
@@ -18,7 +15,7 @@
         function chaxun() {
             goeasy.hereNow(
                 {
-                    channels: ['letschat'], //要查询的channel 列表
+                    channels: ['1','2','3','4','5','6','7','8','9','10'], //要查询的channel 列表
                     includeUsers: true, //可选项，是否返回用户列表，默认false
                     distinct: true //可选项，是否过滤相同的userId，默认false
                 },
@@ -67,25 +64,26 @@
             onMessage: function(message){
                 //收到消息的第一行，打出日志，以这个时间作为检查的标准
                 //如果不是本人发的，则显示到屏幕上
-                var username = message.content.split(":",1);
-                if(username!='${username}'){
-                    writeToScreen(message.content);
+                var username = message.content.split("::",1);
+                if(username!="${username}"){
+                    writeToScreen('${username}'+"::"+message.content.split(":",0));
                 }
             }
         });
         function publishMessage() {
             editor.sync();
             var publishMessage =$("#content").val();
-            alert(publishMessage);
             goeasy.publish({
                 channel: 'letschat',
-                message:  '${username}: '+publishMessage,
+                name:'${username}',
+                fuck:"1",
+                message: '${username}:: '+publishMessage,
                 onFailed: function (error) {
-                    alert(error.code+" : "+error.content);
+                    alert(error.code+" :"+error.content);
                     writeToScreen('<span style="color:red;">系统出错啦</span>' + msg.data);
                 },
                 onSuccess: function(){
-                    writeToScreen('${username}: '+publishMessage);
+                    writeToScreen(publishMessage+'::${username}');
                     document.getElementById("content").value='';
                 }
             });
@@ -94,9 +92,9 @@
         function writeToScreen(message) {
             var pre = document.createElement("p");
             pre.style.wordWrap = "break-word";
-            var username = message.split(":",1);
+            var username = message.split("::",2)[1];
             //如果是本人发的，则放到对话框的邮编
-            if(username=='${username}'){
+            if(username=="${username}"){
                 pre.style.setProperty('text-align','right');
             }
             pre.innerHTML =message;
@@ -105,6 +103,7 @@
         /*使用须知*/
         var editor;
         KindEditor.ready(function (K) {
+
             editor = K.create('#content', {
                 allowFileManager: true,
                 resizeType: 1,

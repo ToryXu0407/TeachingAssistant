@@ -42,7 +42,8 @@ public class RegisterController extends BaseController {
 			Record record1 = Db.use("ta").findFirst("select * from ta_user where username= ? ",username);
 			if(record1!=null)
 			    throw new RuntimeException("用户名已存在!");
-			int id =Db.use("ta").save("ta_user", record);
+			Db.use("ta").save("ta_user", record);
+			record = Db.use("ta").findFirst("select max(id) from ta_user");
 			setSessionAttr(PermissionChecker.USER_ID, record.get("id"));
 			setSessionAttr(PermissionChecker.USER_USERNAME, username);
 			String type ="2";

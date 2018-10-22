@@ -13,7 +13,7 @@ import java.util.List;
 public class TestController extends Controller {
          
 	public void index(){
-		Long userid = getSessionAttr(PermissionChecker.USER_ID);
+		int userid = getSessionAttr(PermissionChecker.USER_ID);
 		String username = getSessionAttr(PermissionChecker.USER_USERNAME);
 		setAttr("userid", userid);
 		setAttr("username", username);
