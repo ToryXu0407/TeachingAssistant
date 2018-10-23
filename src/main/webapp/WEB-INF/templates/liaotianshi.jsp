@@ -67,8 +67,8 @@
             onMessage: function(message){
                 //收到消息的第一行，打出日志，以这个时间作为检查的标准
                 //如果不是本人发的，则显示到屏幕上
-                var username = message.content.split(":",1);
-                if(username!='${username}'){
+                var username = message.content.split("::",2)[1];
+                if(username!="${username}"){
                     writeToScreen(message.content);
                 }
             }
@@ -76,16 +76,15 @@
         function publishMessage() {
             editor.sync();
             var publishMessage =$("#content").val();
-            alert(publishMessage);
             goeasy.publish({
                 channel: 'letschat',
-                message:  '${username}: '+publishMessage,
+                message:  publishMessage+'::${username}',
                 onFailed: function (error) {
                     alert(error.code+" : "+error.content);
                     writeToScreen('<span style="color:red;">系统出错啦</span>' + msg.data);
                 },
                 onSuccess: function(){
-                    writeToScreen('${username}: '+publishMessage);
+                    writeToScreen('${username}:: '+publishMessage);
                     document.getElementById("content").value='';
                 }
             });
@@ -94,12 +93,14 @@
         function writeToScreen(message) {
             var pre = document.createElement("p");
             pre.style.wordWrap = "break-word";
-            var username = message.split(":",1);
+            var username = message.split("::",1)[0];
+            var content = message.split("::",2)[1];
             //如果是本人发的，则放到对话框的邮编
-            if(username=='${username}'){
+            if(username=="${username}"){
                 pre.style.setProperty('text-align','right');
-            }
-            pre.innerHTML =message;
+                pre.innerHTML =content+":"+username;
+            }else
+                pre.innerHTML =username+":"+content;
             output.appendChild(pre);
         }
         /*使用须知*/
