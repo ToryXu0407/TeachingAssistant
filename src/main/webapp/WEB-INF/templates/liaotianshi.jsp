@@ -3,13 +3,17 @@
 <html>
 <head>
     <script type="text/javascript" src="https://cdn-hangzhou.goeasy.io/goeasy.js"></script>
-    <link rel="stylesheet" href="../assets/js/kindeditor-4.1.7/themes/default/default.css"/>
-    <script type="text/javascript" src="../assets/js/kindeditor-4.1.7/kindeditor.js"></script>
-    <script type="text/javascript" src="../assets/js/kindeditor-4.1.7/kindeditor-all.js"></script>
-    <script type="text/javascript" src="../assets/js/kindeditor-4.1.7/kindeditor-all-min.js"></script>
-    <script type="text/javascript" src="../assets/js/kindeditor-4.1.7/kindeditor-min.js"></script>
+    <link rel="stylesheet" href="./assets/js/kindeditor-4.1.7/themes/default/default.css"/>
+    <script type="text/javascript" src="./assets/js/kindeditor-4.1.7/kindeditor.js"></script>
+    <script type="text/javascript" src="./assets/js/kindeditor-4.1.7/kindeditor-all.js"></script>
+    <script type="text/javascript" src="./assets/js/kindeditor-4.1.7/kindeditor-all-min.js"></script>
+    <script type="text/javascript" src="./assets/js/kindeditor-4.1.7/kindeditor-min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript">
+        function load()
+        {
+            dingyue();
+        }
         var goeasy = new GoEasy({
             appkey: 'BC-554a3c0772034f42bf753a901bb0b5b7',
             userId:'${userid}',
@@ -23,7 +27,11 @@
                     distinct: true //可选项，是否过滤相同的userId，默认false
                 },
                 function (response) {
-                    console.log(response);
+                    console.log("response:"+response);
+                    var data = response.content.channels.letschat.users;
+                    console.log("data:"+data);
+                    //查询到上线用户信息并显示出来
+                    getOnlineUser(data);
                 });
         }
         function quxiao() {
@@ -33,7 +41,7 @@
                 onSuccess: function () {
                     alert("取消订阅presence 成功.")
                 },
-//取消失败
+            //取消失败
                 onFailed: function (error) {
                     alert("取消订阅presence 失败.");
                 }
@@ -44,7 +52,7 @@
                 channel: 'letschat',
                 //订阅Presence 成功
                 onSuccess: function () {
-                    alert('Presence subscription success.');
+                    chaxun();
                 },
 //订阅Presence 失败
                 onFailed: function (error) {
@@ -52,8 +60,9 @@
                 },
 //当有客户端状态发生变化
                 onPresence: function (presenceEvents) {
-                    var data = JSON.stringify(presenceEvents)
-                    alert('Presence:' + data);
+                    console.log("presenceEvents:"+presenceEvents);
+                    var data = JSON.stringify(presenceEvents);
+                    chaxun();
                 }
             });
         }
@@ -84,8 +93,7 @@
                     writeToScreen('<span style="color:red;">系统出错啦</span>' + msg.data);
                 },
                 onSuccess: function(){
-                    writeToScreen('${username}:: '+publishMessage);
-                    document.getElementById("content").value='';
+                    writeToScreen(publishMessage+'::${username}');
                 }
             });
         }
@@ -93,8 +101,8 @@
         function writeToScreen(message) {
             var pre = document.createElement("p");
             pre.style.wordWrap = "break-word";
-            var username = message.split("::",1)[0];
-            var content = message.split("::",2)[1];
+            var username = message.split("::",2)[1];
+            var content = message.split("::",2)[0];
             //如果是本人发的，则放到对话框的邮编
             if(username=="${username}"){
                 pre.style.setProperty('text-align','right');
@@ -102,6 +110,18 @@
             }else
                 pre.innerHTML =username+":"+content;
             output.appendChild(pre);
+            editor.html("");
+        }
+        function getOnlineUser(message){
+            var pre = document.createElement("p");
+            pre.style.wordWrap = "break-word";
+            document.getElementById("onlineUsers").innerHTML='';
+            for(var i=0;i<message.length;i++){
+                pre = document.createElement("p");
+                var username = message[i].data;
+                pre.innerHTML =username;
+                onlineUsers.appendChild(pre);
+            }
         }
         /*使用须知*/
         var editor;
@@ -129,20 +149,31 @@
         });
     </script>
 </head>
-<body>
-<h2>聊天室</h2>
-<div
-        style="width: 1000px; height: 400px; overflow: scroll; border: 1px solid;"
-        id="output"></div>
+<body onload="load()">
+
+<div >
+    <div style="float: left;">
+        <h2>聊天室</h2>
+        <div
+                style="width: 1000px; height: 400px; overflow: scroll; border: 1px solid;"
+                id="output"></div>
+        <br/>
+    </div>
+    <div style="float: left;">
+        <h2>在线用户</h2>
+        <div
+                style="width: 200px; height: 400px; overflow: scroll; border: 1px solid;"
+                id="onlineUsers"></div>
+    </div>
+
+</div>
+
 <br/>
 <div style="text-align: left;">
     <form action="">
-        <textarea id="content" name="content" style="width: 70%; height: 30%;"></textarea>
+        <textarea id="content" name="content" style="width: 1000px; height: 30%;"></textarea>
         <br /> <input onclick="publishMessage()" value="发送" type="button" />
     </form>
-    <button onclick="chaxun()">查询</button>
-    <button onclick="dingyue()">订阅</button>
-    <button onclick="quxiao()">取消</button>
 </div>
 </body>
 </html>
