@@ -1,4 +1,7 @@
 package model;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.validation.constraints.NotNull;
 /**
  * @Author: toryxu
@@ -7,7 +10,11 @@ import javax.validation.constraints.NotNull;
  * @description Vue登录页面demo信息对象实体
  * @memo 备注信息
  */
-public class VueLoginInfoVo {
+@Setter
+@Getter
+public class UserInfo {
+    @NotNull(message="用户id不允许为空")
+    private int userid;
 
     @NotNull(message="用户名不允许为空")
     private String username;
@@ -15,21 +22,13 @@ public class VueLoginInfoVo {
     @NotNull(message="密码不允许为空")
     private String password;
 
-    public String getUsername() {
-        return username;
-    }
+    private int type;
 
-    public String getPassword() {
-        return password;
-    }
+    private String createTime;
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    private String headImage;
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    private String isTeacher;
 
 }
 

@@ -13,6 +13,7 @@ import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.activerecord.dialect.MysqlDialect;
 import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.render.ViewType;
+import interceptor.GlobalActionInterceptor;
 import interceptor.PermissionBuild;
 import interceptor.PermissionChecker;
 import interceptor.VisitLogInterceptor;
@@ -79,9 +80,10 @@ public class CoreConfig extends JFinalConfig {
 
 	@Override
 	public void configInterceptor(Interceptors me) {
-		me.add(new VisitLogInterceptor());
-		me.add(new PermissionChecker());
-		me.add(new PermissionBuild());
+		//me.add(new VisitLogInterceptor());
+		//me.add(new PermissionChecker());
+		//me.add(new PermissionBuild());
+		//me.add(new GlobalActionInterceptor());
 	}
 
 	@Override

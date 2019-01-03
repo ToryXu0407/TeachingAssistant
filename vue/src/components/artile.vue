@@ -1,9 +1,9 @@
 <template>
-      <ol>
+      <ul>
     <li v-for="article in articles">
-      {{ article.content }}
+      {{ article.label }}:{{ article.brief}}
     </li>
-  </ol>
+  </ul>
 </template>
 
 <script>
@@ -16,7 +16,7 @@ export default {
   },
 	methods: {
 		getArticle(){
-						this.$axios.post('index/getArticle')
+						this.$axios.post('article/getArticle')
 						.then((successResponse)=>{
 					this.responseResult = JSON.stringify(successResponse.data)
 					console.log(this.responseResult)

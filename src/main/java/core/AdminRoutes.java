@@ -1,6 +1,7 @@
 package core;
 
 import com.jfinal.config.Routes;
+import controller.ArticleController;
 import controller.LoginController;
 import controller.RegisterController;
 import controller.TestController;
@@ -9,8 +10,9 @@ public class AdminRoutes extends Routes {
 	
 	@Override
 	public void config() {
-		add("/student", TestController.class, "/");//测试路径
-		add("/register", RegisterController.class, "/");//测试路径
+		add("/student", TestController.class, "/");
+		add("/register", RegisterController.class, "/");
 		add("/", LoginController.class);
+		add("/article", ArticleController.class);
     }
 }

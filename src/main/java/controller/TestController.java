@@ -11,7 +11,7 @@ public class TestController extends Controller {
 		String username = getSessionAttr(PermissionChecker.USER_USERNAME);
 		setAttr("userid", userid);
 		setAttr("username", username);
-		render("liaotianshi.jsp");
+		render("index.jsp");
 	}
 
 }
