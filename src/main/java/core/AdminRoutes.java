@@ -1,10 +1,7 @@
 package core;
 
 import com.jfinal.config.Routes;
-import controller.ArticleController;
-import controller.LoginController;
-import controller.RegisterController;
-import controller.TestController;
+import controller.*;
 
 public class AdminRoutes extends Routes {
 	
@@ -14,5 +11,6 @@ public class AdminRoutes extends Routes {
 		add("/register", RegisterController.class, "/");
 		add("/", LoginController.class);
 		add("/article", ArticleController.class);
+		add("/post", PostController.class);
     }
 }

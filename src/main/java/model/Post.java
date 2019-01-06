@@ -1,32 +1,29 @@
 package model;
 
-import com.jfinal.plugin.activerecord.Model;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
  * @Author: toryxu
- * @Date: 2019/1/3 0003 14:29
+ * @Date: 2019/1/4 0004 17:00
  * @Version 1.0
- * 帖子
+ * 回帖内容
  */
-@Setter
 @Getter
-public class Article extends Model<Article> {
+@Setter
+public class Post {
+
+    private int postId;
 
     private int articleId;
 
     private int userId;
 
+    private int parentUserId;
+
     private String createTime;
 
     private String updateTime;
 
-    private String isSticky;
-
-    private String label;
-
     private String content;
-
-    private String brief;
 }
