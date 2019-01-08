@@ -1,6 +1,5 @@
 package model;
 
-import com.jfinal.plugin.activerecord.Model;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +11,7 @@ import lombok.Setter;
  */
 @Setter
 @Getter
-public class Article extends Model<Article> {
+public class Article {
 
     private int articleId;
 
@@ -29,4 +28,8 @@ public class Article extends Model<Article> {
     private String content;
 
     private String brief;
+
+    private String username;
+
+    private String headImage;
 }

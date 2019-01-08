@@ -13,6 +13,10 @@ public class ResultFactory {
         return buidResult(ResultCode.SUCCESS, "成功", data);
     }
 
+    public static Result buildSuccessArticleResult(Object data,long totalPage) {
+        return buidArticleResult(ResultCode.SUCCESS, "成功", data,totalPage);
+    }
+
     public static Result buildFailResult(String message) {
         return buidResult(ResultCode.FAIL, message, null);
     }
@@ -23,5 +27,13 @@ public class ResultFactory {
 
     public static Result buidResult(int resultCode, String message, Object data) {
         return new Result(resultCode, message, data);
+    }
+
+    public static Result buidArticleResult(ResultCode resultCode, String message, Object data,long totalPage) {
+        return buidArticleResult(resultCode.code, message, data,totalPage);
+    }
+
+    public static Result buidArticleResult(int resultCode, String message, Object data,long totalPage) {
+        return new Result(resultCode, message, data,totalPage);
     }
 }
