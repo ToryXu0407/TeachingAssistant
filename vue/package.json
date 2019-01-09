@@ -14,9 +14,14 @@
   },
   "dependencies": {
     "element-ui": "^2.4.11",
+    "http": "0.0.0",
+    "interceptor": "^0.1.4",
+    "interceptors": "^1.0.1",
     "vue": "^2.5.2",
-    "vue-concise-slider": "^3.3.7",
-    "vue-router": "^3.0.1"
+    "vue-concise-slider": "^3.3.8",
+    "vue-resource": "^1.5.1",
+    "vue-router": "^3.0.1",
+    "wangeditor": "^3.1.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

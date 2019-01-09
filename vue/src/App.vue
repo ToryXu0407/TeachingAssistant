@@ -1,28 +1,48 @@
 <template>
-	<div id="app">
-	<router-view>
-	</router-view>
-	</div>
+  <div id="app" class="app clearfix">
+    <input type="hidden" id="pdLogin" value="sdd"/>
+    <router-view :key="key"></router-view>
+  </div>
 </template>
 
-
-
 <script>
-	export default {
+// import statistics from 'http://static.snail.com/js/stone/v2/statistics_ty_v2.source.js'
+export default {
+  name: 'app',
+  computed: {
+    key () {
+      return this.$route.name !== undefined ? this.$route.name + +new Date() : this.$route + +new Date()
+    }
+  },
+  mounted () {
+    document.getElementById('pdLogin').value = 'false'
+    const s = document.createElement('script')
+    s.type = 'text/javascript'
+    s.src = 'http://static.snail.com/js/stone/v2/statistics_ty_v2.source.js'
+    document.body.appendChild(s)
+  },
+  created: function () {
+    var vm = this
 
-		data() {
-			return {
-				sel: ''
-			}
-		}
-	}
+    // vm.$http({
+    //   url: '//moment.snail.com/api/v1/user/info',
+    //   method: 'jsonp',
+    //   jsonp: 'callback',
+    //   emulateJSON: true,
+    //   headers: {
+    //     'Content-Type': 'x-www-from-urlencoded'
+    //   }
+    // }).then(function (res) {
+    //   if (res.data.code === 200) {
+    //     document.getElementById('pdLogin').value = 'true'
+    //   } else {
+    //     document.getElementById('pdLogin').value = 'false'
+    //   }
+    // })
+  }
+}
 </script>
 
-<style>
-	#app {
-		font-family: 'Avenir', Helvetica, Arial, sans-serif;
-		-webkit-font-smoothing: antialiased;
-		-moz-osx-font-smoothing: grayscale;
-		color: #2c3e50;
-	}
+<style >
+   @import './sass/stylesheets/SocialPublic.css'
 </style>

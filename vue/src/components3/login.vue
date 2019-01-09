@@ -15,7 +15,6 @@
          <span>忘记密码</span>
        </p>
     </div>
-  </div>  
 </template>
 
 <script>
@@ -45,7 +44,7 @@ export default {
 }).catch(failResponse => {})
     }
 },
-	
+
 }
 </script>
 <style>

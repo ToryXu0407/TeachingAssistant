@@ -1,40 +1,61 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '@/components/home'
-import Login from '@/components/login'
-import Header from '@/components/navheader'
-import Register from '@/components/register'
-import ArticleIndex from '@/components/articleIndex'
-import Base from '@/components/base'
+import Index from '@/Index'
+import SocialIndex from '@/SocialIndex'
+import SocialDetail from '@/SocialDetail'
+import SocialPost from '@/SocialPost'
 
 Vue.use(Router)
 
 export default new Router({
+  // mode: 'history',
+  // hashbang: false,
+  // history: false,
   routes: [
-		{
-			path:'/home',
-			name:'home',
-			component:Home
-		},
-		{
-		path:'/login',
-		name:'login',
-		component:Login
-		},
+    // {
+    //   path: '/',
+    //   name: 'index',
+    //   component: Index,
+    //   meta: {
+    //     title: '这是个圈子',
+    //     keepAlive: false
+    //   }
+    // },
     {
-      path:'/articleIndex',
-      name:'articleIndex',
-      component:ArticleIndex
+      path: '/index',
+      name: 'index',
+      component: Index,
+      meta: {
+        title: '这是个圈子',
+        keepAlive: false
+      }
     },
-		{
-			path:'/',
-			name:'base',
-			component:Base
-		},
-		{
-			path:'/register',
-			name:'reigster',
-			component:Register,
-		}
+    {
+      path: '/',
+      name: 'circle',
+      component: SocialIndex,
+      meta: {
+        title: '这是个圈子',
+        keepAlive: false
+      }
+    },
+    {
+      path: '/post/:circleId/:postId/:onPage',
+      name: 'post',
+      component: SocialDetail,
+      meta: {
+        title: '这是个圈子',
+        keepAlive: false
+      }
+    },
+    {
+      path: '/SocialPost/:circleId',
+      name: 'SocialPost',
+      component: SocialPost,
+      meta: {
+        title: '这是个圈子',
+        keepAlive: false
+      }
+    }
   ]
 })

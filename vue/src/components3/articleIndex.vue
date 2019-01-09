@@ -1,6 +1,9 @@
 <template>
   <div>
     <navheader class="navheader"></navheader>
+    <div class="SocialIndexHeader bgWhite" id="SocialIndexHeader">
+      <SocialIndexHeader></SocialIndexHeader>
+    </div>
     <div class="IndexList" id="IndexList">
       <div class="IndexListType clearfix" id="IndexListType">
         <div class="TypeTag fl">
@@ -15,12 +18,10 @@
         <ul>
           <li v-for="(list, i) in list" :data-listId="list.circle_id">
             <div class="Jitems">
-              <div class="Jitems-Name">
-                <img :src="list.headImage" class="qzicon fl"/>
-                <router-link class ="Qzname fl" :to="{ name: 'circle', params: {'circleId':list.circle_id}}" :title="list.circle_name" :circleId="list.circle_id">{{list.username}}</router-link>
-                <a href="javascript:;" class="Indexlist_join" @click="JoinQz(list.circle_id, i)" v-show="!list.circle_is_joined" wn_tj_click_href wn_tj_click_gameId wn_tj_click_excel="join_community" :wn_tj_click_id="list.circle_id"><img src="../images/icon3.png"/>加入</a>
-                <a href="javascript:;" class="Indexlist_ujoin" @click="QuitQz(list.circle_id, i)"  v-show="list.circle_is_joined"><span>已加入</span><span>退出</span></a>
-              </div>
+              <!--<div class="Jitems-Name">-->
+                <!--<img :src="list.headImage" class="qzicon fl"/>-->
+                <!--<router-link class ="Qzname fl" :to="{ name: 'circle', params: {'circleId':list.circle_id}}" :title="list.circle_name" :circleId="list.circle_id">{{list.username}}</router-link>-->
+              <!--</div>-->
               <div class="Jitems-Title">
                 <router-link :to="{ name: 'post', params: {'circleId':list.circle_id,'postId': list.id,'onPage':1}}" :title="list.title" :listId="list.id" wn_tj_click_href wn_tj_click_gameId wn_tj_click_excel="news_headlines" :wn_tj_click_id="list.id">{{list.label}}</router-link>
               </div>
@@ -93,11 +94,13 @@
 <script>
   import navheader from './navheader'
   import pagination from './pagination'
+  import SocialIndexHeader from './SocialIndexHeader'
   export default {
     name: 'articleIndex',
     components: {
       pagination: pagination,
-      navheader: navheader
+      navheader: navheader,
+      SocialIndexHeader: SocialIndexHeader
     },
     watch: {
       currentPage: 'requestData',

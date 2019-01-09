@@ -25,10 +25,25 @@ public class ArticleController extends BaseController{
     public void getArticle() {
         Result result;
         try {
+            int page=0,pagesize=10;
+            if(getParaToInt("page")!=null)
+                page = getParaToInt("page");
+            if(getParaToInt("pagesize")!=null)
+                pagesize = getParaToInt("pagesize");
+            String sql = "select * from ta_article ";
+            if(getPara("isSticky")!=null)
+                sql+=" where is_sticky='"+getPara("isSticky")+"'";
+            String orderSql=" order by create_time desc";
+            if(getPara("order")!=null) {
+                if (getPara("order").equals("hot"))
+                    //暂时把热门的定义为回帖量最多的，之后改成最近某段时间最多的
+                    orderSql = " order by comment_count desc";
+            }
+            sql +=orderSql+" limit ?,?";
+            List<Article> articles = new ArrayList<>();
             List<Record> records = Db.use("ta")
-                    .find("select * from ta_article order by create_time desc limit 0,10 ");
+                    .find(sql,page,pagesize);
             if (records.size() != 0) {
-                List<Article> articles = new ArrayList<>();
                 for (Record record : records) {
                     Article article = new Article();
                     article.setArticleId(record.getInt("article_id"));
@@ -38,9 +53,23 @@ public class ArticleController extends BaseController{
                     article.setLabel(record.getStr("label"));
                     article.setContent(record.getStr("content"));
                     article.setBrief(record.getStr("brief"));
+                    article.setViewCount(record.getInt("view_count"));
+                    article.setCommentCount(record.getInt("comment_count"));
+                    Record record1 = Db.use("ta").
+                            findFirst("select * from ta_user where id="+record.getInt("user_id"));
+                    article.setUsername(record1.getStr("username"));
+                    article.setHeadImage(record1.getStr("head_image"));
                     articles.add(article);
                 }
-                result = ResultFactory.buildSuccessResult(articles);
+                Record record = Db.use("ta")
+                        .findFirst("select count(*) as num from ta_article");
+                Long totalPage;
+                Long articleNum = record.getLong("num");
+                if(articleNum%10==0)
+                    totalPage = articleNum/10L;
+                else
+                    totalPage = articleNum/10L+1;
+                result = ResultFactory.buildSuccessArticleResult(articles,totalPage);
             }else
                 result = ResultFactory.buildSuccessResult(null);
         }catch(Exception e){
