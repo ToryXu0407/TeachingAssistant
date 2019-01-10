@@ -2,9 +2,9 @@
   <div class="PeoInfo bgWhite" id="PeoInfo" style="">
     <div class="onLogin">
       <div class="PeoInfo-Hd">
-         <img :src="isLogin === true ? info.photo : 'http://www.iplaystone.com/static/common/images/loginPic.png'"/>
+         <img :src="isLogin === true ? info.headImage : 'http://www.iplaystone.com/static/common/images/loginPic.png'"/>
       </div>
-      <a href="javascript:;" class="PeoInfo-Name" :title="info.nickname">{{isLogin === true ? info.nickname : '游客'}}</a>
+      <a href="javascript:;" class="PeoInfo-Name" :title="info.username">{{isLogin === true ? info.username : '游客'}}</a>
       <h6 :title="info.introduce">{{info.introduce}} </h6>
       <div class="span" v-if="false">
         <a class="home cur" href="javascript:;">
@@ -35,41 +35,52 @@ export default {
   },
   methods: {
     showMoreMyCircleBtn: function () {
+    },
+    getLoggedInfo(){
+      var vm = this
+      this.$axios.post('/getLoggedInfo')
+        .then((successResponse)=>{
+          this.responseResult = JSON.stringify(successResponse.data)
+          console.log(this.responseResult)
+          if (successResponse.data.code === 200) {
+            this.info = successResponse.data.data
+            console.log("info:"+this.info)
+            console.log(this.info.username)
+            this.isLogin = true
+          }
+        }).catch(failResponse => {})
     }
   },
   created: function () {
     var vm = this
-    vm.$http({
-      url: '//moment.snail.com/api/v1/user/info',
-      method: 'jsonp',
-      jsonp: 'callback',
-      emulateJSON: true,
-      headers: {
-        'Content-Type': 'x-www-from-urlencoded'
-      }
-    }).then(function (res) {
-      if (res.data.code === 200) {
-        this.info = res.data.info
-        this.isLogin = true
-      }
-    })
-    vm.$http({
-      url: '//moment.snail.com/api/v1/user/my-circles',
-      method: 'jsonp',
-      jsonp: 'callback',
-      emulateJSON: true,
-      headers: {
-        'Content-Type': 'x-www-from-urlencoded'
-      }
-    }).then(function (res) {
-      if (res.data.code === 200) {
-        this.myCircleListDetail = res.data.list
-        if (res.data.list.length < 7) {
-          document.getElementById('showMoreMyCircle').style.display = 'none'
-          document.getElementById('myCircleList').style.height = 'auto'
+    this.$axios.post('/getLoggedInfo')
+      .then((successResponse)=>{
+        this.responseResult = JSON.stringify(successResponse.data)
+        console.log(this.responseResult)
+        if (successResponse.data.code === 200) {
+          this.info = successResponse.data.data
+          console.log("info:"+this.info)
+          console.log(this.info.username)
+          this.isLogin = true
         }
-      }
-    })
+      }).catch(failResponse => {})
+    // vm.$http({
+    //   url: '//moment.snail.com/api/v1/user/my-circles',
+    //   method: 'jsonp',
+    //   jsonp: 'callback',
+    //   emulateJSON: true,
+    //   headers: {
+    //     'Content-Type': 'x-www-from-urlencoded'
+    //   }
+    // }).then(function (res) {
+    //   if (res.data.code === 200) {
+    //     this.myCircleListDetail = res.data.list
+    //     if (res.data.list.length < 7) {
+    //       document.getElementById('showMoreMyCircle').style.display = 'none'
+    //       document.getElementById('myCircleList').style.height = 'auto'
+    //     }
+    //   }
+    // })
   }
 }
 </script>

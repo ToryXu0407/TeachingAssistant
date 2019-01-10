@@ -43,6 +43,13 @@ public class LoginController extends BaseController {
 			if (userRecord == null) {
 				throw new RuntimeException("用户名/密码输入错误");
 			}
+			UserInfo userInfo = new UserInfo();
+			userInfo.setUsername(userRecord.getStr("username"));
+			userInfo.setType(userRecord.getInt("type"));
+			userInfo.setCreateTime(userRecord.get("create_time").toString());
+			userInfo.setHeadImage(userRecord.getStr("head_image"));
+			userInfo.setIsTeacher(userRecord.getStr("is_teacher"));
+			setSessionAttr(PermissionChecker.USER,userInfo);
 			setSessionAttr(PermissionChecker.USER_ID, userRecord.get("id"));
 			setSessionAttr(PermissionChecker.USER_USERNAME, username);
 			//每类用户对应一种权限，其实也没必要，因为每类用户跳转的页面都是不一样的
@@ -70,11 +77,12 @@ public class LoginController extends BaseController {
 		int userid;
 		String username;
 		if(getSessionAttr(PermissionChecker.USER_ID)!=null&&getSessionAttr(PermissionChecker.USER_USERNAME)!=null){
-			 userid = getSessionAttr(PermissionChecker.USER_ID);
+			userid = getSessionAttr(PermissionChecker.USER_ID);
 			username = getSessionAttr(PermissionChecker.USER_USERNAME);
-			UserInfo userInfo = new UserInfo();
-			userInfo.setUserid(userid);
-			userInfo.setUsername(username);
+			UserInfo userInfo = getSessionAttr(PermissionChecker.USER);
+//			UserInfo userInfo = new UserInfo();
+//			userInfo.setUserid(userid);
+//			userInfo.setUsername(username);
 			result = ResultFactory.buildSuccessResult(userInfo);
 		}
 		else{

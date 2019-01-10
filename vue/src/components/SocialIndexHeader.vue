@@ -16,14 +16,20 @@
           <!-- <img src="../images/icon.png"/>发起讨论 -->
         </div>
     </div>
+      <LoginPop v-show="showDialog" @on-cancel="closeLoginPop"></LoginPop>
   </div>
 </template>
 
 <script>
+  import LoginPop from './LoginPop.vue'
   export default {
     name: 'SocialIndexHeader',
+    components: {
+      LoginPop: LoginPop,
+    },
     data () {
       return {
+        showDialog:false,
         HdInfoData: {id: '1', name: '讨论社', descrption: '教学辅助网站论坛', icon: 'http://oss.yiqihappy.top/aa.jpg'}
       }
     },
@@ -32,8 +38,11 @@
     },
     methods: {
       ShowLoginPop: function () {
-        document.getElementById('login_pop').style.display = 'block'
-        document.getElementById('stone_mask').style.display = 'block'
+        this.showDialog = true;
+      },
+      closeLoginPop: function () {
+        this.showDialog = false;
+        this.$emit('refresh');
       },
       dataDetails: function () {
         this.joinText = '退出'
@@ -83,9 +92,12 @@
         })
       }
     },
-    created: function () {}
+    created: function () {
+
+    }
   }
 </script>
 <style scoped>
     @import '../sass/stylesheets/SocialIndexHeader.css';
+
 </style>

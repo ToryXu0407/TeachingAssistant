@@ -1,14 +1,14 @@
 <template>
   <div id="SocialIndex" class="SocialIndex">
      <div class="SocialIndexHeader bgWhite" id="SocialIndexHeader">
-        <SocialIndexHeader :HdInfoData.sync="HdInfoData" :isSiH.sync="isSiH"></SocialIndexHeader>
+        <SocialIndexHeader :HdInfoData.sync="HdInfoData" :isSiH.sync="isSiH"  @refresh="refresh"></SocialIndexHeader>
      </div>
      <div class="SocialIndexMain clearfix">
         <div class="MainList fl bgWhite">
             <SocialIndexList></SocialIndexList>
         </div>
         <div class="MainMoudle fr" id="MainMoudle">
-            <PeoInfo></PeoInfo>
+            <PeoInfo ref="myPeoInfo"></PeoInfo>
             <SocialIndexHot></SocialIndexHot>
             <span class="goTop cur" v-show="isGoTop" @click="goTop()"></span>
         </div>
@@ -46,6 +46,10 @@
       window.addEventListener('scroll', this.handleScroll)
     },
     methods: {
+      refresh(){
+        console.log("egtLoggedInfo")
+        this.$refs.myPeoInfo.getLoggedInfo();
+      },
       goTop: function () {
         var gotoTop = function () {
           var currentPosition = document.documentElement.scrollTop || document.body.scrollTop

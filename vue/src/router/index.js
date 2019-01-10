@@ -4,7 +4,6 @@ import Index from '@/Index'
 import SocialIndex from '@/SocialIndex'
 import SocialDetail from '@/SocialDetail'
 import SocialPost from '@/SocialPost'
-
 Vue.use(Router)
 
 export default new Router({
@@ -56,6 +55,8 @@ export default new Router({
         title: '这是个圈子',
         keepAlive: false
       }
-    }
+    },
+
+
   ]
 })

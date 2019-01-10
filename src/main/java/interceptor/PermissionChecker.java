@@ -21,6 +21,7 @@ public class PermissionChecker implements Interceptor {
     public static final String USER_ID = "USER_ID";
     public static final String USER_USERNAME = "USER_USERNAME";
     public static final String USER_TYPE = "USER_TYPE";
+    public static final String USER = "USER";
 
 
     private static final String[] NOT_NEED_CHECK_URLS = new String[]{"/", "",
