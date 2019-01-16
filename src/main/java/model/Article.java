@@ -13,7 +13,7 @@ import lombok.Setter;
 @Getter
 public class Article {
     //文章编号
-    private int articleId;
+    private int id;
 
     //用户编号
     private int userId;
@@ -47,4 +47,13 @@ public class Article {
 
     //回帖数
     private int commentCount;
+
+    //点赞数
+    private int voteCount;
+
+    //昵称
+    private String nickname;
+
+    //登陆用户是否已经点赞
+    private Boolean isVoted;
 }

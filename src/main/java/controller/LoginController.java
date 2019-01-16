@@ -44,6 +44,7 @@ public class LoginController extends BaseController {
 				throw new RuntimeException("用户名/密码输入错误");
 			}
 			UserInfo userInfo = new UserInfo();
+			userInfo.setNickname(userRecord.getStr("nickname"));
 			userInfo.setUsername(userRecord.getStr("username"));
 			userInfo.setType(userRecord.getInt("type"));
 			userInfo.setCreateTime(userRecord.get("create_time").toString());
@@ -74,19 +75,12 @@ public class LoginController extends BaseController {
 	@UnCheckLogin
 	public void getLoggedInfo() {
 		Result result;
-		int userid;
-		String username;
 		if(getSessionAttr(PermissionChecker.USER_ID)!=null&&getSessionAttr(PermissionChecker.USER_USERNAME)!=null){
-			userid = getSessionAttr(PermissionChecker.USER_ID);
-			username = getSessionAttr(PermissionChecker.USER_USERNAME);
 			UserInfo userInfo = getSessionAttr(PermissionChecker.USER);
-//			UserInfo userInfo = new UserInfo();
-//			userInfo.setUserid(userid);
-//			userInfo.setUsername(username);
 			result = ResultFactory.buildSuccessResult(userInfo);
 		}
 		else{
-            result = ResultFactory.buildSuccessResult(null);
+            result = ResultFactory.buildFailResult("无登陆信息");
         }
         renderJson(result);
 	}
@@ -94,7 +88,8 @@ public class LoginController extends BaseController {
 	public void logout(){
 		removeSessionAttr(PermissionChecker.USER_ID);
 		removeSessionAttr(PermissionChecker.USER_USERNAME);
-		redirect("/login");
+        Result result = ResultFactory.buildSuccessResult("注销成功!");
+        renderJson(result);
 	}
 
 }

@@ -4,7 +4,7 @@
       <div class="PeoInfo-Hd">
          <img :src="isLogin === true ? info.headImage : 'http://www.iplaystone.com/static/common/images/loginPic.png'"/>
       </div>
-      <a href="javascript:;" class="PeoInfo-Name" :title="info.username">{{isLogin === true ? info.username : '游客'}}</a>
+      <a href="javascript:;" class="PeoInfo-Name" :title="info.nickname">{{isLogin === true ? info.nickname : '游客'}}</a>
       <h6 :title="info.introduce">{{info.introduce}} </h6>
       <div class="span" v-if="false">
         <a class="home cur" href="javascript:;">
@@ -44,9 +44,11 @@ export default {
           console.log(this.responseResult)
           if (successResponse.data.code === 200) {
             this.info = successResponse.data.data
-            console.log("info:"+this.info)
-            console.log(this.info.username)
+            document.getElementById('pdLogin').value = 'true'
             this.isLogin = true
+          }else{
+            document.getElementById('pdLogin').value = 'false'
+            this.isLogin = false
           }
         }).catch(failResponse => {})
     }
@@ -55,32 +57,15 @@ export default {
     var vm = this
     this.$axios.post('/getLoggedInfo')
       .then((successResponse)=>{
-        this.responseResult = JSON.stringify(successResponse.data)
-        console.log(this.responseResult)
         if (successResponse.data.code === 200) {
-          this.info = successResponse.data.data
-          console.log("info:"+this.info)
-          console.log(this.info.username)
-          this.isLogin = true
+          vm.info = successResponse.data.data
+          console.log(vm.info.username)
+          document.getElementById('pdLogin').value = 'true'
+          vm.isLogin = true
+        }else{
+          document.getElementById('pdLogin').value = 'false'
         }
       }).catch(failResponse => {})
-    // vm.$http({
-    //   url: '//moment.snail.com/api/v1/user/my-circles',
-    //   method: 'jsonp',
-    //   jsonp: 'callback',
-    //   emulateJSON: true,
-    //   headers: {
-    //     'Content-Type': 'x-www-from-urlencoded'
-    //   }
-    // }).then(function (res) {
-    //   if (res.data.code === 200) {
-    //     this.myCircleListDetail = res.data.list
-    //     if (res.data.list.length < 7) {
-    //       document.getElementById('showMoreMyCircle').style.display = 'none'
-    //       document.getElementById('myCircleList').style.height = 'auto'
-    //     }
-    //   }
-    // })
   }
 }
 </script>

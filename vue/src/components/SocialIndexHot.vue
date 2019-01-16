@@ -6,10 +6,10 @@
     <div class="HotList clearfix">
       <ul>
         <li v-for="(list,temp) in list">
-           <router-link :to="{ name: 'post', params: {'circleId':list.article_id}}" :title="list.label" :listId="list.articleId" wn_tj_click_gameId wn_tj_click_href wn_tj_click_excel="hot_posts" :wn_tj_click_id="list.articleId">
+           <router-link :to="{ name: 'post', params: {'articleId':list.id,'onPage':1}}" :title="list.label" :listId="list.id">
             <i class="fl">{{temp+1}}</i>
             <span class="fl" :title="list.label">{{list.label}}</span>
-            <b class="fr">{{list.viewCount}}</b>
+            <b class="fr">{{list.commentCount}}</b>
           </router-link>
         </li>
       </ul>
@@ -28,7 +28,7 @@ export default {
   created: function () {
     const vm = this
     let params = new URLSearchParams();
-    params.append('page', 0);
+    params.append('page', 1);
     params.append('pagesize', 10);
     params.append('order',"hot");
     this.$axios.post('/article/getArticle', params)

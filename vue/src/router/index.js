@@ -39,7 +39,7 @@ export default new Router({
       }
     },
     {
-      path: '/post/:circleId/:postId/:onPage',
+      path: '/post/:articleId/:onPage',
       name: 'post',
       component: SocialDetail,
       meta: {
@@ -48,7 +48,7 @@ export default new Router({
       }
     },
     {
-      path: '/SocialPost/:circleId',
+      path: '/SocialPost/:articleId',
       name: 'SocialPost',
       component: SocialPost,
       meta: {

@@ -21,10 +21,10 @@
       </div>
       <div class="IndexListCont">
         <ul>
-          <li v-for="(list, i) in list" :data-listId="list.articleId" :name="list.articleId">
+          <li v-for="(list, i) in list" :data-listId="list.id" :name="list.id">
               <div class="Jitems">
                 <div class="Jitems-Title">
-                  <router-link :to="{ name: 'post', params: {'circleId':circleId,'postId': list.id,'onPage':1}}" :title="list.label" :listId="list.articleId">{{list.label}}</router-link>
+                  <router-link :to="{ name: 'post', params: {'articleId':list.id ,'onPage':0}}" :title="list.label" :listId="list.id">{{list.label}}</router-link>
                   <i class="icon-good" v-if="list.isSticky=='Y'" >精</i>
                 </div>
                 <!--<div class="Jitems-Detail" v-if="list.is_top != 1">-->
@@ -52,16 +52,16 @@
                 <!--</div>-->
                 <div class="Jitems-Info">
                     <div class="JuserInfo fl">
-                        <a href="javascript:;" class="JuserInfo-people default" :title="list.username">
+                        <a href="javascript:;" class="JuserInfo-people default" :title="list.nickname">
                             <img :src="list.headImage"/>
-                            {{list.username}}
+                            {{list.nickname}}
                         </a>
                         <span class="JuserInfo-time" :title="list.createTime">{{list.createTime}}</span>
                     </div>
-                    <router-link class="JdataInfo fr" :to="{ name: 'post', params: {'circleId':circleId,'postId': list.id,'onPage':1}}">
+                    <div class="JdataInfo fr">
                        <span class="Jview"><img src="../images/icon4.png"/>{{list.viewCount}}</span>
                        <span class="Jreply"><img src="../images/icon5.png"/>{{list.commentCount}}</span>
-                    </router-link>
+                    </div>
                 </div>
               </div>
           </li>
@@ -185,7 +185,7 @@ export default {
     ShowHtml: function (order, page) {
       const vm = this
       let params = new URLSearchParams();
-      params.append('page', 0);
+      params.append('page', page);
       params.append('pagesize', 10);
       params.append('order',order);
       if(this.tags===1){
@@ -204,17 +204,14 @@ export default {
     }
   },
   created: function () {
-    this.circleId = this.$route.params.circleId
-    // this.circleId = 8
     window.addEventListener('scroll', this.handleScroll)
     const vm = this
     let params = new URLSearchParams();
-    params.append('page', 0);
+    params.append('page', 1);
     params.append('pagesize',10);
     this.$axios.post('/article/getArticle',params)
       .then(function (res) {
         vm.list = res.data.data
-        console.log(vm.list)
         vm.all = res.data.totalPage
         if (res.data.totalPage === 0 || res.data.totalPage < 2) {
           vm.all = 1

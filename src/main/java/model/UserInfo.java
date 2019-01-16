@@ -22,6 +22,10 @@ public class UserInfo {
     @NotNull(message="密码不允许为空")
     private String password;
 
+//    昵称不能重复
+    @NotNull(message="昵称不允许为空")
+    private String nickname;
+
     private int type;
 
     private String createTime;

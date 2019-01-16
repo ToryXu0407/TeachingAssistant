@@ -47,8 +47,8 @@
     },
     methods: {
       refresh(){
-        console.log("egtLoggedInfo")
         this.$refs.myPeoInfo.getLoggedInfo();
+        this.$emit('refresh');
       },
       goTop: function () {
         var gotoTop = function () {
@@ -74,11 +74,11 @@
         if (this.scrolled > 1236) {
           this.isShow = true
           this.isGoTop = true
-          document.getElementById('SocialIndexRecommend').classList.add('fixed')
+         // document.getElementById('SocialIndexRecommend').classList.add('fixed')
           document.getElementById('MainMoudle').children[0].classList.add('hfixed')
         } else if (this.scrolled < 800) {
           document.getElementById('MainMoudle').children[0].classList.remove('hfixed')
-          document.getElementById('SocialIndexRecommend').classList.remove('fixed')
+         // document.getElementById('SocialIndexRecommend').classList.remove('fixed')
           this.isShow = false
           this.isGoTop = false
         }
@@ -93,27 +93,27 @@
     created: function () {
       this.circleId = this.$route.params.circleId
       window.addEventListener('scroll', this.handleScroll)
-      var vm = this
-      vm.$http({
-        url: '//moment.snail.com/api/v1/circle/info',
-        method: 'jsonp',
-        params: {
-          'circle_id': this.circleId
-        },
-        jsonp: 'callback',
-        emulateJSON: true,
-        headers: {
-          'Content-Type': 'x-www-from-urlencoded'
-        }
-      }).then(function (res) {
-        if (res.data.code === 200) {
-          this.HdInfoData = res.data.info
-          console.log(res.data)
-        } else if (res.data.code === 404) {
-          var url = 'http://stone.snail.com/error/404.html?from=circle&type=1'
-          window.location.href = url
-        }
-      })
+      // var vm = this
+      // vm.$http({
+      //   url: '//moment.snail.com/api/v1/circle/info',
+      //   method: 'jsonp',
+      //   params: {
+      //     'circle_id': this.circleId
+      //   },
+      //   jsonp: 'callback',
+      //   emulateJSON: true,
+      //   headers: {
+      //     'Content-Type': 'x-www-from-urlencoded'
+      //   }
+      // }).then(function (res) {
+      //   if (res.data.code === 200) {
+      //     this.HdInfoData = res.data.info
+      //     console.log(res.data)
+      //   } else if (res.data.code === 404) {
+      //     var url = 'http://stone.snail.com/error/404.html?from=circle&type=1'
+      //     window.location.href = url
+      //   }
+      // })
     }
   }
 </script>

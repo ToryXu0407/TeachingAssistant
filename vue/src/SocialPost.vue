@@ -7,39 +7,39 @@
           <input type="text" placeholder="请输入标题(～￣▽￣)～ " class="bgWhite" v-model="items.text" ref="count"/>
           <span>还可以输入<b>{{num}}</b>个字符</span>
         </div>
-        <div class="SPMT-Classify fl bgWhite">
-          <div class="SPMTC-Input cur" @click="showSelect()" :data-tagId="tagId"  :data-tagName="tagName">{{SelectInput}}</div>
-          <i :class="['rotatez',{'rotate': isSelect === false}]"></i>
-          <ul class="SPMTC-Select" v-show="isSelect">
-              <li v-for="(list, temp) in tags" :data-tagId="list.id" :title="list.name" @click="Choice(list.id, list.name)">{{list.name}}</li>
-          </ul>
-        </div>
+        <!--<div class="SPMT-Classify fl bgWhite">-->
+          <!--<div class="SPMTC-Input cur" @click="showSelect()" :data-tagId="tagId"  :data-tagName="tagName">{{SelectInput}}</div>-->
+          <!--<i :class="['rotatez',{'rotate': isSelect === false}]"></i>-->
+          <!--<ul class="SPMTC-Select" v-show="isSelect">-->
+              <!--<li v-for="(list, temp) in tags" :data-tagId="list.id" :title="list.name" @click="Choice(list.id, list.name)">{{list.name}}</li>-->
+          <!--</ul>-->
+        <!--</div>-->
       </div>
-      <div class="SPM-Tags" v-if="isTopsList"> 
-         <div class="TagsDiv clearfix">
-            <span class="addTags fl cur" @click="addTopics">添加话题</span>
-            <span class="addTagsTs fl" v-if="topicNum == 5"></span>
-            <div class="tagsBox fl">
-               <span class="J-tags" v-for="(list, temp) in topicsList" :data-id="list.id" v-if="list.isShow">
-                  {{list.name}}
-                  <i class="removeTags cur fr" @click="removeJtags(list.temp, list.id)"></i>
-               </span>
-            </div>
-            <span class="tagsTs fr">您还可以添加{{topicNum}}个话题</span>
-         </div>
-         <div class="TagsList" v-if="isTops">
-            <span class="closeTags cur" @click="closeTagsList"></span>
-            <ul class="TagsListItem">
-              <li  v-for="(list,temp) in topics" :data-topId="list.topic_id" :title="list.topic_name" @click="CurrentTop(temp, list.topic_id ,list.topic_name)" :class="['cur',{'active':list.isActive}]">{{list.topic_name}}</li>
-            </ul>
-         </div>
-      </div>
+      <!--<div class="SPM-Tags" v-if="isTopsList"> -->
+         <!--<div class="TagsDiv clearfix">-->
+            <!--<span class="addTags fl cur" @click="addTopics">添加话题</span>-->
+            <!--<span class="addTagsTs fl" v-if="topicNum == 5"></span>-->
+            <!--<div class="tagsBox fl">-->
+               <!--<span class="J-tags" v-for="(list, temp) in topicsList" :data-id="list.id" v-if="list.isShow">-->
+                  <!--{{list.name}}-->
+                  <!--<i class="removeTags cur fr" @click="removeJtags(list.temp, list.id)"></i>-->
+               <!--</span>-->
+            <!--</div>-->
+            <!--<span class="tagsTs fr">您还可以添加{{topicNum}}个话题</span>-->
+         <!--</div>-->
+         <!--<div class="TagsList" v-if="isTops">-->
+            <!--<span class="closeTags cur" @click="closeTagsList"></span>-->
+            <!--<ul class="TagsListItem">-->
+              <!--<li  v-for="(list,temp) in topics" :data-topId="list.topic_id" :title="list.topic_name" @click="CurrentTop(temp, list.topic_id ,list.topic_name)" :class="['cur',{'active':list.isActive}]">{{list.topic_name}}</li>-->
+            <!--</ul>-->
+         <!--</div>-->
+      <!--</div>-->
       <div class="SPM-Editor">
         <div id="editorElem" style="text-align:left"></div>
       </div>
       <div class="SPM-Operation">
          <!--  <span class="wordnum fl">还可以输入999字符</span> -->
-        <span class="PostHtml cur fr animation" id="PostHtml"  wn_tj_click_gameId wn_tj_click_href wn_tj_click_excel="posts" :wn_tj_click_id="circleId">发表</span>
+        <span class="PostHtml cur fr animation" id="PostHtml">发表</span>
         <span class="errts fr" id="errts" v-show="errts">{{errtsText}}</span>
       </div>
     </div>
@@ -71,7 +71,7 @@
       return {
         tags: [],
         topics: [],
-        circleId: '',
+        articleId: '',
         title: '',
         content: '',
         tag: '',
@@ -171,87 +171,92 @@
       getContent: function (text) { // 发送评论
         var _this = this
         document.getElementsByClassName('w-e-text')[0].blur()
-        if (this.title !== '' && text !== '' && this.tagId !== '') {
+        if (this.title !== '' && text !== '') {
           document.getElementById('errts').style.display = 'none'
-          // this.postHtml(this.circleId, this.title, this.editorContent, this.tagId)
-          _this.postHtml(this.circleId, this.title, text, this.tagId)
+          // this.postHtml(this.articleId, this.title, this.editorContent, this.tagId)
+          _this.postHtml(this.articleId, this.title, text)
         } else {
           document.getElementById('errts').style.display = 'inline-block'
           document.getElementById('errts').innerHTML = '请填写相关选项'
         }
         // if (text !== '') {
-        //   _this.postHtml(this.circleId, this.title, text, this.tagId)
+        //   _this.postHtml(this.articleId, this.title, text, this.tagId)
         // }
       },
-      postHtml: function (circleId, title, text, tag) {
+      postHtml: function (articleId, title, text) {
         var vm = this
-        var tid = this.topicsId
-        if (tid) {
-          tid = tid.join(',')
-        } else {
-          tid = ''
-        }
-        vm.$http.post('//moment.snail.com/api/v1/post/circle-post', {
-          circle_id: circleId,
-          topics: tid,
-          tag: tag,
-          content: text,
-          title: title
-        },
-        {emulateJSON: true}).then((res) => {
-          if (res.data.code === 200) {
-            this.errts = false
-            this.$router.push({name: 'circle', params: { circleId: this.circleId }})
-          } else {
-            document.getElementById('errts').style.display = 'inline-block'
-            document.getElementById('errts').innerHTML = res.data.message
-          }
-        }, (error) => { console.log(error) })
+        let params = new URLSearchParams();
+        params.append('content', text);
+        params.append('label', title);
+        this.$axios.post('/article/updateArticle',params)
+          .then((successResponse)=>{
+            if (successResponse.data.code === 200) {
+              //登陆成功
+              console.log("发帖成功");
+              this.$router.push({name: 'circle'})
+            }
+          }).catch(failResponse => {})
+        // vm.$http.post('//moment.snail.com/api/v1/post/circle-post', {
+        //   articleId: articleId,
+        //   topics: tid,
+        //   tag: tag,
+        //   content: text,
+        //   title: title
+        // },
+        // {emulateJSON: true}).then((res) => {
+        //   if (res.data.code === 200) {
+        //     this.errts = false
+        //     this.$router.push({name: 'circle', params: { articleId: this.articleId }})
+        //   } else {
+        //     document.getElementById('errts').style.display = 'inline-block'
+        //     document.getElementById('errts').innerHTML = res.data.message
+        //   }
+        // }, (error) => { console.log(error) })
       }
     },
     created: function () {
-      this.circleId = this.$route.params.circleId
-      var vm = this
-      vm.$http({
-        url: '//moment.snail.com/api/v1/circle/private-tags',
-        method: 'jsonp',
-        params: {
-          'circle_id': this.circleId
-        },
-        jsonp: 'callback',
-        emulateJSON: true,
-        headers: {
-          'Content-Type': 'x-www-from-urlencoded'
-        }
-      }).then(function (res) {
-        this.tags = res.data.tags
-      })
-      vm.$http({
-        url: '//moment.snail.com/api/v1/circle/get-topics',
-        method: 'jsonp',
-        params: {
-          'circle_id': this.circleId
-        },
-        jsonp: 'callback',
-        emulateJSON: true,
-        headers: {
-          'Content-Type': 'x-www-from-urlencoded'
-        }
-      }).then(function (res) {
-        if (res.body.code === 200) {
-          if (res.body.topics.length === 0 || res.body.topics.length === 1) {
-            this.isTopsList = false
-            if (res.body.topics.length === 1) {
-              this.topicsId.push('' + res.body.topics[0].topic_id + '')
-            }
-          } else {
-            for (let i in res.body.topics) {
-              res.body.topics[i]['isActive'] = false
-            }
-            this.topics = res.body.topics
-          }
-        }
-      })
+      // this.articleId = this.$route.params.articleId
+      // var vm = this
+      // vm.$http({
+      //   url: '//moment.snail.com/api/v1/circle/private-tags',
+      //   method: 'jsonp',
+      //   params: {
+      //     'circle_id': this.articleId
+      //   },
+      //   jsonp: 'callback',
+      //   emulateJSON: true,
+      //   headers: {
+      //     'Content-Type': 'x-www-from-urlencoded'
+      //   }
+      // }).then(function (res) {
+      //   this.tags = res.data.tags
+      // })
+      // vm.$http({
+      //   url: '//moment.snail.com/api/v1/circle/get-topics',
+      //   method: 'jsonp',
+      //   params: {
+      //     'circle_id': this.articleId
+      //   },
+      //   jsonp: 'callback',
+      //   emulateJSON: true,
+      //   headers: {
+      //     'Content-Type': 'x-www-from-urlencoded'
+      //   }
+      // }).then(function (res) {
+      //   if (res.body.code === 200) {
+      //     if (res.body.topics.length === 0 || res.body.topics.length === 1) {
+      //       this.isTopsList = false
+      //       if (res.body.topics.length === 1) {
+      //         this.topicsId.push('' + res.body.topics[0].topic_id + '')
+      //       }
+      //     } else {
+      //       for (let i in res.body.topics) {
+      //         res.body.topics[i]['isActive'] = false
+      //       }
+      //       this.topics = res.body.topics
+      //     }
+      //   }
+      // })
     },
     mounted () {
       var editor = new E('#editorElem')

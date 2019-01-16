@@ -3,13 +3,13 @@
      <div class="MainList fl" id="MainList">
         <div class="ListPage Page-Top bgWhite">
             <pagination :cur.sync="cur" :all.sync="all" :isJump.sync="isJump"  @listen="monitor"></pagination>
-            <router-link class="goBack cur"  :to="{ name: 'circle', params: {'circleId':circleId}}" wn_tj_click_href wn_tj_click_gameId wn_tj_click_excel="previous_page" wn_tj_click_id><img src="./images/icon14.png"/>返回{{HdInfoData.name}}</router-link>
+            <router-link class="goBack cur"  :to="{ name: 'circle'}" wn_tj_click_href wn_tj_click_gameId wn_tj_click_excel="previous_page" wn_tj_click_id><img src="./images/icon14.png"/>返回讨论社</router-link>
         </div>
         <div class="ListCont">
             <div class="Jtitle bgWhite" id="Jtitle">
-                <h5 class="textOverFlow" :data-tzId="DetailLandlord.id" :title="DetailLandlord.title">{{DetailLandlord.title}}</h5>
-                <span :class="['icon-gf',{'none':DetailLandlord.is_official == 0}]" title="官方" v-if="DetailLandlord.is_official !== 0">官方</span>
-                <span :class="['icon-top',{'none':DetailLandlord.is_top == 0}]" v-if="DetailLandlord.is_top !== 0" title="置顶">置顶</span>
+                <h5 class="textOverFlow" :data-tzId="DetailLandlord.id" :title="DetailLandlord.label">{{DetailLandlord.label}}</h5>
+                <!--<span :class="['icon-gf',{'none':DetailLandlord.is_official == 0}]" title="官方" v-if="DetailLandlord.is_official !== 0">官方</span>-->
+                <!--<span :class="['icon-top',{'none':DetailLandlord.is_top == 0}]" v-if="DetailLandlord.is_top !== 0" title="置顶">置顶</span>-->
                 <span class="icon-good" v-for="tags in DetailLandlord.public_tags" :title="tags.name" :class="tags.mark">{{tags.text}}</span>
                 <div class="Jtitle-Moudle fr">
                     <span @click="onLandlord(1)" :class="{onLandlord:DetailLandlord.onLandlord === true}">只看楼主</span>
@@ -22,33 +22,34 @@
                     <div class="Jitems">
                       <div class="JitemsLeft fl">
                         <div class="J-UserInfo">
-                           <div class="J-UserInfo-Pic"><img :src="DetailLandlord.user_photo" :alt="DetailLandlord.user_nickname"/></div>
-                           <span class="J-UserInfo-Name textOverFlow" :title="DetailLandlord.user_nickname">{{DetailLandlord.user_nickname}}</span>
+                           <div class="J-UserInfo-Pic"><img :src="DetailLandlord.headImage" :alt="DetailLandlord.nickname"/></div>
+                           <span class="J-UserInfo-Name textOverFlow" :title="DetailLandlord.nickname">{{DetailLandlord.nickname}}</span>
                            <span class="J-UserInfo-adminCall" v-show="DetailLandlord.is_post_by_admin">管理员</span>
                         </div>
                       </div>
                       <div class="JitemsRight fr">
                           <div class="J-TextCont" v-html="DetailLandlord.content"></div>
-                          <div :class="['J-ClickUp',{'J-On' : DetailLandlord.is_voted === true}]" @click="ListVote(DetailLandlord.id)" wn_tj_click_href wn_tj_click_gameId wn_tj_click_excel="praise_starter" :wn_tj_click_id="DetailLandlord.id">
+                          <div :class="['J-ClickUp',{'J-On' : DetailLandlord.isVoted === true}]" @click="ListVote(DetailLandlord.id)">
                               <p></p>
-                              <p>{{DetailLandlord.lick_count}}</p>
+                              <p>{{DetailLandlord.voteCount}}</p>
                           </div>
                           <div class="J-Modle clearfix">
                               <div class="J-Modle-Hd">
-                                  <div class="Hd-Floor fl"><span>楼主</span>{{DetailLandlord.created_at}}</div>
+                                  <div class="Hd-Floor fl"><span>楼主</span>{{DetailLandlord.createTime}}</div>
                                   <div class="Hd-Moudle fr">
                                     <ol>
-                                       <li v-if="DetailLandlord.is_admin">
-                                           <span class="PostManagement" @click="showPostManage()">帖子管理<i :class="{'rotate':isPostManage === true}"></i></span>
-                                           <div class="adminlist" v-show="isPostManage">
-                                              <p class="cur" @click="isAdmin(0)" id="isTop">{{DetailLandlord.is_top == 0 ? '置顶':'取消置顶'}}</p>
-                                              <p class="cur" @click="isAdmin(1)">{{DetailLandlord.public_tags === undefined || DetailLandlord.public_tags.length === 0 ? '加精' : '取消加精'}}</p>
-                                              <p class="cur" @click="isAdmin(4)" v-if="DetailLandlord.auth_level == 1">{{DetailLandlord.is_official == 0 ? '设为官方贴':'取消官方贴'}}</p>
-                                              <p class="cur" @click="isAdmin(5)" v-if="DetailLandlord.auth_level == 1 && DetailLandlord.is_faq == true && DetailLandlord.is_faq_setup === false">设为FAQ</p>
-                                           </div>
-                                       </li>
-                                       <li v-show="DetailLandlord.delete_private"><span class="Hd-Moudle-Del" @click="isAdmin(2)">删除</span></li>  
-                                       <li v-show="!DetailLandlord.delete_private" v-if="false"><span class="Hd-Moudle-Report">举报</span></li>
+                                      <!--管理员的置顶加精设为官方贴，因为管理员在新的一个项目，因此这里注释，论坛功能直接移植并加上管理员功能-->
+                                       <!--<li v-if="DetailLandlord.is_admin">-->
+                                           <!--<span class="PostManagement" @click="showPostManage()">帖子管理<i :class="{'rotate':isPostManage === true}"></i></span>-->
+                                           <!--<div class="adminlist" v-show="isPostManage">-->
+                                              <!--<p class="cur" @click="isAdmin(0)" id="isTop">{{DetailLandlord.is_top == 0 ? '置顶':'取消置顶'}}</p>-->
+                                              <!--<p class="cur" @click="isAdmin(1)">{{DetailLandlord.public_tags === undefined || DetailLandlord.public_tags.length === 0 ? '加精' : '取消加精'}}</p>-->
+                                              <!--<p class="cur" @click="isAdmin(4)" v-if="DetailLandlord.auth_level == 1">{{DetailLandlord.is_official == 0 ? '设为官方贴':'取消官方贴'}}</p>-->
+                                              <!--<p class="cur" @click="isAdmin(5)" v-if="DetailLandlord.auth_level == 1 && DetailLandlord.is_faq == true && DetailLandlord.is_faq_setup === false">设为FAQ</p>-->
+                                           <!--</div>-->
+                                       <!--</li>-->
+                                       <!--<li v-show="DetailLandlord.delete_private"><span class="Hd-Moudle-Del" @click="isAdmin(2)">删除</span></li>-->
+                                       <!--<li v-show="!DetailLandlord.delete_private" v-if="false"><span class="Hd-Moudle-Report">举报</span></li>-->
                                        <li @click="goBottom()"><span class="Hd-Moudle-Reply">回复</span></li>
                                     </ol>
                                   </div>
@@ -57,14 +58,14 @@
                       </div>
                     </div>
                 </li>
-                 <li :class="['clearfix bgWhite ListContUlLi',{'isSelf':list.is_self === true}]" v-for="(list , temp) in DetailList" :data-listId="list.id" v-if="list.is_display" :name="list.id">
+                 <li :class="['clearfix bgWhite ListContUlLi',{'isSelf':list.is_self === true}]" v-for="(list , temp) in DetailList" :data-listId="list.id" v-if="true" :name="list.id">
                     <a :name="list.id"></a>
                     <img src="./images/lz.png" class="user-lz" v-show="list.is_owner"/>
                     <div class="Jitems">
                       <div class="JitemsLeft fl">
                         <div class="J-UserInfo">
-                           <div class="J-UserInfo-Pic"><img :src="list.user_photo" :alt="list.user_nickname"/></div>
-                           <span class="J-UserInfo-Name textOverFlow" :title="list.user_nickname" :data-userid="list.user_id">{{list.user_nickname}}</span>
+                           <div class="J-UserInfo-Pic"><img :src="list.headImage" :alt="list.nickname"/></div>
+                           <span class="J-UserInfo-Name textOverFlow" :title="list.nickname" :data-userid="list.userId">{{list.nickname}}</span>
                            <span class="J-UserInfo-adminCall" v-show="list.is_post_by_admin">管理员</span>
                         </div>
                       </div>
@@ -72,61 +73,60 @@
                           <div class="J-TextCont" v-html="list.content"></div>
                           <div class="J-Modle clearfix">
                               <div class="J-Modle-Hd">
-                                  <div class="Hd-Floor fl"><span>{{list.position}}楼</span>{{list.created_at}}</div>
+                                  <div class="Hd-Floor fl"><span>{{list.position}}楼</span>{{list.createTime}}</div>
                                   <div class="Hd-Moudle fr">
                                     <ol>
-                                       <li v-show="list.delete_private" @click="isAdmin(3, list.id)"><span class="Hd-Moudle-Del">删除</span></li>  
+                                       <li v-show="list.delete_private" @click="isAdmin(3, list.id)"><span class="Hd-Moudle-Del">删除</span></li>
                                        <li v-show="!list.delete_private" v-if="false"><span class="Hd-Moudle-Report">举报</span></li>
-                                       <li v-if="true">
-                                          <span class="Hd-Moudle-Reply" v-show="list.isReplay" @click="ShowMoudleList(temp, list.reply_num, list.id)">回复<b v-if="list.reply_num > 0">（{{list.reply_num}}）</b></span>
-                                          <span class="Hd-Moudle-Reply" v-show="!list.isReplay" @click="HideMoudleList(temp)">收起回复<b v-if="list.reply_num > 0">（{{list.reply_num}}）</b></span>
+                                       <li>
+                                          <span class="Hd-Moudle-Reply" v-show="list.isReplay" @click="ShowMoudleList(temp, list.replyNum, list.id)">回复<b v-if="list.replyNum > 0">（{{list.replyNum}}）</b></span>
+                                          <span class="Hd-Moudle-Reply" v-show="!list.isReplay" @click="HideMoudleList(temp)">收起回复<b v-if="list.replyNum > 0">（{{list.replyNum}}）</b></span>
                                        </li>
-                                       <li><span :class="['Hd-Moudle-Praise',{'Hd-Moudle-Praise-On' : list.is_voted === true}]" @click="CommentVote(list.id, temp, list.is_voted)" wn_tj_click_href wn_tj_click_gameId wn_tj_click_excel="praise_responder" :wn_tj_click_id="DetailLandlord.id">{{list.like_num}}</span></li>
                                     </ol>
                                   </div>
                               </div>
                               <div class="J-Moudle-List" v-show="!list.isReplay">
                                   <div class="J-Moudle-List-Cont clearfix">
-                                       <ul class="J-Moudle-List-Cont-Ul"  v-if="list.reply_num > 0">
-                                          <li class="J-Moudle-List-Cont-Li" v-for="(Mlist, Mtemp) in list.replies" :data-repliesId="Mlist.id">
+                                       <ul class="J-Moudle-List-Cont-Ul"  v-if="list.replyNum > 0">
+                                          <li class="J-Moudle-List-Cont-Li" v-for="(Mlist, Mtemp) in list.replies">
                                               <div class="Jmoude-items clearfix">
-                                                  <div class="Jmoude-items-Pic fl"><img :src="Mlist.user_photo" :alt="Mlist.user_nickname"/></div>
+                                                  <div class="Jmoude-items-Pic fl"><img :src="Mlist.headImage" :alt="Mlist.nickname"/></div>
                                                   <div class="Jmoude-items-Cont fr">
                                                     <div class="Jmoudle-items-h5">
-                                                        <span><a href="javascript:;" :data-hfrId="Mlist.user_id">{{Mlist.user_nickname}}：</a><b style="float:left">{{ Mlist.to_user_id !== Mlist.comment_user_id ? '回复' : '' }} </b><a href="javascript:;" v-if="Mlist.to_user_id != Mlist.comment_user_id" :data-atrId="Mlist.to_user_id" class="twouser" >{{Mlist.to_user_nickname}}：</a>{{Mlist.content}}</span>
+                                                        <span><a href="javascript:;">{{Mlist.nickname}}：</a><b style="float:left">{{ Mlist.toUserId !== Mlist.userId ? '回复' : '' }} </b><a href="javascript:;"  class="twouser" v-if="Mlist.toUserId !== Mlist.userId">{{Mlist.toUserNickName}}：</a>{{Mlist.content}}</span>
                                                     </div>
                                                     <div class="Jmoudle-items-info">
-                                                        <span class="fl">{{Mlist.created_at}}</span>
-                                                        <span class="fr cur" :data-userId="(Mlist.user_id)" :data-commentUserId="(Mlist.comment_user_id)" @click="JMoudleReply(Mlist.id, Mlist.comment_id, Mlist.user_nickname, temp, $event, list.id)">回复</span>
+                                                        <span class="fl">{{Mlist.createTime}}</span>
+                                                        <span class="fr cur"  @click="JMoudleReply(list.userId, Mlist.userId, Mlist.nickname,temp, $event, list.id)">回复</span>
                                                     </div>
-                                                  </div>     
+                                                  </div>
                                               </div>
                                           </li>
                                        </ul>
                                        <div class="J-Moudle-List-Cont-Jet">
-                                            <span class="J-Moudle-List-More fl cur" v-show="list.reply_num > 5 && list.more === true" @click="showMore(list.id, 1, 10, temp)">查看更多</span>
-                                            <div class="J-Moudle-Page fl" v-show="list.reply_num > 5 && list.more === false">
-                                                <ul>   
-                                                    <li><a :class="setButtonClass(0,temp)" @click="prvePage(list.current,list.id,temp)"><img src="./images/prev.png" alt="<"/></a></li>   
-                                                    <li v-for="(flag,i) in list.allpage"  :class="[{ active: list.current === flag },{point:flag < 1}]" :data-flag="flag" :data-cur="list.current">   
-                                                        <a @click="btnClick(flag,temp,list.id)">{{ flag < 1 ? "..." : flag }}</a>  
-                                                    </li>   
-                                                    <li class="next"><a :class="setButtonClass(1,temp)" @click="nextPage(list.current,list.all,list.id,temp)"><img src="./images/next.png" alt=">"/></a></li>   
-                                                </ul> 
+                                            <span class="J-Moudle-List-More fl cur" v-show="list.replyNum > 5 && list.more === true" @click="showMore(list.id, 1, 10, temp)">查看更多</span>
+                                            <div class="J-Moudle-Page fl" v-show="list.replyNum > 5 && list.more === false">
+                                                <ul>
+                                                    <li><a :class="setButtonClass(0,temp)" @click="prvePage(list.current,list.id,temp)"><img src="./images/prev.png" alt="<"/></a></li>
+                                                    <li v-for="(flag,i) in list.allpage"  :class="[{ active: list.current === flag },{point:flag < 1}]" :data-flag="flag" :data-cur="list.current">
+                                                        <a @click="btnClick(flag,temp,list.id)">{{ flag < 1 ? "..." : flag }}</a>
+                                                    </li>
+                                                    <li class="next"><a :class="setButtonClass(1,temp)" @click="nextPage(list.current,list.all,list.id,temp)"><img src="./images/next.png" alt=">"/></a></li>
+                                                </ul>
                                             </div>
-                                            <div class="J-Moudle-Mebtn fr cur" :data-listId="list.id" :data-listUserId="list.user_id" @click="JReply(list.id, temp)">我也说一句</div>
+                                            <div class="J-Moudle-Mebtn fr cur" :data-listId="list.id"  :data-listUserId="list.user_id" @click="JReply(list.id, temp)">我也说一句</div>
                                        </div>
                                   </div>
                                   <div class="J-Moudle-List-Input" v-show="list.isMoudleListInput">
                                       <div class="J-Moudle-List-Input-Box">
-                                          <input type="text" :placeholder="list.UserNickName" :id="'J'+list.id" maxLength="150" autofocus="autofocus"/>
+                                          <input type="text" :placeholder="list.nickname" :id="'J'+list.id" maxLength="150" autofocus="autofocus"/>
                                       </div>
                                       <div class="J-Moudle-List-Input-Set">
                                           <div class="J-M-l-I-S-Icon cur fl" v-if="false">
                                               <img src="./images/icon13.png"/>
                                               <div class="Icon-List none"></div>
                                           </div>
-                                          <span class="J-M-L-Btn cur fr" @click="postComment(list.id, temp)" wn_tj_click_href wn_tj_click_gameId wn_tj_click_excel="reply_responder" :wn_tj_click_id="list.id">发表</span>
+                                          <span class="J-M-L-Btn cur fr" @click="postComment(list.id, temp)">发表</span>
                                       </div>
                                       <!--Login Mask-->
                                       <div class="loginMask" v-if="!isLogin">
@@ -145,17 +145,17 @@
             </ul>
         </div>
         <div class="ListPage Page-Bootom">
-            <pagination :cur.sync="cur" :all.sync="all" :isJump.sync="isJump"  @listen="monitor"></pagination>  
-            <router-link class="goBack cur"  :to="{ name: 'circle', params: {'circleId':circleId}}" wn_tj_click_href wn_tj_click_gameId wn_tj_click_excel="previous_page" wn_tj_click_id><img src="./images/icon14.png"/>返回{{HdInfoData.name}}</router-link>
+            <pagination :cur.sync="cur" :all.sync="all" :isJump.sync="isJump"  @listen="monitor"></pagination>
+          <router-link class="goBack cur"  :to="{ name: 'circle'}" wn_tj_click_href wn_tj_click_gameId wn_tj_click_excel="previous_page" wn_tj_click_id><img src="./images/icon14.png"/>返回讨论社</router-link>
         </div>
         <div class="LidtEditor bgWhite" id="LidtEditor">
           <div class="Editor">
             <div id="editorElem" style="text-align:left">
             </div>
             <span class="errts" id="postErrts" v-show="iSerrts"></span>
-            <span class="PostHtml cur" @click="" wn_tj_click_href wn_tj_click_gameId wn_tj_click_excel="reply_starter" :wn_tj_click_id="DetailLandlord.id" id="PostHtml">发表</span>
+            <span class="PostHtml cur" @click="" id="PostHtml">发表</span>
           </div>
-          <div class="loginMask" v-if="!isLogin">
+          <div class="loginMask" v-show="!isLogin">
              <p>游客不能回复哦~</p>
              <div class="loginMaskBox">
                 <a href="javascript:;" @click="detailLogin()">登录</a>
@@ -166,15 +166,15 @@
         </div>
      </div>
      <div class="MainMoudle fr" id="MainMoudle">
-        <SocialIndexHeader :HdInfoData.sync="HdInfoData" :isSiH.sync="isSiH" id="MainMoudle"></SocialIndexHeader>
+        <PeoInfo ref="myPeoInfo"></PeoInfo>
         <SocialIndexHot></SocialIndexHot>
-        <SocialIndexRecommend id ="SocialIndexRecommend"></SocialIndexRecommend>
+        <!--<SocialIndexRecommend id ="SocialIndexRecommend"></SocialIndexRecommend>-->
         <span class="goTop cur" v-show="isGoTop" @click="goTop()"></span>
      </div>
-     <rulePop :isPopInfo="isPopInfo" :DetailLandlord="DetailLandlord" :cur="cur" @abc="delComment"></rulePop>
+     <!--<rulePop :isPopInfo="isPopInfo" :DetailLandlord="DetailLandlord" :cur="cur" @abc="delComment"></rulePop>-->
      <div class="divmask a" v-show="isPostManageMask" @click="closeMask"></div>
+    <LoginPop v-show="showDialog" @on-cancel="closeLoginPop"></LoginPop>
   </div>
-
 </template>
 
 <script>
@@ -186,11 +186,15 @@
   import pagination from './components/pagination.vue'
   import rulePop from './components/rulePop.vue'
   import E from 'wangeditor'
+  import PeoInfo from "./components/PeoInfo";
+  import LoginPop from './components/LoginPop'
   // import statistics from 'http://static.snail.com/js/stone/v2/statistics_ty_v2.source.js'
 
   export default {
     name: 'SocialDetail',
     components: {
+      LoginPop: LoginPop,
+      PeoInfo:PeoInfo,
       SocialIndexHeader: SocialIndexHeader,
       SocialIndexAdmin: SocialIndexAdmin,
       SocialIndexHot: SocialIndexHot,
@@ -229,6 +233,8 @@
       return {
         circleId: '',
         postId: '',
+        showDialog:false,
+        articleId:'',
         HdInfoData: {},
         DetailLandlord: [],
         DetailList: [],
@@ -240,7 +246,8 @@
         listId: '',
         userId: '',
         content: '',
-        username: '',
+        headImage:'',
+        nickname: '',
         isOne: true,
         isOnLandlord: 0,
         editorContent: '',
@@ -260,12 +267,18 @@
     },
     methods: {
       ShowLoginPop: function () {
-        document.getElementById('login_pop').style.display = 'block'
-        document.getElementById('stone_mask').style.display = 'block'
+        this.showDialog = true;
+      },
+      closeLoginPop: function () {
+        if (document.getElementById('pdLogin').value === 'true') {
+          this.isLogin = true;
+        }
+        this.showDialog = false;
+        this.$refs.myPeoInfo.getLoggedInfo();
       },
       detailLogin: function () {
         if (document.getElementById('pdLogin').value === 'true') {
-
+          this.isLogin = true;
         } else {
           this.ShowLoginPop()
         }
@@ -316,11 +329,11 @@
         if (this.scrolled > windheight + 250) {
           this.isShow = true
           this.isGoTop = true
-          document.getElementById('SocialIndexRecommend').classList.add('fixed2')
+          // document.getElementById('SocialIndexRecommend').classList.add('fixed2')
           document.getElementById('MainMoudle').children[0].classList.add('hfixed')
         } else if (this.scrolled < 800) {
           document.getElementById('MainMoudle').children[0].classList.remove('hfixed')
-          document.getElementById('SocialIndexRecommend').classList.remove('fixed2')
+          // document.getElementById('SocialIndexRecommend').classList.remove('fixed2')
           this.isShow = false
           this.isGoTop = false
         }
@@ -343,25 +356,46 @@
           // console.log(_this.editor.txt.html())
         }
       },
+      getPost: function(){
+        let params = new URLSearchParams();
+        const vm = this;
+        params.append('articleId', this.$route.params.articleId);
+        params.append('page', this.cur);
+        this.$axios.post('/post/getPostsByArticleId',params)
+          .then(function (res) {
+            vm.DetailList = res.data.data
+            vm.all = res.data.totalPage
+            if (res.data.totalPage === 0) {
+              vm.all = 1
+            }
+            if (vm.cur > 1) {
+              vm.isOne = false // 第二页 楼主不显示
+            } else {
+              vm.isOne = true
+            }
+          })
+      },
       postHtml: function (postId, editorContent) {
-        // console.log(editorContent)
+         console.log(editorContent)
         var vm = this
-        vm.$http.post('//moment.snail.com/api/v1/comment/comment', {
-          post_id: postId,
-          content: editorContent
-        },
-        {emulateJSON: true}).then((res) => {
-          if (res.data.code === 200) {
-            this.monitor(this.all)
-            document.getElementById('postErrts').style.display = 'none'
-            document.getElementsByClassName('w-e-text')[0].innerHTML = '<p><br/></p>'
-            this.editorContent = 'no'
-            this.goBottom()
-          } else {
-            document.getElementById('postErrts').style.display = 'inline-block'
-            document.getElementById('postErrts').innerHTML = res.data.message
-          }
-        }, (error) => { console.log(error) })
+        let params = new URLSearchParams();
+        params.append('articleId', this.$route.params.articleId);
+        params.append("content",editorContent);
+        this.$axios.post('/post/updatePost',params)
+          .then((res)=>{
+            if (res.data.code === 200) {
+              this.monitor(this.all)
+                  document.getElementById('postErrts').style.display = 'none'
+                  document.getElementsByClassName('w-e-text')[0].innerHTML = '<p><br/></p>'
+                  this.editorContent = 'no'
+                  this.goBottom()
+                  this.getPost();
+            } else {
+              alert("回帖失败!");
+              //var url = 'http://stone.snail.com/error/404.html?from=circle&type=1&circleId=' + this.circleId
+              //window.location.href = url
+            }
+          })
       },
       goBottom: function () {
         const windheight = document.documentElement.scrollHeight
@@ -411,7 +445,7 @@
         this.cur = data
         this.LoadHtml(data, this.isOnLandlord)
         if (data > 1) {
-          this.isOne = false // 第二页 楼主不现实
+          this.isOne = false // 第二页 楼主不显示
         } else {
           this.isOne = true
         }
@@ -421,27 +455,32 @@
         this.DetailList[temp]['isReplay'] = false
         this.DetailList[temp]['UserNickName'] = ''
         this.DetailList[temp]['listId'] = commentUserId
-        this.DetailList[temp]['userId'] = ''
+        //修改值来完成重新加载组件的功能
+        let t = this.DetailList[temp]['userId']
+        this.DetailList[temp]['userId'] = '1'
+        this.DetailList[temp]['userId'] = t
       },
       HideMoudleList: function (temp) { // 关闭评论列表
         this.DetailList[temp]['isReplay'] = true
         this.DetailList[temp]['UserNickName'] = ''
         this.DetailList[temp]['isMoudleListInput'] = false
+        let t = this.DetailList[temp]['userId']
+        this.DetailList[temp]['userId'] = '1'
+        this.DetailList[temp]['userId'] = t
       },
-      JMoudleReply: function (userId, commentUserId, userNickName, temp, event, id) { // 回复
+      JMoudleReply: function (userId, commentUserId, userNickName,temp, event, id) { // 回复
+        console.log("list.id:"+id+":commentUserId:"+commentUserId)
         if (document.getElementById('pdLogin').value === 'true') {
           this.DetailList[temp]['isMoudleListInput'] = true
-          this.DetailList[temp]['UserNickName'] = '回复：' + userNickName
-          this.DetailList[temp]['listId'] = commentUserId
-          this.DetailList[temp]['userId'] = userId
+          this.DetailList[temp]['listId'] = id
+          this.DetailList[temp]['toUserId'] = commentUserId
+          //需要修改控件值来进行控件的重新加载
+          var t =  this.DetailList[temp]['userId']
+          this.DetailList[temp]['userId'] = 1
+          this.DetailList[temp]['userId'] = t
           setTimeout(function () {
             document.getElementById('J' + id).focus()
           }, 200)
-          // console.log(event.currentTarget.getBoundingClientRect().top)
-          // console.log(document.documentElement.scrollTop)
-          // var top = 0
-          // top = document.documentElement.scrollTop + event.currentTarget.getBoundingClientRect().top - 400
-          // window.scrollTo(0, top)
         } else {
           this.ShowLoginPop()
         }
@@ -450,141 +489,90 @@
         this.DetailList[temp]['isMoudleListInput'] = true
         this.DetailList[temp]['UserNickName'] = ''
         this.DetailList[temp]['listId'] = commentUserId
-        this.DetailList[temp]['userId'] = ''
+        var t =  this.DetailList[temp]['userId']
+        this.DetailList[temp]['userId'] = 1
+        this.DetailList[temp]['userId'] = t
         setTimeout(function () {
           document.getElementById('J' + commentUserId).focus()
         }, 200)
       },
-      CommentVote: function (commentId, temp, isVote) { // 评论投票
-        if (document.getElementById('pdLogin').value === 'true') {
-          var vm = this
-          vm.$http({
-            url: '//moment.snail.com/api/v1/comment/vote',
-            method: 'jsonp',
-            params: {
-              'comment_id': commentId
-            },
-            jsonp: 'callback',
-            emulateJSON: true,
-            headers: {
-              'Content-Type': 'x-www-from-urlencoded'
-            }
-          }).then(function (res) {
-            if (res.body.operation === 'minus') {
-              this.DetailList[temp]['is_voted'] = false
-              this.DetailList[temp]['like_num'] = this.DetailList[temp]['like_num'] - 1
-            } else if (res.body.operation === 'plus') {
-              this.DetailList[temp]['is_voted'] = true
-              this.DetailList[temp]['like_num'] = this.DetailList[temp]['like_num'] + 1
-            }
-          })
-        } else {
-          this.ShowLoginPop()
-        }
-      },
-      ListVote: function (PostId) { // 楼主贴投票
-        if (document.getElementById('pdLogin').value === 'true') {
-          var vm = this
-          vm.$http({
-            url: '//moment.snail.com/api/v1/post/vote',
-            method: 'jsonp',
-            params: {
-              'post_id': PostId
-            },
-            jsonp: 'callback',
-            emulateJSON: true,
-            headers: {
-              'Content-Type': 'x-www-from-urlencoded'
-            }
-          }).then(function (res) {
-            this.RefreshHdInfo()
-          })
-        } else {
-          this.ShowLoginPop()
-        }
+      ListVote: function (articleId) { // 楼主贴投票
+         if (document.getElementById('pdLogin').value === 'true') {
+           var vm = this
+           var params = new URLSearchParams();
+           params.append('articleId', articleId);
+           this.$axios.post('/article/vote',params)
+           .then(function (res) {
+             if(res.data.code === 200)
+               vm.RefreshHdInfo();
+           })
+         }else{
+           this.ShowLoginPop()
+         }
       },
       LoadHtml: function (data, flag) { // 刷新HTML 只看楼主
         var vm = this
-        vm.$http({
-          url: '//moment.snail.com/api/v1/comment/list',
-          method: 'jsonp',
-          params: {
-            'post_id': this.postId,
-            'page': data,
-            'only_owner': flag
-          },
-          jsonp: 'callback',
-          emulateJSON: true,
-          headers: {
-            'Content-Type': 'x-www-from-urlencoded'
-          }
-        }).then(function (res) {
-          for (var i in res.data.list) {
-            res.data.list[i]['UserNickName'] = ''
-            res.data.list[i]['isMoudleListInput'] = false
-            res.data.list[i]['more'] = true
-            if (res.data.list[i].reply_num > 0) {
-              res.data.list[i]['isReplay'] = false
-            } else {
-              res.data.list[i]['isReplay'] = true
-            }
-            if (res.data.list[i].replies !== undefined) {
-              if (res.data.list[i].replies.length > 0) {
-                res.data.list[i].replies = res.data.list[i].replies.splice(0, 5)
+        var params = new URLSearchParams();
+        params.append('articleId', this.$route.params.articleId);
+        params.append('page', data);
+        params.append('only_owner',flag)
+        this.$axios.post('/post/getPostsByArticleId',params)
+          .then(function (res) {
+            vm.DetailList = res.data.data
+            vm.all = res.data.totalPage
+            for (var i in res.data.data) {
+              res.data.data[i]['UserNickName'] = ''
+              res.data.data[i]['isMoudleListInput'] = false
+              res.data.data[i]['more'] = true
+              if (res.data.data[i].replyNum > 0) {
+                res.data.data[i]['isReplay'] = false
+              } else {
+                res.data.data[i]['isReplay'] = true
+              }
+              if (res.data.data[i].replies !== undefined) {
+                if (res.data.data[i].replies.length > 0) {
+                  res.data.data[i].replies = res.data.data[i].replies.splice(0, 5)
+                }
               }
             }
-          }
-          this.DetailList = res.data.list
-          this.all = res.data.totalPage
-          if (res.data.totalPage === 0) {
-            this.all = 1
-          }
-        })
+            if (res.data.totalPage === 0) {
+              vm.all = 1
+            }
+            if (vm.cur > 1) {
+              vm.isOne = false // 第二页 楼主不显示
+            } else {
+              vm.isOne = true
+            }
+          })
       },
       RefreshHdInfo: function () { // 刷新楼主投票
         var vm = this
-        vm.$http({
-          url: '//moment.snail.com/api/v1/post/detail-of-circle-post',
-          method: 'jsonp',
-          params: {
-            'post_id': this.postId
-          },
-          jsonp: 'callback',
-          emulateJSON: true,
-          headers: {
-            'Content-Type': 'x-www-from-urlencoded'
-          }
-        }).then(function (res) {
-          if (res.data.code === 200) {
-            this.DetailLandlord = res.data.info
-            this.DetailLandlord['onLandlord'] = false
-          } else if (res.data.code === 404) {
-            var url = 'http://stone.snail.com/error/404.html?from=circle&type=1&circleId=' + this.circleId
-            window.location.href = url
-          }
-        })
+        let params = new URLSearchParams();
+        params.append('id', this.$route.params.articleId);
+        this.$axios.post('/article/getArticleById',params)
+          .then((res)=>{
+            if (res.data.code === 200) {
+              this.DetailLandlord = res.data.data
+              this.DetailLandlord['onLandlord'] = false
+            } else if (res.data.code === 404) {
+              //var url = 'http://stone.snail.com/error/404.html?from=circle&type=1&circleId=' + this.circleId
+              //window.location.href = url
+            }
+          })
       },
       showMore: function (commentid, page, pagesize, temp) { // 显示评论列表
-        var _this = this
-        _this.$http({
-          url: '//moment.snail.com/api/v1/reply/list',
-          method: 'jsonp',
-          params: {
-            'comment_id': commentid,
-            'page': page,
-            'pagesize': pagesize
-          },
-          jsonp: 'callback',
-          emulateJSON: true,
-          headers: {
-            'Content-Type': 'x-www-from-urlencoded'
-          }
-        }).then(function (res) {
-          if (res.body.code === 200) {
-            _this.DetailList[temp]['replies'] = res.body.list
-            _this.DetailList[temp]['current'] = page
-            _this.DetailList[temp]['more'] = false
-            _this.DetailList[temp]['allpage'] = res.body.totalPage
+        var vm = this
+        let params = new URLSearchParams();
+        params.append('postId', commentid);
+        params.append('page', page);
+        params.append('pagesize', pagesize);
+        this.$axios.post('/post/getPostsByParentPostId',params)
+        .then(function (res) {
+          if (res.data.code === 200) {
+              vm.DetailList[temp]['replies'] = res.data.data
+              vm.DetailList[temp]['current'] = page
+              vm.DetailList[temp]['more'] = false
+              vm.DetailList[temp]['allpage'] = res.data.totalPage
           }
         })
       },
@@ -620,30 +608,28 @@
           return this.DetailList[index].current <= 1 ? 'page-button-disabled' : ''
         }
       },
+      //其实id不传也没事，可以从temp中取
       postComment: function (id, temp) { // 发表评论
-        var vm = this
-        var content = document.getElementById('J' + id).value
-        if (!content) return
-        vm.$http({
-          url: '//moment.snail.com/api/v1/reply/reply',
-          method: 'jsonp',
-          params: {
-            comment_id: this.DetailList[temp].listId,
-            to_reply_id: this.DetailList[temp].userId,
-            content: content
-          },
-          jsonp: 'callback',
-          emulateJSON: true,
-          headers: {
-            'Content-Type': 'x-www-from-urlencoded'
-          }
-        }).then(function (res) {
-          if (res.data.code === 200) {
-            this.showMore(id, 1, 10, temp)
-            document.getElementById('J' + id).value = ''
-            this.DetailList[temp].reply_num = this.DetailList[temp].reply_num + 1
-          }
-        })
+         var vm = this
+         var content = document.getElementById('J' + id).value
+         if (!content) return
+        let params = new URLSearchParams();
+        params.append('articleId', this.$route.params.articleId);
+        params.append("parentPostId",id)
+        params.append("toUserId",this.DetailList[temp]['toUserId'])
+        params.append("userId",this.DetailList[temp]['userId']);
+        params.append("content",content);
+        this.$axios.post('/post/updatePost',params)
+          .then((res)=>{
+            if (res.data.code === 200) {
+              //this.monitor(this.all)
+              document.getElementById('J' + id).value = ''
+              this.editorContent = 'no'
+              this.getPost();
+            } else {
+              alert("回帖失败!");
+            }
+          })
       }
     },
     computed: {
@@ -677,100 +663,57 @@
       }
     },
     created: function () {
-      this.postId = this.$route.params.postId
-      this.circleId = this.$route.params.circleId
+      const vm = this
+      // this.postId = this.$route.params.postId
+      // this.circleId = this.$route.params.circleId
       this.cur = this.$route.params.onPage
       window.addEventListener('scroll', this.handleScroll)
-      var vm = this
-      vm.$http({
-        url: '//moment.snail.com/api/v1/circle/info',
-        method: 'jsonp',
-        params: {
-          'circle_id': this.circleId
-        },
-        jsonp: 'callback',
-        emulateJSON: true,
-        headers: {
-          'Content-Type': 'x-www-from-urlencoded'
-        }
-      }).then(function (res) {
-        this.HdInfoData = res.data.info
-      })
-      vm.$http({
-        url: '//moment.snail.com/api/v1/user/info',
-        method: 'jsonp',
-        jsonp: 'callback',
-        emulateJSON: true,
-        headers: {
-          'Content-Type': 'x-www-from-urlencoded'
-        }
-      }).then(function (res) {
+      let params = new URLSearchParams();
+      params.append('id', this.$route.params.articleId);
+      this.$axios.post('/article/getArticleById',params)
+        .then((res)=>{
         if (res.data.code === 200) {
-          this.isLogin = true
-        } else {
-          this.isLogin = false
+          vm.DetailLandlord = res.data.data
+          vm.DetailLandlord['onLandlord'] = false
         }
       })
-      vm.$http({
-        url: '//moment.snail.com/api/v1/post/detail-of-circle-post',
-        method: 'jsonp',
-        params: {
-          'post_id': this.postId
-        },
-        jsonp: 'callback',
-        emulateJSON: true,
-        headers: {
-          'Content-Type': 'x-www-from-urlencoded'
-        }
-      }).then(function (res) {
-        if (res.data.code === 200) {
-          res.data.info.public_tags_length = res.data.info.public_tags.length
-          this.DetailLandlord = res.data.info
-          // console.log(this.DetailLandlord)
-          this.DetailLandlord['onLandlord'] = false
-        } else if (res.data.code === 404) {
-          var url = 'http://stone.snail.com/error/404.html?from=circle&type=1&circleId=' + this.circleId
-          window.location.href = url
-        }
-      })
-      vm.$http({
-        url: '//moment.snail.com/api/v1/comment/list',
-        method: 'jsonp',
-        params: {
-          'post_id': this.postId,
-          'page': this.cur,
-          'only_owner': 0
-        },
-        jsonp: 'callback',
-        emulateJSON: true,
-        headers: {
-          'Content-Type': 'x-www-from-urlencoded'
-        }
-      }).then(function (res) {
-        for (var i in res.data.list) {
-          res.data.list[i]['UserNickName'] = ''
-          res.data.list[i]['isMoudleListInput'] = false
-          res.data.list[i]['more'] = true
-          if (res.data.list[i].reply_num > 0) {
-            res.data.list[i]['isReplay'] = false
-          } else {
-            res.data.list[i]['isReplay'] = true
+      this.$axios.post('/getLoggedInfo')
+        .then((successResponse)=>{
+          if (successResponse.data.code === 200) {
+            this.HdInfoData = successResponse.data.data
+            this.isLogin = true
           }
-          if (res.data.list[i].replies !== undefined) {
-            if (res.data.list[i].replies.length > 0) {
-              res.data.list[i].replies = res.data.list[i].replies.splice(0, 5)
+        }).catch(failResponse => {})
+      params = new URLSearchParams();
+      params.append('articleId', this.$route.params.articleId);
+      params.append('page', this.cur);
+      this.$axios.post('/post/getPostsByArticleId',params)
+        .then(function (res) {
+          vm.DetailList = res.data.data
+          console.log("userId:"+res.data.data[0].userId)
+          for (var i in res.data.data) {
+            res.data.data[i]['UserNickName'] = ''
+            res.data.data[i]['isMoudleListInput'] = false
+            res.data.data[i]['more'] = true
+            if (res.data.data[i].replyNum > 0) {
+              res.data.data[i]['isReplay'] = false
+            } else {
+              res.data.data[i]['isReplay'] = true
+            }
+            if (res.data.data[i].replies !== undefined) {
+              if (res.data.data[i].replies.length > 0) {
+                res.data.data[i].replies = res.data.data[i].replies.splice(0, 5)
+              }
             }
           }
-        }
-        this.DetailList = res.data.list
-        this.all = res.data.totalPage
+        vm.all = res.data.totalPage
         if (res.data.totalPage === 0) {
-          this.all = 1
+          vm.all = 1
         }
-        if (this.cur > 1) {
-          this.isOne = false // 第二页 楼主不显示
+        if (vm.cur > 1) {
+          vm.isOne = false // 第二页 楼主不显示
         } else {
-          this.isOne = true
+          vm.isOne = true
         }
       })
     },
@@ -860,6 +803,7 @@
       var _this = this
       document.getElementById('PostHtml').addEventListener('click', function () {
         this.editorContent = editor.txt.html()
+        console.log(this.editorContent)
         _this.getContent(editor.txt.html())
         // console.log('1')
       })

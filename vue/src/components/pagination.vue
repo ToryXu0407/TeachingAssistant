@@ -1,13 +1,13 @@
 <template>
-  <div class="PageBar" id="PageBar">   
-    <ul>   
-      <li><a :class="setButtonClass(0)" @click="prvePage(curIndex)"><img src="../images/prev.png" alt="<"/></a></li>   
-      <li v-for="(index,i) in indexs"  :class="[{ active: curIndex == index },{point:index < 1}]">   
-        <a @click="btnClick(index)">{{ index < 1 ? "..." : index }}</a>  
-      </li>   
-      <li class="next"><a :class="setButtonClass(1)" @click="nextPage(curIndex)"><img src="../images/next.png" alt=">"/></a></li>   
+  <div class="PageBar" id="PageBar">
+    <ul>
+      <li><a :class="setButtonClass(0)" @click="prvePage(curIndex)"><img src="../images/prev.png" alt="<"/></a></li>
+      <li v-for="(index,i) in indexs"  :class="[{ active: curIndex == index },{point:index < 1}]">
+        <a @click="btnClick(index)">{{ index < 1 ? "..." : index }}</a>
+      </li>
+      <li class="next"><a :class="setButtonClass(1)" @click="nextPage(curIndex)"><img src="../images/next.png" alt=">"/></a></li>
       <li class="JumpToPage" v-show="isJump">跳转到<input type="text" v-model="inputNum" onkeyup="value=value.replace(/[^\d.]+/,'')"/>页<span class="cur" @click="JumpGo(inputNum)">确定</span></li>
-    </ul>  
+    </ul>
   </div>
 </template>
 <script>
@@ -100,24 +100,24 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.PageBar {  
-  -webkit-touch-callout: none;  
-  -webkit-user-select: none;  
-  -khtml-user-select: none;  
-  -moz-user-select: none;  
-  -ms-user-select: none;  
-  user-select: none;  
+.PageBar {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   text-align: center;
   margin-top:37px;
   font-size: 0;
-}   
-.PageBar li {  
-  list-style: none;  
-  display: inline-block;  
+}
+.PageBar li {
+  list-style: none;
+  display: inline-block;
   margin:0;
-}  
-.PageBar li:first-child > a {  
-    margin-left: 0px;  
+}
+.PageBar li:first-child > a {
+    margin-left: 0px;
 }
 .PageBar .point a{
   border:none;
@@ -127,7 +127,7 @@ export default {
 .PageBar .point a:hover{
   background: none;
 }
-.PageBar a {  
+.PageBar a {
   display: inline-block;
   width: 36px;
   height: 36px;
@@ -138,35 +138,35 @@ export default {
   border: 1px solid #ccc;
   margin-right:4px;
   cursor: pointer;
-}  
-.PageBar a:hover {  
+}
+.PageBar a:hover {
   border-color: #00aaff;
-  color:#00aaff;  
-}  
+  color:#00aaff;
+}
 /*.PageBar li:last-child a{
   border-right: 1px solid rgb(238, 240, 241);
 }*/
 /*.PageBar li.next a{
   border-right: 1px solid rgb(238, 240, 241);
 }*/
-.PageBar .active a {  
-  color: #fff;  
-  cursor: default;  
+.PageBar .active a {
+  color: #fff;
+  cursor: default;
   border-color:#00aaff;
-  background:#00aaff;  
-}  
-.PageBar i {  
-  font-style: normal;  
-  color: #d44950;  
-  margin: 0px 4px;  
-  font-size: 12px;  
-}  
+  background:#00aaff;
+}
+.PageBar i {
+  font-style: normal;
+  color: #d44950;
+  margin: 0px 4px;
+  font-size: 12px;
+}
 .PageBar .page-button-disabled{
   background:#f7f9fa;
   cursor: not-allowed;
-  color:#ddd !important;  
+  color:#ddd !important;
   border-color:#e6e6e6;
-} 
+}
 .PageBar .page-button-disabled:hover{
   background:#f7f9fa;
   border-color:#e6e6e6;
@@ -203,6 +203,6 @@ export default {
 }
 .PageBar .JumpToPage span:hover{
   border-color:#00aaff;
-  color:#00aaff;  
+  color:#00aaff;
 }
 </style>

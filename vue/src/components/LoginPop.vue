@@ -3,11 +3,11 @@
     <div class="LoginPop_outer">
       <i class="LoginPop_cancle" @click="closepop"></i>
       <div class="LoginPop_title"><img src="http://www.iplaystone.com/static/common/images/loginPic.png"/></div>
-      <div class="LoginPop_input"><input id="LoginPop_userName" v-model="loginInfoVo.username" placeholder="电子邮箱/手机号" />
+      <div class="LoginPop_input"><input  v-model="loginInfoVo.username" placeholder="电子邮箱/手机号" />
         <i class="LoginPop_icon LoginPop_user"></i>
         <div class="LoginPop_error"></div>
       </div>
-      <div class="LoginPop_input"><input type="password" v-model="loginInfoVo.password" id="LoginPop_pwd" placeholder="密码" />
+      <div class="LoginPop_input"><input type="password" v-model="loginInfoVo.password"  placeholder="密码" />
         <i class="LoginPop_icon LoginPop_pwd"></i>
         <div class="LoginPop_error"></div>
       </div>
@@ -27,7 +27,6 @@ export default {
   },
   methods: {
     login () {
-      console.log("fuck");
       const vm = this;
       let params = new URLSearchParams();
       params.append('username', this.loginInfoVo.username);
@@ -38,7 +37,9 @@ export default {
           if (successResponse.data.code === 200) {
             //登陆成功
             console.log("登陆成功");
-            vm.$emit('on-cancel');
+            console.log(document.getElementById('pdLogin').value);
+            document.getElementById('pdLogin').value = 'true'
+            vm.$emit('on-suceess');
           }
         }).catch(failResponse => {})
     },
