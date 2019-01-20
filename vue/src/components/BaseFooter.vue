@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="footer">
     <hr style="height:1px;border:none;border-top:1px solid #CCCCCC;" />
     <el-footer class="me-area">
       <div class="me-footer">
@@ -28,7 +28,6 @@
 </script>
 
 <style>
-
   .me-area {
     width: 100%;
     bottom: 0;

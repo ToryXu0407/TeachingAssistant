@@ -1,60 +1,57 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Index from '@/Index'
-import SocialIndex from '@/SocialIndex'
-import SocialDetail from '@/SocialDetail'
-import SocialPost from '@/SocialPost'
+import Index from '@/components/forum/Index'
+import SocialIndex from '@/components/forum/SocialIndex'
+import SocialDetail from '@/components/forum/SocialDetail'
+import SocialPost from '@/components/forum/SocialPost'
+import Register from '@/components/Register'
+import CourseIndex from '@/components/course/CourseIndex'
+import CourseDetail from '@/components/course/CourseDetail'
+import CourseNotice from '@/components/course/CourseNotice'
+import Courseware from '@/components/course/Courseware'
 Vue.use(Router)
 
 export default new Router({
-  // mode: 'history',
-  // hashbang: false,
-  // history: false,
   routes: [
-    // {
-    //   path: '/',
-    //   name: 'index',
-    //   component: Index,
-    //   meta: {
-    //     title: '这是个圈子',
-    //     keepAlive: false
-    //   }
-    // },
+
     {
       path: '/index',
       name: 'index',
       component: Index,
-      meta: {
-        title: '这是个圈子',
-        keepAlive: false
-      }
+    },
+    {
+      path: '/course',
+      name: 'course',
+      component: CourseIndex,
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: Register,
     },
     {
       path: '/',
-      name: 'circle',
+      name: 'social',
       component: SocialIndex,
-      meta: {
-        title: '这是个圈子',
-        keepAlive: false
-      }
     },
     {
       path: '/post/:articleId/:onPage',
       name: 'post',
       component: SocialDetail,
-      meta: {
-        title: '这是个圈子',
-        keepAlive: false
-      }
+    },
+    {
+      path: '/courseDetail/:courseId/:onPage',
+      name: 'courseDetail',
+      component: CourseDetail,
+      children: [
+        {path: 'notice', name: '课程通知', component: CourseNotice, },
+        {path: 'courseware', name: '课件', component: Courseware, },
+      ]
     },
     {
       path: '/SocialPost/:articleId',
       name: 'SocialPost',
       component: SocialPost,
-      meta: {
-        title: '这是个圈子',
-        keepAlive: false
-      }
     },
 
 

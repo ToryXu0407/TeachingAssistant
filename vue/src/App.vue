@@ -3,8 +3,8 @@
     <base-header ref="myBaseHeader" @refresh="refresh"></base-header>
     <div id="app" class="app clearfix">
       <input type="hidden" id="pdLogin" value="sdd"/>
-      <router-view :key="key" @refresh="refresh" v-if="isRouterAlive"></router-view>
-      <base-footer></base-footer>
+      <router-view :key="key" @refresh="refresh" v-if="isRouterAlive" @hidefooter="hidefooter" @showfooter="showfooter"></router-view>
+      <base-footer v-show="footerShow"></base-footer>
     </div>
   </div>
 
@@ -19,6 +19,7 @@ export default {
   data(){
     return {
       isRouterAlive:true,
+      footerShow:true
     }
   },
   computed: {
@@ -30,10 +31,27 @@ export default {
     'base-header':BaseHeader,
     'base-footer':BaseFooter
   },
+  beforeRouteUpdate (to, from, next) {
+    console.log("beforeRouteUpdate")
+    if(to.path == '/register'){
+      this.footerShow = false
+    }else{
+      this.footerShow = true
+    }
+    next()
+  },
   methods:{
     refresh(){
       this.reload();
       this.$refs.myBaseHeader.getLoggedInfo();
+    },
+    hidefooter(){
+      console.log("hidefooter")
+      this.footerShow = false
+    },
+    showfooter(){
+      console.log("showfooter")
+      this.footerShow = true
     },
     reload(){
       this.isRouterAlive = false;

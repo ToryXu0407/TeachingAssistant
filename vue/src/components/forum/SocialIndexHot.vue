@@ -1,7 +1,7 @@
 <template>
   <div class="SocialIndexHot bgWhite" id="SocialIndexHot">
     <div class="MoudleHd">
-      热门讨论
+      热门课程
     </div>
     <div class="HotList clearfix">
       <ul>
@@ -41,5 +41,5 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-   @import '../sass/stylesheets/SocialIndexHot.css';
+   @import '../../sass/stylesheets/SocialIndexHot.css';
 </style>

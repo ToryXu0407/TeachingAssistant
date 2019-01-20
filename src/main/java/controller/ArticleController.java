@@ -8,6 +8,7 @@ import interceptor.PermissionChecker;
 import model.*;
 import util.StringUtil;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,9 +35,12 @@ public class ArticleController extends BaseController{
                 page = getParaToInt("page")-1;
             if(getParaToInt("pagesize")!=null)
                 pagesize = getParaToInt("pagesize");
-            String sql = "select * from ta_article ";
+            String sql = "select * from ta_article where 1=1";
+            if(getPara("input")!=null){
+                sql+=" and label like '%"+getPara("input")+"%'";
+            }
             if(getPara("isSticky")!=null)
-                sql+=" where is_sticky='"+getPara("isSticky")+"'";
+                sql+=" and is_sticky='"+getPara("isSticky")+"'";
             String orderSql=" order by create_time desc";
             if(getPara("order")!=null) {
                 if (getPara("order").equals("hot"))
@@ -78,10 +82,10 @@ public class ArticleController extends BaseController{
                         .findFirst("select count(*) as num from ta_article");
                 Long totalPage;
                 Long articleNum = record.getLong("num");
-                if(articleNum%10==0)
-                    totalPage = articleNum/10L;
+                if(articleNum%pagesize==0)
+                    totalPage = articleNum/pagesize;
                 else
-                    totalPage = articleNum/10L+1;
+                    totalPage = articleNum/pagesize+1;
                 result = ResultFactory.buildSuccessArticleResult(articles,totalPage);
             }else
                 result = ResultFactory.buildFailResult("null");
@@ -157,7 +161,10 @@ public class ArticleController extends BaseController{
                 if(String.valueOf(getSessionAttr(PermissionChecker.USER_ID)).equals("null"))
                     throw new RuntimeException("您还没有登陆!");
                 record.set("user_id",getSessionAttr(PermissionChecker.USER_ID));
-                record.set("create_time",new Date());
+                Date currentTime = new Date();
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String dateString = formatter.format(currentTime);
+                record.set("create_time",dateString);
                 //默认文章没有加精
                 record.set("is_sticky","N");
                 record.set("label",article.getLabel());
@@ -224,7 +231,10 @@ public class ArticleController extends BaseController{
                 Record record1 = new Record();
                 record1.set("article_id",articleId);
                 record1.set("user_id",userId);
-                record1.set("create_time",new Date());
+                Date currentTime = new Date();
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String dateString = formatter.format(currentTime);
+                record1.set("create_time",dateString);
                 Db.use("ta").save("ta_vote",record1);
                 Db.use("ta").update("update ta_article set vote_count = vote_count+1 where id="+articleId);
             }

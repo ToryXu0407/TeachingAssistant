@@ -9,9 +9,16 @@
                  <li v-for="(allTags,index) in allTags" >
                     <a href="javascript:;" :title="allTags.name" :data-tagid="allTags.id" @click="GoTagsBtn(allTags.id, index)" :class="{current:index == current}" wn_tj_click_href :wn_tj_click_excel="allTags.name" wn_tj_click_id>{{allTags.name}}</a>
                  </li>
+             <li></li><li></li><li></li>
+               <li>
+                 <el-input v-model="input" style="width:100px;margin-left:30px;margin-top: -10px;" placeholder="请输入内容"></el-input>
+               </li>
+               <li>
+                 <el-button icon="el-icon-search" circle @click="search" style="margin-left:60px;margin-top: -10px;"></el-button>
+               </li>
              </ul>
-         </div>
-         <div class="scrrenTag fr">
+        </div>
+        <div class="scrrenTag fr">
            <h6 class="scrrenTagInput" @click="drownInput"><span>{{ordername}}</span><i :class="['rotatez',{'roate':drown === false}]"></i></h6>
            <ul class="InputSelect" v-if="drown">
               <li data-order="hot" @click="drownSelect('hot','热门排序')" wn_tj_click_href wn_tj_click_gameId wn_tj_click_excel="hot_ordering" wn_tj_click_id>热门排序</li>
@@ -27,29 +34,6 @@
                   <router-link :to="{ name: 'post', params: {'articleId':list.id ,'onPage':0}}" :title="list.label" :listId="list.id">{{list.label}}</router-link>
                   <i class="icon-good" v-if="list.isSticky=='Y'" >精</i>
                 </div>
-                <!--<div class="Jitems-Detail" v-if="list.is_top != 1">-->
-                    <!--<h5 class="Jitems-Detail-text" v-html="list.text"></h5>-->
-                    <!--<div class="Jitems-Detail-img clearfix">-->
-                        <!--<div class="JDICont">-->
-                           <!--<div class="imgList" v-for="(img, index) in list.images" @click="ShowBigPic($event,index,i)">-->
-                              <!--<div class="imgfd"></div>-->
-                              <!--<img :src="img + '?x-oss-process=image/resize,h_110'" alt="刷新加载图片"/>-->
-                           <!--</div>-->
-                        <!--</div>-->
-                        <!--<div class="Jlist-thumb clearfix" v-if="list.images != ''" v-show="list.flag">-->
-                          <!--<div class="thumbHd"><a href="javascript:;" class="j_retract" @click="hidePic($event,i)"><i class="icon_retract"></i>收起</a> </div>-->
-                          <!--<div class="thumbWarp">-->
-                              <!--<div :class="['thumbWarpList',{none: list.showindex != index }]" v-for="(img, index) in list.images" >-->
-                                <!--<div class="thumbPrev" v-if="index != 0" :data-cur="index-1" @click="thumbPrev(index,i)"></div>-->
-                                <!--<div class="thumbsx" @click="hidePic2($event,i)"></div>-->
-                                <!--<img :src="img" alt="刷新查看" />-->
-                                <!--<div class="thumbNext" v-if="list.images.length-1 != index" :data-cur="index+1" @click="thumbNext(index,i)"></div>-->
-                              <!--</div>-->
-                          <!--</div>-->
-                        <!--</div>-->
-                        <!--&lt;!&ndash; <EnlargePicture :imagesList="list.images" :isCurrent="isCurrent"  :isFlag="list.flag" :data-flag="list.flag"></EnlargePicture> &ndash;&gt;-->
-                    <!--</div>-->
-                <!--</div>-->
                 <div class="Jitems-Info">
                     <div class="JuserInfo fl">
                         <a href="javascript:;" class="JuserInfo-people default" :title="list.nickname">
@@ -59,8 +43,8 @@
                         <span class="JuserInfo-time" :title="list.createTime">{{list.createTime}}</span>
                     </div>
                     <div class="JdataInfo fr">
-                       <span class="Jview"><img src="../images/icon4.png"/>{{list.viewCount}}</span>
-                       <span class="Jreply"><img src="../images/icon5.png"/>{{list.commentCount}}</span>
+                       <span class="Jview"><img src="../../images/icon4.png"/>{{list.viewCount}}</span>
+                       <span class="Jreply"><img src="../../images/icon5.png"/>{{list.commentCount}}</span>
                     </div>
                 </div>
               </div>
@@ -73,8 +57,8 @@
   </div>
 </template>
 <script>
-import pagination from './pagination.vue'
-import EnlargePicture from './EnlargePicture.vue'
+import pagination from '../pagination.vue'
+import EnlargePicture from '../EnlargePicture.vue'
 export default {
   name: 'SocialIndexList',
   components: {
@@ -100,6 +84,7 @@ export default {
     return {
       list: [],
       allTags: [{id: 1, name: '加精'}],
+      input: '',
       cur: 1,
       all: 1,
       pageSize: 20,
@@ -182,6 +167,21 @@ export default {
       this.ShowHtml(this.order, 1)
       this.$refs.page.send(1)
     },
+    search(){
+      const vm = this;
+      let params = new URLSearchParams();
+      params.append('input', this.input);
+      this.$axios.post('/article/getArticle', params)
+        .then(function (res) {
+          vm.list = res.data.data
+          vm.all = res.data.totalPage
+          if (res.data.totalPage === 0 || res.data.totalPage < 2) {
+            vm.all = 1
+            vm.drownReflush = false
+            vm.drownReflushText = false
+          }
+        })
+    },
     ShowHtml: function (order, page) {
       const vm = this
       let params = new URLSearchParams();
@@ -219,25 +219,11 @@ export default {
           vm.drownReflushText = false
         }
       })
-    // vm.$http({
-    //   url: '//moment.snail.com/api/v1/circle/all-tags',
-    //   method: 'jsonp',
-    //   params: {
-    //     'circle_id': this.circleId
-    //   },
-    //   jsonp: 'callback',
-    //   emulateJSON: true,
-    //   headers: {
-    //     'Content-Type': 'x-www-from-urlencoded'
-    //   }
-    // }).then(function (res) {
-    //   this.allTags = res.body.tags
-    // })
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-   @import '../sass/stylesheets/SocialIndexList.css';
+   @import '../../sass/stylesheets/SocialIndexList.css';
 </style>

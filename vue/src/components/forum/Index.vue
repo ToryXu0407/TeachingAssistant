@@ -15,11 +15,10 @@
   </div>
 </template>
 <script>
-  import PeoInfo from './components/PeoInfo.vue'
-  import LoginPop from './components/LoginPop.vue'
-  import SocialIndexHot from './components/SocialIndexHot.vue'
-  import IndexList from './components/IndexList.vue'
-  import SocialIndexRecommend from './components/SocialIndexRecommend.vue'
+  import PeoInfo from '../PeoInfo.vue'
+  import LoginPop from '../LoginPop.vue'
+  import SocialIndexHot from './SocialIndexHot.vue'
+  import IndexList from '../IndexList.vue'
   export default {
     name: 'SocialIndex',
     components: {
@@ -27,7 +26,6 @@
       PeoInfo: PeoInfo,
       SocialIndexHot: SocialIndexHot,
       IndexList: IndexList,
-      SocialIndexRecommend: SocialIndexRecommend
     },
     data () {
       return {

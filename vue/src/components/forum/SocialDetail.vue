@@ -1,152 +1,152 @@
 <template>
-  <div id="SocialDetail" class="SocialDetail">
-     <div class="MainList fl" id="MainList">
+    <div id="SocialDetail" class="SocialDetail">
+      <div class="MainList fl" id="MainList">
         <div class="ListPage Page-Top bgWhite">
-            <pagination :cur.sync="cur" :all.sync="all" :isJump.sync="isJump"  @listen="monitor"></pagination>
-            <router-link class="goBack cur"  :to="{ name: 'circle'}" wn_tj_click_href wn_tj_click_gameId wn_tj_click_excel="previous_page" wn_tj_click_id><img src="./images/icon14.png"/>返回讨论社</router-link>
+          <pagination :cur.sync="cur" :all.sync="all" :isJump.sync="isJump"  @listen="monitor"></pagination>
+          <router-link class="goBack cur"  :to="{ name: 'social'}" wn_tj_click_href wn_tj_click_gameId wn_tj_click_excel="previous_page" wn_tj_click_id><img src="../../images/icon14.png"/>返回讨论社</router-link>
         </div>
         <div class="ListCont">
-            <div class="Jtitle bgWhite" id="Jtitle">
-                <h5 class="textOverFlow" :data-tzId="DetailLandlord.id" :title="DetailLandlord.label">{{DetailLandlord.label}}</h5>
-                <!--<span :class="['icon-gf',{'none':DetailLandlord.is_official == 0}]" title="官方" v-if="DetailLandlord.is_official !== 0">官方</span>-->
-                <!--<span :class="['icon-top',{'none':DetailLandlord.is_top == 0}]" v-if="DetailLandlord.is_top !== 0" title="置顶">置顶</span>-->
-                <span class="icon-good" v-for="tags in DetailLandlord.public_tags" :title="tags.name" :class="tags.mark">{{tags.text}}</span>
-                <div class="Jtitle-Moudle fr">
-                    <span @click="onLandlord(1)" :class="{onLandlord:DetailLandlord.onLandlord === true}">只看楼主</span>
-                    <span @click="goBottom()"><img src="./images/icon6.png"/>回复</span>
-                </div>
+          <div class="Jtitle bgWhite" id="Jtitle">
+            <h5 class="textOverFlow" :data-tzId="DetailLandlord.id" :title="DetailLandlord.label">{{DetailLandlord.label}}</h5>
+            <!--<span :class="['icon-gf',{'none':DetailLandlord.is_official == 0}]" title="官方" v-if="DetailLandlord.is_official !== 0">官方</span>-->
+            <!--<span :class="['icon-top',{'none':DetailLandlord.is_top == 0}]" v-if="DetailLandlord.is_top !== 0" title="置顶">置顶</span>-->
+            <span class="icon-good" v-for="tags in DetailLandlord.public_tags" :title="tags.name" :class="tags.mark">{{tags.text}}</span>
+            <div class="Jtitle-Moudle fr">
+              <span @click="onLandlord(1)" :class="{onLandlord:DetailLandlord.onLandlord === true}">只看楼主</span>
+              <span @click="goBottom()"><img src="../../images/icon6.png"/>回复</span>
             </div>
-            <ul class="ListContUl">
-                <li :class="['clearfix bgWhite ListContUlLi',{'isSelf':DetailLandlord.is_self === true}]" v-show="isOne" :data-id="DetailLandlord.id">
-                    <img src="./images/lz.png" class="user-lz"/>
-                    <div class="Jitems">
-                      <div class="JitemsLeft fl">
-                        <div class="J-UserInfo">
-                           <div class="J-UserInfo-Pic"><img :src="DetailLandlord.headImage" :alt="DetailLandlord.nickname"/></div>
-                           <span class="J-UserInfo-Name textOverFlow" :title="DetailLandlord.nickname">{{DetailLandlord.nickname}}</span>
-                           <span class="J-UserInfo-adminCall" v-show="DetailLandlord.is_post_by_admin">管理员</span>
-                        </div>
-                      </div>
-                      <div class="JitemsRight fr">
-                          <div class="J-TextCont" v-html="DetailLandlord.content"></div>
-                          <div :class="['J-ClickUp',{'J-On' : DetailLandlord.isVoted === true}]" @click="ListVote(DetailLandlord.id)">
-                              <p></p>
-                              <p>{{DetailLandlord.voteCount}}</p>
-                          </div>
-                          <div class="J-Modle clearfix">
-                              <div class="J-Modle-Hd">
-                                  <div class="Hd-Floor fl"><span>楼主</span>{{DetailLandlord.createTime}}</div>
-                                  <div class="Hd-Moudle fr">
-                                    <ol>
-                                      <!--管理员的置顶加精设为官方贴，因为管理员在新的一个项目，因此这里注释，论坛功能直接移植并加上管理员功能-->
-                                       <!--<li v-if="DetailLandlord.is_admin">-->
-                                           <!--<span class="PostManagement" @click="showPostManage()">帖子管理<i :class="{'rotate':isPostManage === true}"></i></span>-->
-                                           <!--<div class="adminlist" v-show="isPostManage">-->
-                                              <!--<p class="cur" @click="isAdmin(0)" id="isTop">{{DetailLandlord.is_top == 0 ? '置顶':'取消置顶'}}</p>-->
-                                              <!--<p class="cur" @click="isAdmin(1)">{{DetailLandlord.public_tags === undefined || DetailLandlord.public_tags.length === 0 ? '加精' : '取消加精'}}</p>-->
-                                              <!--<p class="cur" @click="isAdmin(4)" v-if="DetailLandlord.auth_level == 1">{{DetailLandlord.is_official == 0 ? '设为官方贴':'取消官方贴'}}</p>-->
-                                              <!--<p class="cur" @click="isAdmin(5)" v-if="DetailLandlord.auth_level == 1 && DetailLandlord.is_faq == true && DetailLandlord.is_faq_setup === false">设为FAQ</p>-->
-                                           <!--</div>-->
-                                       <!--</li>-->
-                                       <!--<li v-show="DetailLandlord.delete_private"><span class="Hd-Moudle-Del" @click="isAdmin(2)">删除</span></li>-->
-                                       <!--<li v-show="!DetailLandlord.delete_private" v-if="false"><span class="Hd-Moudle-Report">举报</span></li>-->
-                                       <li @click="goBottom()"><span class="Hd-Moudle-Reply">回复</span></li>
-                                    </ol>
-                                  </div>
-                              </div>
-                          </div>
+          </div>
+          <ul class="ListContUl">
+            <li :class="['clearfix bgWhite ListContUlLi',{'isSelf':DetailLandlord.is_self === true}]" v-show="isOne" :data-id="DetailLandlord.id">
+              <img src="../../images/lz.png" class="user-lz"/>
+              <div class="Jitems">
+                <div class="JitemsLeft fl">
+                  <div class="J-UserInfo">
+                    <div class="J-UserInfo-Pic"><img :src="DetailLandlord.headImage" :alt="DetailLandlord.nickname"/></div>
+                    <span class="J-UserInfo-Name textOverFlow" :title="DetailLandlord.nickname">{{DetailLandlord.nickname}}</span>
+                    <span class="J-UserInfo-adminCall" v-show="DetailLandlord.is_post_by_admin">管理员</span>
+                  </div>
+                </div>
+                <div class="JitemsRight fr">
+                  <div class="J-TextCont" v-html="DetailLandlord.content"></div>
+                  <div :class="['J-ClickUp',{'J-On' : DetailLandlord.isVoted === true}]" @click="ListVote(DetailLandlord.id)">
+                    <p></p>
+                    <p>{{DetailLandlord.voteCount}}</p>
+                  </div>
+                  <div class="J-Modle clearfix">
+                    <div class="J-Modle-Hd">
+                      <div class="Hd-Floor fl"><span>楼主</span>{{DetailLandlord.createTime}}</div>
+                      <div class="Hd-Moudle fr">
+                        <ol>
+                          <!--管理员的置顶加精设为官方贴，因为管理员在新的一个项目，因此这里注释，论坛功能直接移植并加上管理员功能-->
+                          <!--<li v-if="DetailLandlord.is_admin">-->
+                          <!--<span class="PostManagement" @click="showPostManage()">帖子管理<i :class="{'rotate':isPostManage === true}"></i></span>-->
+                          <!--<div class="adminlist" v-show="isPostManage">-->
+                          <!--<p class="cur" @click="isAdmin(0)" id="isTop">{{DetailLandlord.is_top == 0 ? '置顶':'取消置顶'}}</p>-->
+                          <!--<p class="cur" @click="isAdmin(1)">{{DetailLandlord.public_tags === undefined || DetailLandlord.public_tags.length === 0 ? '加精' : '取消加精'}}</p>-->
+                          <!--<p class="cur" @click="isAdmin(4)" v-if="DetailLandlord.auth_level == 1">{{DetailLandlord.is_official == 0 ? '设为官方贴':'取消官方贴'}}</p>-->
+                          <!--<p class="cur" @click="isAdmin(5)" v-if="DetailLandlord.auth_level == 1 && DetailLandlord.is_faq == true && DetailLandlord.is_faq_setup === false">设为FAQ</p>-->
+                          <!--</div>-->
+                          <!--</li>-->
+                          <!--<li v-show="DetailLandlord.delete_private"><span class="Hd-Moudle-Del" @click="isAdmin(2)">删除</span></li>-->
+                          <!--<li v-show="!DetailLandlord.delete_private" v-if="false"><span class="Hd-Moudle-Report">举报</span></li>-->
+                          <li @click="goBottom()"><span class="Hd-Moudle-Reply">回复</span></li>
+                        </ol>
                       </div>
                     </div>
-                </li>
-                 <li :class="['clearfix bgWhite ListContUlLi',{'isSelf':list.is_self === true}]" v-for="(list , temp) in DetailList" :data-listId="list.id" v-if="true" :name="list.id">
-                    <a :name="list.id"></a>
-                    <img src="./images/lz.png" class="user-lz" v-show="list.is_owner"/>
-                    <div class="Jitems">
-                      <div class="JitemsLeft fl">
-                        <div class="J-UserInfo">
-                           <div class="J-UserInfo-Pic"><img :src="list.headImage" :alt="list.nickname"/></div>
-                           <span class="J-UserInfo-Name textOverFlow" :title="list.nickname" :data-userid="list.userId">{{list.nickname}}</span>
-                           <span class="J-UserInfo-adminCall" v-show="list.is_post_by_admin">管理员</span>
-                        </div>
-                      </div>
-                      <div class="JitemsRight fr">
-                          <div class="J-TextCont" v-html="list.content"></div>
-                          <div class="J-Modle clearfix">
-                              <div class="J-Modle-Hd">
-                                  <div class="Hd-Floor fl"><span>{{list.position}}楼</span>{{list.createTime}}</div>
-                                  <div class="Hd-Moudle fr">
-                                    <ol>
-                                       <li v-show="list.delete_private" @click="isAdmin(3, list.id)"><span class="Hd-Moudle-Del">删除</span></li>
-                                       <li v-show="!list.delete_private" v-if="false"><span class="Hd-Moudle-Report">举报</span></li>
-                                       <li>
-                                          <span class="Hd-Moudle-Reply" v-show="list.isReplay" @click="ShowMoudleList(temp, list.replyNum, list.id)">回复<b v-if="list.replyNum > 0">（{{list.replyNum}}）</b></span>
-                                          <span class="Hd-Moudle-Reply" v-show="!list.isReplay" @click="HideMoudleList(temp)">收起回复<b v-if="list.replyNum > 0">（{{list.replyNum}}）</b></span>
-                                       </li>
-                                    </ol>
-                                  </div>
-                              </div>
-                              <div class="J-Moudle-List" v-show="!list.isReplay">
-                                  <div class="J-Moudle-List-Cont clearfix">
-                                       <ul class="J-Moudle-List-Cont-Ul"  v-if="list.replyNum > 0">
-                                          <li class="J-Moudle-List-Cont-Li" v-for="(Mlist, Mtemp) in list.replies">
-                                              <div class="Jmoude-items clearfix">
-                                                  <div class="Jmoude-items-Pic fl"><img :src="Mlist.headImage" :alt="Mlist.nickname"/></div>
-                                                  <div class="Jmoude-items-Cont fr">
-                                                    <div class="Jmoudle-items-h5">
-                                                        <span><a href="javascript:;">{{Mlist.nickname}}：</a><b style="float:left">{{ Mlist.toUserId !== Mlist.userId ? '回复' : '' }} </b><a href="javascript:;"  class="twouser" v-if="Mlist.toUserId !== Mlist.userId">{{Mlist.toUserNickName}}：</a>{{Mlist.content}}</span>
-                                                    </div>
-                                                    <div class="Jmoudle-items-info">
-                                                        <span class="fl">{{Mlist.createTime}}</span>
-                                                        <span class="fr cur"  @click="JMoudleReply(list.userId, Mlist.userId, Mlist.nickname,temp, $event, list.id)">回复</span>
-                                                    </div>
-                                                  </div>
-                                              </div>
-                                          </li>
-                                       </ul>
-                                       <div class="J-Moudle-List-Cont-Jet">
-                                            <span class="J-Moudle-List-More fl cur" v-show="list.replyNum > 5 && list.more === true" @click="showMore(list.id, 1, 10, temp)">查看更多</span>
-                                            <div class="J-Moudle-Page fl" v-show="list.replyNum > 5 && list.more === false">
-                                                <ul>
-                                                    <li><a :class="setButtonClass(0,temp)" @click="prvePage(list.current,list.id,temp)"><img src="./images/prev.png" alt="<"/></a></li>
-                                                    <li v-for="(flag,i) in list.allpage"  :class="[{ active: list.current === flag },{point:flag < 1}]" :data-flag="flag" :data-cur="list.current">
-                                                        <a @click="btnClick(flag,temp,list.id)">{{ flag < 1 ? "..." : flag }}</a>
-                                                    </li>
-                                                    <li class="next"><a :class="setButtonClass(1,temp)" @click="nextPage(list.current,list.all,list.id,temp)"><img src="./images/next.png" alt=">"/></a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="J-Moudle-Mebtn fr cur" :data-listId="list.id"  :data-listUserId="list.user_id" @click="JReply(list.id, temp)">我也说一句</div>
-                                       </div>
-                                  </div>
-                                  <div class="J-Moudle-List-Input" v-show="list.isMoudleListInput">
-                                      <div class="J-Moudle-List-Input-Box">
-                                          <input type="text" :placeholder="list.nickname" :id="'J'+list.id" maxLength="150" autofocus="autofocus"/>
-                                      </div>
-                                      <div class="J-Moudle-List-Input-Set">
-                                          <div class="J-M-l-I-S-Icon cur fl" v-if="false">
-                                              <img src="./images/icon13.png"/>
-                                              <div class="Icon-List none"></div>
-                                          </div>
-                                          <span class="J-M-L-Btn cur fr" @click="postComment(list.id, temp)">发表</span>
-                                      </div>
-                                      <!--Login Mask-->
-                                      <div class="loginMask" v-if="!isLogin">
-                                         <div class="loginMaskBox">
-                                            <a href="javascript:;" @click="detailLogin()">登录</a>
-                                            <a href="javascript:;" class="loginMaskBoxline"></a>
-                                            <a href="http://www.iplaystone.com/static/web/register.html">注册</a>
-                                         </div>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li :class="['clearfix bgWhite ListContUlLi',{'isSelf':list.is_self === true}]" v-for="(list , temp) in DetailList" :data-listId="list.id" v-if="true" :name="list.id">
+              <a :name="list.id"></a>
+              <img src="../../images/lz.png" class="user-lz" v-show="list.is_owner"/>
+              <div class="Jitems">
+                <div class="JitemsLeft fl">
+                  <div class="J-UserInfo">
+                    <div class="J-UserInfo-Pic"><img :src="list.headImage" :alt="list.nickname"/></div>
+                    <span class="J-UserInfo-Name textOverFlow" :title="list.nickname" :data-userid="list.userId">{{list.nickname}}</span>
+                    <span class="J-UserInfo-adminCall" v-show="list.is_post_by_admin">管理员</span>
+                  </div>
+                </div>
+                <div class="JitemsRight fr">
+                  <div class="J-TextCont" v-html="list.content"></div>
+                  <div class="J-Modle clearfix">
+                    <div class="J-Modle-Hd">
+                      <div class="Hd-Floor fl"><span>{{list.position}}楼</span>{{list.createTime}}</div>
+                      <div class="Hd-Moudle fr">
+                        <ol>
+                          <li v-show="list.delete_private" @click="isAdmin(3, list.id)"><span class="Hd-Moudle-Del">删除</span></li>
+                          <li v-show="!list.delete_private" v-if="false"><span class="Hd-Moudle-Report">举报</span></li>
+                          <li>
+                            <span class="Hd-Moudle-Reply" v-show="list.isReplay" @click="ShowMoudleList(temp, list.replyNum, list.id)">回复<b v-if="list.replyNum > 0">（{{list.replyNum}}）</b></span>
+                            <span class="Hd-Moudle-Reply" v-show="!list.isReplay" @click="HideMoudleList(temp)">收起回复<b v-if="list.replyNum > 0">（{{list.replyNum}}）</b></span>
+                          </li>
+                        </ol>
                       </div>
                     </div>
-                </li>
-            </ul>
+                    <div class="J-Moudle-List" v-show="!list.isReplay">
+                      <div class="J-Moudle-List-Cont clearfix">
+                        <ul class="J-Moudle-List-Cont-Ul"  v-if="list.replyNum > 0">
+                          <li class="J-Moudle-List-Cont-Li" v-for="(Mlist, Mtemp) in list.replies">
+                            <div class="Jmoude-items clearfix">
+                              <div class="Jmoude-items-Pic fl"><img :src="Mlist.headImage" :alt="Mlist.nickname"/></div>
+                              <div class="Jmoude-items-Cont fr">
+                                <div class="Jmoudle-items-h5">
+                                  <span><a href="javascript:;">{{Mlist.nickname}}：</a><b style="float:left">{{ Mlist.toUserId !== Mlist.userId ? '回复' : '' }} </b><a href="javascript:;"  class="twouser" v-if="Mlist.toUserId !== Mlist.userId">{{Mlist.toUserNickName}}：</a>{{Mlist.content}}</span>
+                                </div>
+                                <div class="Jmoudle-items-info">
+                                  <span class="fl">{{Mlist.createTime}}</span>
+                                  <span class="fr cur"  @click="JMoudleReply(list.userId, Mlist.userId, Mlist.nickname,temp, $event, list.id)">回复</span>
+                                </div>
+                              </div>
+                            </div>
+                          </li>
+                        </ul>
+                        <div class="J-Moudle-List-Cont-Jet">
+                          <span class="J-Moudle-List-More fl cur" v-show="list.replyNum > 5 && list.more === true" @click="showMore(list.id, 1, 10, temp)">查看更多</span>
+                          <div class="J-Moudle-Page fl" v-show="list.replyNum > 5 && list.more === false">
+                            <ul>
+                              <li><a :class="setButtonClass(0,temp)" @click="prvePage(list.current,list.id,temp)"><img src="../../images/prev.png" alt="<"/></a></li>
+                              <li v-for="(flag,i) in list.allpage"  :class="[{ active: list.current === flag },{point:flag < 1}]" :data-flag="flag" :data-cur="list.current">
+                                <a @click="btnClick(flag,temp,list.id)">{{ flag < 1 ? "..." : flag }}</a>
+                              </li>
+                              <li class="next"><a :class="setButtonClass(1,temp)" @click="nextPage(list.current,list.all,list.id,temp)"><img src="../../images/next.png" alt=">"/></a></li>
+                            </ul>
+                          </div>
+                          <div class="J-Moudle-Mebtn fr cur" :data-listId="list.id"  :data-listUserId="list.user_id" @click="JReply(list.id, temp)">我也说一句</div>
+                        </div>
+                      </div>
+                      <div class="J-Moudle-List-Input" v-show="list.isMoudleListInput">
+                        <div class="J-Moudle-List-Input-Box">
+                          <input type="text" :placeholder="list.nickname" :id="'J'+list.id" maxLength="150" autofocus="autofocus"/>
+                        </div>
+                        <div class="J-Moudle-List-Input-Set">
+                          <div class="J-M-l-I-S-Icon cur fl" v-if="false">
+                            <img src="../../images/icon13.png"/>
+                            <div class="Icon-List none"></div>
+                          </div>
+                          <span class="J-M-L-Btn cur fr" @click="postComment(list.id, temp)">发表</span>
+                        </div>
+                        <!--Login Mask-->
+                        <div class="loginMask" v-if="!isLogin">
+                          <div class="loginMaskBox">
+                            <a href="javascript:;" @click="detailLogin()">登录</a>
+                            <a href="javascript:;" class="loginMaskBoxline"></a>
+                            <a href="http://www.iplaystone.com/static/web/register.html">注册</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
         </div>
         <div class="ListPage Page-Bootom">
-            <pagination :cur.sync="cur" :all.sync="all" :isJump.sync="isJump"  @listen="monitor"></pagination>
-          <router-link class="goBack cur"  :to="{ name: 'circle'}" wn_tj_click_href wn_tj_click_gameId wn_tj_click_excel="previous_page" wn_tj_click_id><img src="./images/icon14.png"/>返回讨论社</router-link>
+          <pagination :cur.sync="cur" :all.sync="all" :isJump.sync="isJump"  @listen="monitor"></pagination>
+          <router-link class="goBack cur"  :to="{ name: 'social'}" wn_tj_click_href wn_tj_click_gameId wn_tj_click_excel="previous_page" wn_tj_click_id><img src="../../images/icon14.png"/>返回讨论社</router-link>
         </div>
         <div class="LidtEditor bgWhite" id="LidtEditor">
           <div class="Editor">
@@ -156,50 +156,51 @@
             <span class="PostHtml cur" @click="" id="PostHtml">发表</span>
           </div>
           <div class="loginMask" v-show="!isLogin">
-             <p>游客不能回复哦~</p>
-             <div class="loginMaskBox">
-                <a href="javascript:;" @click="detailLogin()">登录</a>
-                <a href="javascript:;" class="loginMaskBoxline"></a>
-                <a href="http://www.iplaystone.com/static/web/register.html">注册</a>
-             </div>
+            <p>游客不能回复哦~</p>
+            <div class="loginMaskBox">
+              <a href="javascript:;" @click="detailLogin()">登录</a>
+              <a href="javascript:;" class="loginMaskBoxline"></a>
+              <a href="javascript:void(0);" @click="register">注册</a>
+            </div>
           </div>
         </div>
-     </div>
-     <div class="MainMoudle fr" id="MainMoudle">
+      </div>
+      <div class="MainMoudle fr" id="MainMoudle">
         <PeoInfo ref="myPeoInfo"></PeoInfo>
         <SocialIndexHot></SocialIndexHot>
         <!--<SocialIndexRecommend id ="SocialIndexRecommend"></SocialIndexRecommend>-->
         <span class="goTop cur" v-show="isGoTop" @click="goTop()"></span>
-     </div>
-     <!--<rulePop :isPopInfo="isPopInfo" :DetailLandlord="DetailLandlord" :cur="cur" @abc="delComment"></rulePop>-->
-     <div class="divmask a" v-show="isPostManageMask" @click="closeMask"></div>
-    <LoginPop v-show="showDialog" @on-cancel="closeLoginPop"></LoginPop>
-  </div>
+      </div>
+      <!--<rulePop :isPopInfo="isPopInfo" :DetailLandlord="DetailLandlord" :cur="cur" @abc="delComment"></rulePop>-->
+      <div class="divmask a" v-show="isPostManageMask" @click="closeMask"></div>
+      <LoginPop v-show="showDialog" @on-cancel="closeLoginPop" @on-suceess="closeLoginPop"></LoginPop>
+    </div>
+
 </template>
 
 <script>
-  import SocialIndexHeader from './components/SocialIndexHeader.vue'
-  import SocialIndexAdmin from './components/SocialIndexAdmin.vue'
-  import SocialIndexHot from './components/SocialIndexHot.vue'
-  import SocialIndexDetail from './components/SocialIndexDetail.vue'
-  import SocialIndexRecommend from './components/SocialIndexRecommend.vue'
-  import pagination from './components/pagination.vue'
-  import rulePop from './components/rulePop.vue'
+  import SocialIndexHeader from './SocialIndexHeader.vue'
+  import SocialIndexAdmin from '../SocialIndexAdmin.vue'
+  import SocialIndexHot from './SocialIndexHot.vue'
+  import SocialIndexDetail from './SocialIndexDetail.vue'
+  import pagination from '../pagination.vue'
+  import rulePop from '../rulePop.vue'
   import E from 'wangeditor'
-  import PeoInfo from "./components/PeoInfo";
-  import LoginPop from './components/LoginPop'
-  // import statistics from 'http://static.snail.com/js/stone/v2/statistics_ty_v2.source.js'
+  import PeoInfo from "../PeoInfo";
+  import LoginPop from '../LoginPop'
+  import BaseFooter from '../BaseFooter'
+
 
   export default {
     name: 'SocialDetail',
     components: {
+      BaseFooter: BaseFooter,
       LoginPop: LoginPop,
       PeoInfo:PeoInfo,
       SocialIndexHeader: SocialIndexHeader,
       SocialIndexAdmin: SocialIndexAdmin,
       SocialIndexHot: SocialIndexHot,
       SocialIndexDetail: SocialIndexDetail,
-      SocialIndexRecommend: SocialIndexRecommend,
       pagination: pagination,
       rulePop: rulePop
       // statistics: statistics
@@ -231,7 +232,6 @@
     },
     data () {
       return {
-        circleId: '',
         postId: '',
         showDialog:false,
         articleId:'',
@@ -266,6 +266,9 @@
       }
     },
     methods: {
+      register(){
+        this.$router.push("/register")
+      },
       ShowLoginPop: function () {
         this.showDialog = true;
       },
@@ -275,6 +278,7 @@
         }
         this.showDialog = false;
         this.$refs.myPeoInfo.getLoggedInfo();
+        this.$emit('refresh');
       },
       detailLogin: function () {
         if (document.getElementById('pdLogin').value === 'true') {
@@ -392,8 +396,6 @@
                   this.getPost();
             } else {
               alert("回帖失败!");
-              //var url = 'http://stone.snail.com/error/404.html?from=circle&type=1&circleId=' + this.circleId
-              //window.location.href = url
             }
           })
       },
@@ -555,8 +557,7 @@
               this.DetailLandlord = res.data.data
               this.DetailLandlord['onLandlord'] = false
             } else if (res.data.code === 404) {
-              //var url = 'http://stone.snail.com/error/404.html?from=circle&type=1&circleId=' + this.circleId
-              //window.location.href = url
+
             }
           })
       },
@@ -663,9 +664,8 @@
       }
     },
     created: function () {
+      this.$emit('hidefooter');
       const vm = this
-      // this.postId = this.$route.params.postId
-      // this.circleId = this.$route.params.circleId
       this.cur = this.$route.params.onPage
       window.addEventListener('scroll', this.handleScroll)
       let params = new URLSearchParams();
@@ -812,5 +812,5 @@
 </script>
 
 <style>
-  @import './sass/stylesheets/SocialDetail.css'
+  @import '../../sass/stylesheets/SocialDetail.css'
 </style>

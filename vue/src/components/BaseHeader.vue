@@ -12,7 +12,7 @@
         <el-menu :router=true menu-trigger="click" active-text-color="#5FB878" :default-active="activeIndex"
                  mode="horizontal">
           <el-menu-item index="/">首页</el-menu-item>
-          <el-menu-item index="/">课程</el-menu-item>
+          <el-menu-item index="/course">课程</el-menu-item>
           <el-menu-item index="/">讨论社</el-menu-item>
           <el-menu-item index="/">答疑聊天室</el-menu-item>
           <!--<el-menu-item index="/category/all">文章分类</el-menu-item>-->
@@ -40,8 +40,8 @@
             <el-menu-item index="">
               <el-button type="text" @click="ShowLoginPop">登录</el-button>
             </el-menu-item>
-            <el-menu-item index="">
-              <el-button type="text">注册</el-button>
+            <el-menu-item index="" >
+              <el-button type="text" @click="register">注册</el-button>
             </el-menu-item>
           </template>
 
@@ -107,6 +107,9 @@
         }).catch(failResponse => {})
     },
     methods: {
+      register(){
+        this.$router.push("/register")
+      },
       ShowLoginPop: function () {
         this.showDialog = true;
       },
@@ -115,6 +118,7 @@
       },
       LoginSuccess: function () {
         this.showDialog = false;
+        this.$router.push("/");
         this.$emit('refresh');
       },
       getLoggedInfo(){

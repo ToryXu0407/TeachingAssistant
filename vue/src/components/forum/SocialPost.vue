@@ -215,6 +215,7 @@
       }
     },
     created: function () {
+      this.$emit('hidefooter');
       // this.articleId = this.$route.params.articleId
       // var vm = this
       // vm.$http({
@@ -363,5 +364,5 @@
 </script>
 
 <style>
-  @import './sass/stylesheets/SocialPost.css'
+  @import '../../sass/stylesheets/SocialPost.css'
 </style>

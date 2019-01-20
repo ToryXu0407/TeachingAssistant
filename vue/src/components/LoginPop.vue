@@ -12,7 +12,7 @@
         <div class="LoginPop_error"></div>
       </div>
       <div class="LoginPop_btn"><button id="LoginPop_submit" @click="login">登录</button></div>
-      <div class="LoginPop_box"><a href="http://www.iplaystone.com/static/web/resetPwd.html" class="LoginPop_forget">忘记密码?</a><span></span><a href="http://www.iplaystone.com/static/web/register.html" target="_blank" class="LoginPop_register">立即注册</a></div>
+      <div class="LoginPop_box"><a href="javascript:void(0);" class="LoginPop_forget">忘记密码?</a><span></span><a href="javascript:void(0);" @click="register" target="_blank" class="LoginPop_register">立即注册</a></div>
     </div>
   </div>
 </template>
@@ -43,39 +43,15 @@ export default {
           }
         }).catch(failResponse => {})
     },
+    register(){
+      this.$emit('on-cancel');
+      this.$router.push("/register")
+    },
     closepop: function () {
       this.$emit('on-cancel');
     }
   },
    created: function () {
-  //   var vm = this
-  //   vm.$http({
-  //     url: '//moment.snail.com/api/v1/user/info',
-  //     method: 'jsonp',
-  //     jsonp: 'callback',
-  //     emulateJSON: true,
-  //     headers: {
-  //       'Content-Type': 'x-www-from-urlencoded'
-  //     }
-  //   }).then(function (res) {
-  //     if (res.data.code === 200) {
-  //       this.info = res.data.info
-  //       this.isLogin = true
-  //     }
-  //   })
-  //   vm.$http({
-  //     url: '//moment.snail.com/api/v1/user/my-circles',
-  //     method: 'jsonp',
-  //     jsonp: 'callback',
-  //     emulateJSON: true,
-  //     headers: {
-  //       'Content-Type': 'x-www-from-urlencoded'
-  //     }
-  //   }).then(function (res) {
-  //     if (res.data.code === 200) {
-  //       this.myCircleListDetail = res.data.list
-  //     }
-  //   })
    }
 }
 </script>

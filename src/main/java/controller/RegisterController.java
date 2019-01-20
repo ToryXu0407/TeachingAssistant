@@ -6,6 +6,9 @@ import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import interceptor.PermissionChecker;
+import model.Result;
+import model.ResultFactory;
+import model.UserInfo;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -26,11 +29,16 @@ public class RegisterController extends BaseController {
 
 	@UnCheckLogin
 	public void RegisterSubmit() {
+		Result result;
 		try {
 			String username = getPara("username").trim();
 			String password = getPara("password").trim();
+			String nickname = getPara("nickname").trim();
 			if (StrKit.isBlank(username)) {
 				throw new RuntimeException("用户名不能为空");
+			}
+			if (StrKit.isBlank(nickname)) {
+				throw new RuntimeException("昵称不能为空");
 			}
 			if (StrKit.isBlank(password)) {
 				throw new RuntimeException("密码不能为空");
@@ -40,16 +48,28 @@ public class RegisterController extends BaseController {
 			String dateString = formatter.format(currentTime);
 			Record record = new Record();
 			record.set("username",username);
-			record.set("pwd",password);
+			record.set("nickname",nickname);
+			record.set("password",password);
 			record.set("type",2);
 			record.set("create_time", dateString);
 			Record record1 = Db.use("ta").findFirst("select * from ta_user where username= ? ",username);
 			if(record1!=null)
 			    throw new RuntimeException("用户名已存在!");
+			record1 = Db.use("ta").findFirst("select * from ta_user where nickname= ? ",nickname);
+			if(record1!=null)
+				throw new RuntimeException("昵称已存在!");
 			Db.use("ta").save("ta_user", record);
 			record = Db.use("ta").findFirst("select * from ta_user where username= ? ",username);
+			UserInfo userInfo = new UserInfo();
+			userInfo.setNickname(record.getStr("nickname"));
+			userInfo.setUsername(record.getStr("username"));
+			userInfo.setType(record.getInt("type"));
+			userInfo.setCreateTime(record.get("create_time").toString());
+			userInfo.setHeadImage(record.getStr("head_image"));
+			userInfo.setIsTeacher(record.getStr("is_teacher"));
 			setSessionAttr(PermissionChecker.USER_ID, record.get("id"));
 			setSessionAttr(PermissionChecker.USER_USERNAME, username);
+			setSessionAttr(PermissionChecker.USER,userInfo);
 			String type ="2";
 			if(!StrKit.isBlank(type)){
 			    Record permission = Db.use("ta").findFirst("select * from ta_user_permission where user_type =? ",type);
@@ -57,13 +77,14 @@ public class RegisterController extends BaseController {
 				setSessionAttr(PermissionChecker.USER_TYPE,permission.get("name"));
 			}
 			LOG.info("登录成功,username=" + username);
-			redirect("/student");
-
+			 result = ResultFactory.buildSuccessResult(userInfo);
 		} catch (Exception e) {
 			LOG.error("出错啦", e);
 			setAttr("error", e.getMessage());
+			 result = ResultFactory.buildSuccessResult(e.getMessage());
 			renderVelocity("register.html");
 		}
+		renderJson(result);
 	}
 
 

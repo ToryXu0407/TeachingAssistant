@@ -12,5 +12,7 @@ public class AdminRoutes extends Routes {
 		add("/", LoginController.class);
 		add("/article", ArticleController.class);
 		add("/post", PostController.class);
+		add("/course",CourseController.class);
+		add("/notice",NoticeController.class);
     }
 }

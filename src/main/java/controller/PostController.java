@@ -8,6 +8,7 @@ import model.Post;
 import model.Result;
 import model.ResultFactory;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -132,7 +133,10 @@ public class PostController extends BaseController{
                     record.set("to_user_id",post.getToUserId());
                 record.set("user_id",getSessionAttr(PermissionChecker.USER_ID));
                 record.set("parent_post_id",post.getParentPostId());
-                record.set("create_time",new Date());
+                Date currentTime = new Date();
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String dateString = formatter.format(currentTime);
+                record.set("create_time",dateString);
                 record.set("content",post.getContent());
                 Record record1 = Db.use("ta").findFirst("select max(position) as num from ta_post where article_id="+post.getArticleId());
                 if(record1.get("num")==null){
@@ -211,12 +215,12 @@ public class PostController extends BaseController{
             postList.add(post);
         }
         recordList = Db.use("ta").find("select * from ta_post where parent_post_id = ?",parentPostId);
-        Long totalPage;
+        int totalPage;
         int articleNum = recordList.size();
-        if(articleNum%10==0)
-            totalPage = articleNum/10L;
+        if(articleNum%pagesize==0)
+            totalPage = articleNum/pagesize;
         else
-            totalPage = articleNum/10L+1;
+            totalPage = articleNum/pagesize+1;
         Result result = ResultFactory.buildSuccessArticleResult(postList,totalPage);
         renderJson(result);
     }

@@ -1,35 +1,29 @@
 <template>
-  <div id="SocialIndex" class="SocialIndex">
-     <div class="SocialIndexHeader bgWhite" id="SocialIndexHeader">
-        <SocialIndexHeader :HdInfoData.sync="HdInfoData" :isSiH.sync="isSiH"  @refresh="refresh"></SocialIndexHeader>
-     </div>
+  <div id="CourseIndex" class="SocialIndex">
+     <!--<div class="SocialIndexHeader bgWhite" id="SocialIndexHeader">-->
+        <!--<SocialIndexHeader :HdInfoData.sync="HdInfoData" :isSiH.sync="isSiH"  @refresh="refresh"></SocialIndexHeader>-->
+     <!--</div>-->
      <div class="SocialIndexMain clearfix">
         <div class="MainList fl bgWhite">
-            <SocialIndexList></SocialIndexList>
+            <CourseIndexList></CourseIndexList>
         </div>
         <div class="MainMoudle fr" id="MainMoudle">
             <PeoInfo ref="myPeoInfo"></PeoInfo>
-            <SocialIndexHot></SocialIndexHot>
+            <CourseIndexHot></CourseIndexHot>
             <span class="goTop cur" v-show="isGoTop" @click="goTop()"></span>
         </div>
      </div>
   </div>
 </template>
 <script>
-  import SocialIndexHeader from './components/SocialIndexHeader.vue'
-  import SocialIndexAdmin from './components/SocialIndexAdmin.vue'
-  import SocialIndexHot from './components/SocialIndexHot.vue'
-  import SocialIndexList from './components/SocialIndexList.vue'
-  import SocialIndexRecommend from './components/SocialIndexRecommend.vue'
-  import PeoInfo from './components/PeoInfo.vue'
+  import CourseIndexList from './CourseIndexList.vue'
+  import CourseIndexHot from './CourseIndexHot.vue'
+  import PeoInfo from './../PeoInfo.vue'
   export default {
-    name: 'SocialIndex',
+    name: 'CourseIndex',
     components: {
-      SocialIndexHeader: SocialIndexHeader,
-      SocialIndexAdmin: SocialIndexAdmin,
-      SocialIndexHot: SocialIndexHot,
-      SocialIndexList: SocialIndexList,
-      SocialIndexRecommend: SocialIndexRecommend,
+      CourseIndexList: CourseIndexList,
+      CourseIndexHot: CourseIndexHot,
       PeoInfo: PeoInfo
     },
     data () {
@@ -91,29 +85,8 @@
       window.removeEventListener('scroll', this.handleScroll)
     },
     created: function () {
-      this.circleId = this.$route.params.circleId
       window.addEventListener('scroll', this.handleScroll)
-      // var vm = this
-      // vm.$http({
-      //   url: '//moment.snail.com/api/v1/circle/info',
-      //   method: 'jsonp',
-      //   params: {
-      //     'circle_id': this.circleId
-      //   },
-      //   jsonp: 'callback',
-      //   emulateJSON: true,
-      //   headers: {
-      //     'Content-Type': 'x-www-from-urlencoded'
-      //   }
-      // }).then(function (res) {
-      //   if (res.data.code === 200) {
-      //     this.HdInfoData = res.data.info
-      //     console.log(res.data)
-      //   } else if (res.data.code === 404) {
-      //     var url = 'http://stone.snail.com/error/404.html?from=circle&type=1'
-      //     window.location.href = url
-      //   }
-      // })
+      this.$emit('showfooter');
     }
   }
 </script>
