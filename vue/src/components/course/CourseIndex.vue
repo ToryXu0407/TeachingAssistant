@@ -9,7 +9,7 @@
         </div>
         <div class="MainMoudle fr" id="MainMoudle">
             <PeoInfo ref="myPeoInfo"></PeoInfo>
-            <CourseIndexHot></CourseIndexHot>
+            <CourseIndexHot>热门点击</CourseIndexHot>
             <span class="goTop cur" v-show="isGoTop" @click="goTop()"></span>
         </div>
      </div>

@@ -1,7 +1,7 @@
 <template>
   <div class="SocialIndexHot bgWhite" id="SocialIndexHot">
     <div class="MoudleHd">
-      热门讨论
+      <slot></slot>
     </div>
     <div class="HotList clearfix">
       <ul>
