@@ -159,4 +159,32 @@ public class CourseController extends BaseController {
         }
         renderJson(result);
     }
+
+    /**
+     * 返回浏览量前5的课程（用来在首页轮播图显示)
+     */
+    @UnCheckLogin
+    public void getCarouselArticle(){
+        Result result;
+        try{
+            List<Course> courses = new ArrayList<>();
+            List<Record> recordList = Db.use("ta").find("select * from ta_course order by view_count desc limit 0,5");
+            for(Record record:recordList){
+                Course course = new Course();
+                course.setId(record.getInt("id"));
+                course.setName(record.getStr("name"));
+                course.setDescription(record.getStr("description"));
+                course.setCreateTime(record.get("create_time").toString());
+                course.setViewCount(record.getInt("view_count"));
+                course.setImage(record.getStr("image"));
+                courses.add(course);
+            }
+            result = ResultFactory.buildSuccessResult(courses);
+        }catch (Exception e){
+            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
+            result = ResultFactory.buildFailResult(e.getMessage());
+        }
+        renderJson(result);
+    }
 }

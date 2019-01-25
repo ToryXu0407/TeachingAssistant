@@ -114,6 +114,7 @@ public class ArticleController extends BaseController{
             Record record = Db.use("ta")
                     .findFirst(sql);
             if(record!=null){
+                    Db.use("ta").update("update ta_article set view_count = view_count+1 where id="+getParaToInt("id"));
                     Article article = new Article();
                     article.setId(record.getInt("id"));
                     article.setUserId(record.getInt("user_id"));

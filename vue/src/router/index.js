@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Index from '@/components/forum/Index'
+import BaseIndex from '@/components/BaseIndex'
 import SocialIndex from '@/components/forum/SocialIndex'
 import SocialDetail from '@/components/forum/SocialDetail'
 import SocialPost from '@/components/forum/SocialPost'
@@ -15,9 +16,9 @@ export default new Router({
   routes: [
 
     {
-      path: '/index',
+      path: '/',
       name: 'index',
-      component: Index,
+      component: BaseIndex,
     },
     {
       path: '/course',
@@ -30,7 +31,7 @@ export default new Router({
       component: Register,
     },
     {
-      path: '/',
+      path: '/social',
       name: 'social',
       component: SocialIndex,
     },
