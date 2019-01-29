@@ -14,7 +14,7 @@
           <el-menu-item index="/">首页</el-menu-item>
           <el-menu-item index="/course">课程</el-menu-item>
           <el-menu-item index="/social">讨论社</el-menu-item>
-          <el-menu-item index="/">答疑聊天室</el-menu-item>
+          <el-menu-item index="/chatroom">答疑聊天室</el-menu-item>
           <!--<el-menu-item index="/category/all">文章分类</el-menu-item>-->
           <!--<el-menu-item index="/tag/all">标签</el-menu-item>-->
           <!--<el-menu-item index="/archives">文章归档</el-menu-item>-->

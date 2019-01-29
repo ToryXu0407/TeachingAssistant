@@ -1,31 +1,31 @@
 <template>
-  <div id="CourseIndex" class="SocialIndex">
+  <div id="SocialIndex" class="SocialIndex">
      <div class="SocialIndexHeader bgWhite" id="SocialIndexHeader">
-        <courseIndexHeader></courseIndexHeader>
+        <chatRoomIndexHeader :HdInfoData.sync="HdInfoData" :isSiH.sync="isSiH"  @refresh="refresh"></chatRoomIndexHeader>
      </div>
      <div class="SocialIndexMain clearfix">
         <div class="MainList fl bgWhite">
-            <CourseIndexList></CourseIndexList>
+            <chatRoomIndexList></chatRoomIndexList>
         </div>
         <div class="MainMoudle fr" id="MainMoudle">
             <PeoInfo ref="myPeoInfo"></PeoInfo>
-            <CourseIndexHot>热门点击</CourseIndexHot>
+            <chatRoomIndexHot></chatRoomIndexHot>
             <span class="goTop cur" v-show="isGoTop" @click="goTop()"></span>
         </div>
      </div>
   </div>
 </template>
 <script>
-  import CourseIndexList from './CourseIndexList.vue'
-  import courseIndexHeader from './courseIndexHeader.vue'
-  import CourseIndexHot from './CourseIndexHot.vue'
-  import PeoInfo from './../PeoInfo.vue'
+  import chatRoomIndexHeader from './chatRoomIndexHeader.vue'
+  import chatRoomIndexHot from './chatRoomIndexHot.vue'
+  import chatRoomIndexList from './chatRoomIndexList.vue'
+  import PeoInfo from '../PeoInfo.vue'
   export default {
-    name: 'CourseIndex',
+    name: 'chatRoomIndex',
     components: {
-      CourseIndexList: CourseIndexList,
-      CourseIndexHot: CourseIndexHot,
-      courseIndexHeader: courseIndexHeader,
+      chatRoomIndexHeader: chatRoomIndexHeader,
+      chatRoomIndexHot: chatRoomIndexHot,
+      chatRoomIndexList: chatRoomIndexList,
       PeoInfo: PeoInfo
     },
     data () {
@@ -87,8 +87,8 @@
       window.removeEventListener('scroll', this.handleScroll)
     },
     created: function () {
+      this.circleId = this.$route.params.circleId
       window.addEventListener('scroll', this.handleScroll)
-      this.$emit('showfooter');
     }
   }
 </script>

@@ -10,6 +10,8 @@ import CourseIndex from '@/components/course/CourseIndex'
 import CourseDetail from '@/components/course/CourseDetail'
 import CourseNotice from '@/components/course/CourseNotice'
 import Courseware from '@/components/course/Courseware'
+import ChatRoomIndex from '@/components/chatRoom/chatRoomIndex'
+import ChatRoomDetail from '@/components/chatRoom/chatRoomDetail'
 Vue.use(Router)
 
 export default new Router({
@@ -24,6 +26,11 @@ export default new Router({
       path: '/course',
       name: 'course',
       component: CourseIndex,
+    },
+    {
+      path:'/chatroom',
+      name:'chatroom',
+      component: ChatRoomIndex,
     },
     {
       path: '/register',
@@ -54,6 +61,12 @@ export default new Router({
       name: 'SocialPost',
       component: SocialPost,
     },
+    {
+      path:'/chatRoomDetail/:chatRoomId',
+      name:'chatRoomDetail',
+      component:ChatRoomDetail
+    }
+
 
 
   ]

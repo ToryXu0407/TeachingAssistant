@@ -4,17 +4,26 @@
          <div class="TypeTag fl">
              <ul>
                  <li>
-                    <a href="javascript:;"  :class="{current:current == -1}" title="课程" data-tagid="" @click="GoTagsBtn('', -1)" wn_tj_click_href wn_tj_click_gameId wn_tj_click_excel="all_select" wn_tj_click_id>全部</a>
+                    <a href="javascript:;"  :class="{current:current == -1}" title="进行中"  @click="GoTagsBtn('', -1)" >进行中</a>
                  </li>
-               <li></li><li></li><li></li>
-               <li></li>
+                 <li v-for="(allTags,index) in allTags" >
+                    <a href="javascript:;" :title="allTags.name" :data-tagid="allTags.id" @click="GoTagsBtn(allTags.id, index)" :class="{current:index == current}" wn_tj_click_href :wn_tj_click_excel="allTags.name" wn_tj_click_id>{{allTags.name}}</a>
+                 </li>
+             <li></li><li></li>
                <li>
-                 <el-input v-model="input" style="width:100px;margin-left:140px;margin-top: -10px;" placeholder="输入课程"></el-input>
+                 <el-input v-model="input" style="width:100px;margin-left:30px;margin-top: -10px;" placeholder="请输入内容"></el-input>
                </li>
                <li>
-                 <el-button icon="el-icon-search" @click="search" circle style="margin-left:170px;margin-top: -10px;"></el-button>
+                 <el-button icon="el-icon-search" circle @click="search" style="margin-left:60px;margin-top: -10px;"></el-button>
                </li>
              </ul>
+        </div>
+        <div class="scrrenTag fr">
+           <h6 class="scrrenTagInput" @click="drownInput"><span>{{ordername}}</span><i :class="['rotatez',{'roate':drown === false}]"></i></h6>
+           <ul class="InputSelect" v-if="drown">
+              <li data-order="hot" @click="drownSelect('hot','热门排序')" wn_tj_click_href wn_tj_click_gameId wn_tj_click_excel="hot_ordering" wn_tj_click_id>热门排序</li>
+              <li data-order="time" @click="drownSelect('time','时间排序')" wn_tj_click_href wn_tj_click_gameId wn_tj_click_excel="time_ordering" wn_tj_click_id>时间排序</li>
+           </ul>
          </div>
       </div>
       <div class="IndexListCont">
@@ -22,16 +31,20 @@
           <li v-for="(list, i) in list" :data-listId="list.id" :name="list.id">
               <div class="Jitems">
                 <div class="Jitems-Title">
-                  <router-link :to="{ name: 'courseDetail', params: {'courseId':list.id ,'onPage':0}}" :title="list.name" :listId="list.id">{{list.name}}</router-link>
+                  <router-link :to="{ name: 'chatRoomDetail', params: {'chatRoomId':list.id }}" :title="list.label" :listId="list.id">{{list.label}}</router-link>
+                  <i class="icon-good" v-if="list.isSticky=='Y'" >精</i>
                 </div>
                 <div class="Jitems-Info">
                     <div class="JuserInfo fl">
-                        <a href="javascript:;" class="JuserInfo-people default" :title="list.name">
-                            <img :src="list.image"/>
+                        <a href="javascript:;" class="JuserInfo-people default" :title="list.nickname">
+                            <img :src="list.headImage"/>
+                            {{list.nickname}}
                         </a>
+                        <span class="JuserInfo-time" :title="list.createTime">{{list.createTime}} To {{list.createTime}}</span>
                     </div>
                     <div class="JdataInfo fr">
                        <span class="Jview"><img src="../../images/icon4.png"/>{{list.viewCount}}</span>
+                       <span class="Jreply"><img src="../../images/icon5.png"/>{{list.commentCount}}</span>
                     </div>
                 </div>
               </div>
@@ -47,7 +60,7 @@
 import pagination from '../pagination.vue'
 import EnlargePicture from '../EnlargePicture.vue'
 export default {
-  name: 'CourseIndexList',
+  name: 'chatRoomIndexHot',
   components: {
     pagination: pagination,
     EnlargePicture: EnlargePicture
@@ -70,12 +83,12 @@ export default {
   data () {
     return {
       list: [],
-      allTags: [{id: 1}],
+      allTags: [{id:2,name:'未开始'},{id: 1, name: '已结束'}],
+      input: '',
       cur: 1,
       all: 1,
       pageSize: 20,
       tags: '',
-      input:'',
       order: 'time',
       ordername: '时间排序',
       drown: false,
@@ -158,7 +171,7 @@ export default {
       const vm = this;
       let params = new URLSearchParams();
       params.append('input', this.input);
-      this.$axios.post('/course/getCourse', params)
+      this.$axios.post('/article/getArticle', params)
         .then(function (res) {
           vm.list = res.data.data
           vm.all = res.data.totalPage
@@ -174,7 +187,11 @@ export default {
       let params = new URLSearchParams();
       params.append('page', page);
       params.append('pagesize', 10);
-      this.$axios.post('/course/getCourse', params)
+      params.append('order',order);
+      if(this.tags===1){
+        params.append('isSticky','Y');
+      }
+      this.$axios.post('/article/getArticle', params)
         .then(function (res) {
           vm.list = res.data.data
           vm.all = res.data.totalPage
@@ -192,7 +209,7 @@ export default {
     let params = new URLSearchParams();
     params.append('page', 1);
     params.append('pagesize',10);
-    this.$axios.post('/course/getCourse',params)
+    this.$axios.post('/article/getArticle',params)
       .then(function (res) {
         vm.list = res.data.data
         vm.all = res.data.totalPage
