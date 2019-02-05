@@ -164,7 +164,7 @@ public class CourseController extends BaseController {
      * 返回浏览量前5的课程（用来在首页轮播图显示)
      */
     @UnCheckLogin
-    public void getCarouselArticle(){
+    public void getCourselArticle(){
         Result result;
         try{
             List<Course> courses = new ArrayList<>();

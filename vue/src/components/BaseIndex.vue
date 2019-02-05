@@ -36,7 +36,7 @@
     created: function () {
       const vm = this
       let params = new URLSearchParams();
-      this.$axios.post('/course/getCarouselArticle',params)
+      this.$axios.post('/course/getCourselArticle',params)
         .then(function (res) {
           if(res.data.code===200)
           vm.courses = res.data.data
