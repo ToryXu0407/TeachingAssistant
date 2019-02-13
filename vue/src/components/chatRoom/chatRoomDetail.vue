@@ -3,7 +3,7 @@
     <div class="MainList fl" id="MainList">
       <div class="ListPage Page-Top bgWhite">
         <!--<div>答疑聊天室-在线人数{{onlineNum}}</div>-->
-        <div>答疑聊天室</div>
+        <div>{{courseName}}</div>
         <router-link class="goBack cur"  :to="{ name: 'chatroom'}" wn_tj_click_href wn_tj_click_gameId wn_tj_click_excel="previous_page" wn_tj_click_id><img src="../../images/icon14.png"/>返回</router-link>
       </div>
 
@@ -104,6 +104,7 @@
         showDialog:false,
         isStarted:false,
         canChat:true,
+        courseName:'',
         timer:null,
         message:'',
         nickname:'',
@@ -217,12 +218,13 @@
         var start_date = new Date(this.startTime);
         var end_date = new Date(this.endTime);
         var now = new Date();
+        console.log(now);
         if(now<start_date){
-          // console.log("未开始")
+          //console.log("未开始")
           this.isStarted = false;
           this.canChat = true;
         }else if(now<end_date){
-          console.log("进行中")
+          // console.log("进行中")
           this.isStarted = true;
           this.canChat = true;
         }else if(now>end_date){
@@ -295,6 +297,7 @@
           if (successResponse.data.code === 200) {
             this.startTime = successResponse.data.data.startTime;
             this.endTime = successResponse.data.data.endTime;
+            this.courseName = successResponse.data.data.courseName;
             vm.getCurrentTime();
           }
         }).catch(failResponse => {})
@@ -316,10 +319,16 @@
             var data = JSON.parse(evt.data);
             var userid = data.from.userid;
             var isSelf = 0;
-            if(userid===vm.userid){
-              isSelf=1;
+            var chatroomId = data.chatRoomId;
+            console.log("onMessage:"+chatroomId);
+            //如果是其他聊天室的消息则不接收。
+            if(chatroomId===vm.$route.params.chatRoomId)
+            {
+              if(userid===vm.userid){
+                isSelf=1;
+              }
+              vm.conversationList.push({message:data.text,isSelf:isSelf,date:data.date,nickname:data.from.nickname});
             }
-            vm.conversationList.push({message:data.text,isSelf:isSelf,date:data.date,nickname:data.from.nickname});
             // alert("数据已接收..."+received_msg);
           };
           ws.onclose = function()
@@ -341,7 +350,7 @@
       var vm =this;
         this.timer = setInterval( () => {
           vm.getCurrentTime();
-        }, 1500);
+        }, 1000);
       const s = document.createElement('script')
       s.type = 'text/javascript'
       s.src = '//static.snail.com/js/stone/v2/statistics_ty_v2.source.js'

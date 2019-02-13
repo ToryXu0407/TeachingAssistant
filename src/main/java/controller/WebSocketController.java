@@ -55,15 +55,16 @@ public class WebSocketController {
         Date date = new Date();
         java.text.DateFormat format1 = new java.text.SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String time = format1.format(date);
+        int chatRoomId = (int) session1.getAttribute("chatRoomId");
         for(WebSocketController item: webSocketSet){
             Message msg = new Message();
             msg.setDate(time);
             msg.setFrom((UserInfo) session1.getAttribute(PermissionChecker.USER));
             msg.setText(requestJson);
+            msg.setChatRoomId(chatRoomId);
             item.session.getBasicRemote().sendText(JSON.toJSONString(msg));
         }
         //将对话保存到数据库。
-        int chatRoomId = (int) session1.getAttribute("chatRoomId");
         UserInfo userInfo = (UserInfo) session1.getAttribute(PermissionChecker.USER);
         String nickname = userInfo.getNickname();
         int userId = userInfo.getUserid();

@@ -33,4 +33,5 @@ public class Message {
     private int isSelf;
 
     private String message;
+
 }
