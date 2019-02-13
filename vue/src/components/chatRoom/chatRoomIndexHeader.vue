@@ -10,20 +10,25 @@
             <h4 class="Htitle" :title="HdInfoData.description">{{HdInfoData.description}}</h4>
         </div>
     </div>
-      <LoginPop v-show="showDialog" @on-cancel="closeLoginPop" @on-suceess="LoginSuccess"></LoginPop>
+    <div class="SiH-Href fr" v-if="isTeacher==='Y'" >
+      <div v-bind:id="HdInfoData.id" class="SiH-Launch2 fr animation" @click="ChatRoomAdd(HdInfoData.id)">
+        创建聊天室
+    </div>
+    </div>
   </div>
 </template>
 
 <script>
-  import LoginPop from '../LoginPop.vue'
+  import chatRoomAdd from './chatRoomAdd.vue'
   export default {
     name: 'chatRoomIndexHeader',
     components: {
-      LoginPop: LoginPop,
+      chatRoomAdd: chatRoomAdd,
     },
     data () {
       return {
         showDialog:false,
+        isTeacher:'N',
         HdInfoData: {id: '1', name: '答疑聊天室', descrption: '教学辅助网站论坛', icon: 'http://oss.yiqihappy.top/aa.jpg'}
       }
     },
@@ -31,28 +36,17 @@
       HdInfoData: function (value) {}
     },
     methods: {
-      ShowLoginPop: function () {
-        this.showDialog = true;
-      },
-      closeLoginPop: function () {
-        this.showDialog = false;
-      },
-      LoginSuccess: function () {
-        this.showDialog = false;
-        this.$emit('refresh');
-      },
-      // 发起讨论
-      goDiscussion: function (articleId) {
-        if (document.getElementById('pdLogin').value === 'true') {
-          this.$router.push({name: 'SocialPost', params: {articleId: articleId}})
-        } else {
-          this.ShowLoginPop()
-        }
-      },
-
+      ChatRoomAdd: function (chatRoomId) {
+        // 发起讨论
+          if (document.getElementById('pdLogin').value === 'true') {
+            this.$router.push({name: 'ChatRoomAdd'})
+          } else {
+            this.ShowLoginPop()
+          }
+        },
     },
-    created: function () {
-
+    mounted: function () {
+      this.isTeacher =  document.getElementById('isTeacher').value;
     }
   }
 </script>

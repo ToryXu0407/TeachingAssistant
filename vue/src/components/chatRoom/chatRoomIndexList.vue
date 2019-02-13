@@ -4,10 +4,10 @@
          <div class="TypeTag fl">
              <ul>
                  <li>
-                    <a href="javascript:;"  :class="{current:current == -1}" title="进行中"  @click="GoTagsBtn('', -1)" >进行中</a>
+                    <a href="javascript:;"  :class="{current:current == 0}" title="进行中"  @click="GoTagsBtn('', 0)" >进行中</a>
                  </li>
                  <li v-for="(allTags,index) in allTags" >
-                    <a href="javascript:;" :title="allTags.name" :data-tagid="allTags.id" @click="GoTagsBtn(allTags.id, index)" :class="{current:index == current}" wn_tj_click_href :wn_tj_click_excel="allTags.name" wn_tj_click_id>{{allTags.name}}</a>
+                    <a href="javascript:;" :title="allTags.name" :data-tagid="allTags.id" @click="GoTagsBtn(allTags.id, index+1)" :class="{current:index+1 == current}" wn_tj_click_href :wn_tj_click_excel="allTags.name" wn_tj_click_id>{{allTags.name}}</a>
                  </li>
              <li></li><li></li>
                <li>
@@ -31,8 +31,7 @@
           <li v-for="(list, i) in list" :data-listId="list.id" :name="list.id">
               <div class="Jitems">
                 <div class="Jitems-Title">
-                  <router-link :to="{ name: 'chatRoomDetail', params: {'chatRoomId':list.id }}" :title="list.label" :listId="list.id">{{list.label}}</router-link>
-                  <i class="icon-good" v-if="list.isSticky=='Y'" >精</i>
+                  <router-link :to="{ name: 'chatRoomDetail', params: {'chatRoomId':list.id }}" :title="list.courseName" :listId="list.id">{{list.courseName}}</router-link>
                 </div>
                 <div class="Jitems-Info">
                     <div class="JuserInfo fl">
@@ -40,11 +39,10 @@
                             <img :src="list.headImage"/>
                             {{list.nickname}}
                         </a>
-                        <span class="JuserInfo-time" :title="list.createTime">{{list.createTime}} To {{list.createTime}}</span>
+                        <span class="JuserInfo-time" :title="list.createTime">{{list.startTime}} To {{list.endTime}}</span>
                     </div>
                     <div class="JdataInfo fr">
-                       <span class="Jview"><img src="../../images/icon4.png"/>{{list.viewCount}}</span>
-                       <span class="Jreply"><img src="../../images/icon5.png"/>{{list.commentCount}}</span>
+                       <span class="Jview"><img src="../../images/icon5.png"/>{{list.chatsCount}}</span>
                     </div>
                 </div>
               </div>
@@ -83,7 +81,7 @@ export default {
   data () {
     return {
       list: [],
-      allTags: [{id:2,name:'未开始'},{id: 1, name: '已结束'}],
+      allTags: [{id:1,name:'未开始'},{id: 2, name: '已结束'}],
       input: '',
       cur: 1,
       all: 1,
@@ -92,7 +90,7 @@ export default {
       order: 'time',
       ordername: '时间排序',
       drown: false,
-      current: -1,
+      current: 0,
       isCurrent: 0,
       showFlag: -1,
       tumbCurrent: 0,
@@ -125,8 +123,7 @@ export default {
     GoTagsBtn: function (tagId, index) { // 切换tag
       this.current = index
       this.tags = tagId
-      console.log("tags1:"+this.tags)
-      this.ShowHtml(this.order, 1)
+      this.ShowHtml(this.order, 1,index)
       this.$refs.page.send(1)
     },
     goTop: function () {
@@ -164,14 +161,14 @@ export default {
       this.drown = false
       this.isSelectMask = false
       this.order = order
-      this.ShowHtml(this.order, 1)
+      this.ShowHtml(this.order, 1,this.current)
       this.$refs.page.send(1)
     },
     search(){
       const vm = this;
       let params = new URLSearchParams();
       params.append('input', this.input);
-      this.$axios.post('/article/getArticle', params)
+      this.$axios.post('/chat/getChatRooms', params)
         .then(function (res) {
           vm.list = res.data.data
           vm.all = res.data.totalPage
@@ -182,16 +179,15 @@ export default {
           }
         })
     },
-    ShowHtml: function (order, page) {
+    ShowHtml: function (order, page,status) {
       const vm = this
       let params = new URLSearchParams();
       params.append('page', page);
       params.append('pagesize', 10);
       params.append('order',order);
-      if(this.tags===1){
-        params.append('isSticky','Y');
-      }
-      this.$axios.post('/article/getArticle', params)
+      params.append('status',status);
+      params.append('input',this.input);
+      this.$axios.post('/chat/getChatRooms', params)
         .then(function (res) {
           vm.list = res.data.data
           vm.all = res.data.totalPage
@@ -209,7 +205,8 @@ export default {
     let params = new URLSearchParams();
     params.append('page', 1);
     params.append('pagesize',10);
-    this.$axios.post('/article/getArticle',params)
+    params.append('status',0);
+    this.$axios.post('/chat/getChatRooms',params)
       .then(function (res) {
         vm.list = res.data.data
         vm.all = res.data.totalPage

@@ -34,6 +34,7 @@ public class RegisterController extends BaseController {
 			String username = getPara("username").trim();
 			String password = getPara("password").trim();
 			String nickname = getPara("nickname").trim();
+			String isTeacher = getPara("isTeacher").trim();
 			if (StrKit.isBlank(username)) {
 				throw new RuntimeException("用户名不能为空");
 			}
@@ -52,6 +53,7 @@ public class RegisterController extends BaseController {
 			record.set("password",password);
 			record.set("type",2);
 			record.set("create_time", dateString);
+			record.set("is_teacher",isTeacher);
 			Record record1 = Db.use("ta").findFirst("select * from ta_user where username= ? ",username);
 			if(record1!=null)
 			    throw new RuntimeException("用户名已存在!");
@@ -81,7 +83,7 @@ public class RegisterController extends BaseController {
 		} catch (Exception e) {
 			LOG.error("出错啦", e);
 			setAttr("error", e.getMessage());
-			 result = ResultFactory.buildSuccessResult(e.getMessage());
+			 result = ResultFactory.buildFailResult(e.getMessage());
 			renderVelocity("register.html");
 		}
 		renderJson(result);

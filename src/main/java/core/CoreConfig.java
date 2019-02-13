@@ -13,10 +13,7 @@ import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.activerecord.dialect.MysqlDialect;
 import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.render.ViewType;
-import interceptor.GlobalActionInterceptor;
-import interceptor.PermissionBuild;
-import interceptor.PermissionChecker;
-import interceptor.VisitLogInterceptor;
+import interceptor.*;
 import model.Module;
 
 /**
@@ -88,6 +85,7 @@ public class CoreConfig extends JFinalConfig {
 
 	@Override
 	public void configHandler(Handlers me) {
+		me.add(new WebSocketHandler("^/websocket"));
 		//me.add(new UrlSkipHandler("^/websocket", false));
 	}
 

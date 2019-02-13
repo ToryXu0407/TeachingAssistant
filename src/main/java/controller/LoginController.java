@@ -50,6 +50,7 @@ public class LoginController extends BaseController {
 			userInfo.setCreateTime(userRecord.get("create_time").toString());
 			userInfo.setHeadImage(userRecord.getStr("head_image"));
 			userInfo.setIsTeacher(userRecord.getStr("is_teacher"));
+			userInfo.setUserid(userRecord.getInt("id"));
 			setSessionAttr(PermissionChecker.USER,userInfo);
 			setSessionAttr(PermissionChecker.USER_ID, userRecord.get("id"));
 			setSessionAttr(PermissionChecker.USER_USERNAME, username);

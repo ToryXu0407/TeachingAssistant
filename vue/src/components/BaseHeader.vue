@@ -99,9 +99,15 @@
           if (successResponse.data.code === 200) {
             document.getElementById('pdLogin').value = 'true'
             vm.user = successResponse.data.data;
+            if(vm.user.isTeacher==='Y')
+              document.getElementById('isTeacher').value = 'Y'
+            else{
+              document.getElementById('isTeacher').value = 'N'
+            }
             vm.isLogin = true
           }else{
             document.getElementById('pdLogin').value = 'false'
+            document.getElementById('isTeacher').value = 'N'
             vm.isLogin = false
           }
         }).catch(failResponse => {})
@@ -118,7 +124,6 @@
       },
       LoginSuccess: function () {
         this.showDialog = false;
-        this.$router.push("/");
         this.$emit('refresh');
       },
       getLoggedInfo(){
@@ -128,9 +133,15 @@
             if (successResponse.data.code === 200) {
               document.getElementById('pdLogin').value = 'true'
               vm.user = successResponse.data.data;
+              if(vm.user.isTeacher==='Y')
+                document.getElementById('isTeacher').value = 'Y'
+              else{
+                document.getElementById('isTeacher').value = 'N'
+              }
               vm.isLogin = true
             }else{
               document.getElementById('pdLogin').value = 'false'
+              document.getElementById('isTeacher').value = 'N'
               vm.isLogin = false
             }
           }).catch(failResponse => {})
@@ -142,6 +153,7 @@
           .then((successResponse)=>{
             if(successResponse.data.code===200){
               document.getElementById('pdLogin').value = 'false'
+              document.getElementById('isTeacher').value = 'N'
               vm.$emit('refresh');
               }
         })

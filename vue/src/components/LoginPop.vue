@@ -36,9 +36,13 @@ export default {
           this.info = JSON.stringify(successResponse.data)
           if (successResponse.data.code === 200) {
             //登陆成功
-            console.log("登陆成功");
-            console.log(document.getElementById('pdLogin').value);
             document.getElementById('pdLogin').value = 'true'
+            if(successResponse.data.data.isTeacher==='Y')
+              document.getElementById('isTeacher').value = 'Y'
+            else{
+              document.getElementById('isTeacher').value = 'N'
+            }
+            // this.$router.push("/")
             vm.$emit('on-suceess');
           }
         }).catch(failResponse => {})

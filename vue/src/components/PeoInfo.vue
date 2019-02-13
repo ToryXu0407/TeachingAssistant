@@ -45,9 +45,15 @@ export default {
           if (successResponse.data.code === 200) {
             this.info = successResponse.data.data
             document.getElementById('pdLogin').value = 'true'
+            if(successResponse.data.data.isTeacher==='Y')
+              document.getElementById('isTeacher').value = 'Y'
+            else{
+              document.getElementById('isTeacher').value = 'N'
+            }
             this.isLogin = true
           }else{
             document.getElementById('pdLogin').value = 'false'
+            document.getElementById('isTeacher').value = 'N'
             this.isLogin = false
           }
         }).catch(failResponse => {})
@@ -59,11 +65,16 @@ export default {
       .then((successResponse)=>{
         if (successResponse.data.code === 200) {
           vm.info = successResponse.data.data
-          console.log(vm.info.username)
           document.getElementById('pdLogin').value = 'true'
+          if(successResponse.data.data.isTeacher==='Y')
+            document.getElementById('isTeacher').value = 'Y'
+          else{
+            document.getElementById('isTeacher').value = 'N'
+          }
           vm.isLogin = true
         }else{
           document.getElementById('pdLogin').value = 'false'
+          document.getElementById('isTeacher').value = 'N'
         }
       }).catch(failResponse => {})
   }

@@ -21,7 +21,7 @@ import java.util.List;
 @PermissionOwn(name="index")
 public class ArticleController extends BaseController{
     /**
-     * 在主页上显示部分帖子
+     * 显示帖子
      */
     @UnCheckLogin
     public void getArticle() {
@@ -39,18 +39,21 @@ public class ArticleController extends BaseController{
             if(getPara("input")!=null){
                 sql+=" and label like '%"+getPara("input")+"%'";
             }
+            String orderSql="";
             if(getPara("isSticky")!=null)
                 sql+=" and is_sticky='"+getPara("isSticky")+"'";
-            String orderSql=" order by create_time desc";
             if(getPara("order")!=null) {
                 if (getPara("order").equals("hot"))
                     //暂时把热门的定义为回帖量最多的，之后改成最近某段时间最多的
                     orderSql = " order by comment_count desc";
+            }else{
+                orderSql=" order by create_time desc";
             }
             sql +=orderSql+" limit ?,?";
             List<Article> articles = new ArrayList<>();
             List<Record> records = Db.use("ta")
                     .find(sql,page*pagesize,pagesize);
+            //获得article、发布者信息和个人是否点赞信息
             if (records.size() != 0) {
                 for (Record record : records) {
                     Article article = new Article();
@@ -98,7 +101,7 @@ public class ArticleController extends BaseController{
     }
 
     /**
-     * 在主页上显示部分帖子，以时间排序
+     * 显示帖子内容
      */
     @UnCheckLogin
     public void getArticleById() {

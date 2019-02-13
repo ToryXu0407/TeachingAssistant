@@ -7,33 +7,8 @@
           <input type="text" placeholder="请输入标题(～￣▽￣)～ " class="bgWhite" v-model="items.text" ref="count"/>
           <span>还可以输入<b>{{num}}</b>个字符</span>
         </div>
-        <!--<div class="SPMT-Classify fl bgWhite">-->
-          <!--<div class="SPMTC-Input cur" @click="showSelect()" :data-tagId="tagId"  :data-tagName="tagName">{{SelectInput}}</div>-->
-          <!--<i :class="['rotatez',{'rotate': isSelect === false}]"></i>-->
-          <!--<ul class="SPMTC-Select" v-show="isSelect">-->
-              <!--<li v-for="(list, temp) in tags" :data-tagId="list.id" :title="list.name" @click="Choice(list.id, list.name)">{{list.name}}</li>-->
-          <!--</ul>-->
-        <!--</div>-->
+
       </div>
-      <!--<div class="SPM-Tags" v-if="isTopsList"> -->
-         <!--<div class="TagsDiv clearfix">-->
-            <!--<span class="addTags fl cur" @click="addTopics">添加话题</span>-->
-            <!--<span class="addTagsTs fl" v-if="topicNum == 5"></span>-->
-            <!--<div class="tagsBox fl">-->
-               <!--<span class="J-tags" v-for="(list, temp) in topicsList" :data-id="list.id" v-if="list.isShow">-->
-                  <!--{{list.name}}-->
-                  <!--<i class="removeTags cur fr" @click="removeJtags(list.temp, list.id)"></i>-->
-               <!--</span>-->
-            <!--</div>-->
-            <!--<span class="tagsTs fr">您还可以添加{{topicNum}}个话题</span>-->
-         <!--</div>-->
-         <!--<div class="TagsList" v-if="isTops">-->
-            <!--<span class="closeTags cur" @click="closeTagsList"></span>-->
-            <!--<ul class="TagsListItem">-->
-              <!--<li  v-for="(list,temp) in topics" :data-topId="list.topic_id" :title="list.topic_name" @click="CurrentTop(temp, list.topic_id ,list.topic_name)" :class="['cur',{'active':list.isActive}]">{{list.topic_name}}</li>-->
-            <!--</ul>-->
-         <!--</div>-->
-      <!--</div>-->
       <div class="SPM-Editor">
         <div id="editorElem" style="text-align:left"></div>
       </div>
@@ -96,78 +71,6 @@
       }
     },
     methods: {
-      removeJtags: function (temp, id) {
-        for (const i in this.topicsList) {
-          if (this.topicsList[i].temp === temp) {
-            this.topicsList.splice(i, 1)
-          }
-        }
-        for (const i in this.topicsId) {
-          if (this.topicsId[i] === '' + id + '') {
-            this.topicsId.splice(i, 1)
-          }
-        }
-        this.topics[temp].isActive = false
-        this.topicNum += 1
-      },
-      CurrentTop: function (temp, id, name) {
-        if (this.topics[temp].isActive === true) {
-          this.topics[temp].isActive = false
-          for (const i in this.topicsList) {
-            if (this.topicsList[i].temp === temp) {
-              this.topicsList.splice(i, 1)
-            }
-          }
-          for (const i in this.topicsId) {
-            if (this.topicsId[i] === '' + id + '') {
-              this.topicsId.splice(i, 1)
-            }
-          }
-          this.topicNum += 1
-        } else if (this.topics[temp].isActive === false) {
-          if (this.topicNum > 0) {
-            this.topics[temp].isActive = true
-            let obj = {
-              'id': id,
-              'name': name,
-              'isShow': true,
-              'temp': temp
-            }
-            this.topicsList.push(obj)
-            this.topicsId.push('' + id + '')
-            this.topicNum -= 1
-          }
-        }
-      },
-      closeDrown: function () {
-        this.isSelect = false
-        this.isDivmask = false
-      },
-      showSelect: function () { // 显示话题分类
-        if (this.isSelect === true) {
-          this.isSelect = false
-        } else {
-          this.isSelect = true
-          this.isDivmask = true
-        }
-      },
-      Choice: function (tagId, tagName) { // 选择分类
-        this.tagId = tagId
-        this.tagName = tagName
-        this.SelectInput = tagName
-        this.isSelect = false
-        this.isDivmask = false
-      },
-      addTopics: function () {
-        this.isTops = true
-      },
-      closeTagsList: function () {
-        this.isTops = false
-        // this.isTopsList = false
-      },
-      clsowisTops: function () {
-        this.isTops = false
-      },
       getContent: function (text) { // 发送评论
         var _this = this
         document.getElementsByClassName('w-e-text')[0].blur()
@@ -179,9 +82,6 @@
           document.getElementById('errts').style.display = 'inline-block'
           document.getElementById('errts').innerHTML = '请填写相关选项'
         }
-        // if (text !== '') {
-        //   _this.postHtml(this.articleId, this.title, text, this.tagId)
-        // }
       },
       postHtml: function (articleId, title, text) {
         var vm = this
@@ -196,68 +96,11 @@
               this.$router.push({name: 'circle'})
             }
           }).catch(failResponse => {})
-        // vm.$http.post('//moment.snail.com/api/v1/post/circle-post', {
-        //   articleId: articleId,
-        //   topics: tid,
-        //   tag: tag,
-        //   content: text,
-        //   title: title
-        // },
-        // {emulateJSON: true}).then((res) => {
-        //   if (res.data.code === 200) {
-        //     this.errts = false
-        //     this.$router.push({name: 'circle', params: { articleId: this.articleId }})
-        //   } else {
-        //     document.getElementById('errts').style.display = 'inline-block'
-        //     document.getElementById('errts').innerHTML = res.data.message
-        //   }
-        // }, (error) => { console.log(error) })
       }
     },
     created: function () {
       this.$emit('hidefooter');
-      // this.articleId = this.$route.params.articleId
-      // var vm = this
-      // vm.$http({
-      //   url: '//moment.snail.com/api/v1/circle/private-tags',
-      //   method: 'jsonp',
-      //   params: {
-      //     'circle_id': this.articleId
-      //   },
-      //   jsonp: 'callback',
-      //   emulateJSON: true,
-      //   headers: {
-      //     'Content-Type': 'x-www-from-urlencoded'
-      //   }
-      // }).then(function (res) {
-      //   this.tags = res.data.tags
-      // })
-      // vm.$http({
-      //   url: '//moment.snail.com/api/v1/circle/get-topics',
-      //   method: 'jsonp',
-      //   params: {
-      //     'circle_id': this.articleId
-      //   },
-      //   jsonp: 'callback',
-      //   emulateJSON: true,
-      //   headers: {
-      //     'Content-Type': 'x-www-from-urlencoded'
-      //   }
-      // }).then(function (res) {
-      //   if (res.body.code === 200) {
-      //     if (res.body.topics.length === 0 || res.body.topics.length === 1) {
-      //       this.isTopsList = false
-      //       if (res.body.topics.length === 1) {
-      //         this.topicsId.push('' + res.body.topics[0].topic_id + '')
-      //       }
-      //     } else {
-      //       for (let i in res.body.topics) {
-      //         res.body.topics[i]['isActive'] = false
-      //       }
-      //       this.topics = res.body.topics
-      //     }
-      //   }
-      // })
+
     },
     mounted () {
       var editor = new E('#editorElem')

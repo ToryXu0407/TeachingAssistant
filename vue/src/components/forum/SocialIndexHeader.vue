@@ -16,7 +16,8 @@
           <!-- <img src="../images/icon.png"/>发起讨论 -->
         </div>
     </div>
-      <LoginPop v-show="showDialog" @on-cancel="closeLoginPop" @on-suceess="LoginSuccess"></LoginPop>
+    <LoginPop v-show="showDialog" @on-cancel="closeLoginPop" @on-suceess="LoginSuccess"></LoginPop>
+
   </div>
 </template>
 

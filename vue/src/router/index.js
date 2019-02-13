@@ -5,6 +5,7 @@ import BaseIndex from '@/components/BaseIndex'
 import SocialIndex from '@/components/forum/SocialIndex'
 import SocialDetail from '@/components/forum/SocialDetail'
 import SocialPost from '@/components/forum/SocialPost'
+import ChatRoomAdd from '@/components/chatRoom/chatRoomAdd'
 import Register from '@/components/Register'
 import CourseIndex from '@/components/course/CourseIndex'
 import CourseDetail from '@/components/course/CourseDetail'
@@ -61,6 +62,12 @@ export default new Router({
       name: 'SocialPost',
       component: SocialPost,
     },
+    {
+      path: '/ChatRoomAdd',
+      name: 'ChatRoomAdd',
+      component: ChatRoomAdd,
+    },
+
     {
       path:'/chatRoomDetail/:chatRoomId',
       name:'chatRoomDetail',

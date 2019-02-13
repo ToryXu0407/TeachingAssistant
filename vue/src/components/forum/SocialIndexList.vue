@@ -125,7 +125,6 @@ export default {
     GoTagsBtn: function (tagId, index) { // 切换tag
       this.current = index
       this.tags = tagId
-      console.log("tags1:"+this.tags)
       this.ShowHtml(this.order, 1)
       this.$refs.page.send(1)
     },

@@ -3,6 +3,7 @@
     <base-header ref="myBaseHeader" @refresh="refresh"></base-header>
     <div id="app" class="app clearfix">
       <input type="hidden" id="pdLogin" value="sdd"/>
+      <input type="hidden" id="isTeacher" value="N"/>
       <router-view :key="key" @refresh="refresh" v-if="isRouterAlive" @hidefooter="hidefooter" @showfooter="showfooter"></router-view>
       <base-footer v-show="footerShow"></base-footer>
     </div>
@@ -46,7 +47,6 @@ export default {
       this.$refs.myBaseHeader.getLoggedInfo();
     },
     hidefooter(){
-      console.log("hidefooter")
       this.footerShow = false
     },
     showfooter(){

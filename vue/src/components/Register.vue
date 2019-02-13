@@ -20,6 +20,11 @@
           <el-input placeholder="密码" v-model="userForm.password"></el-input>
         </el-form-item>
 
+        <el-form-item>
+          <el-radio v-model="isTeacher" label="N">学生</el-radio>
+          <el-radio v-model="isTeacher" label="Y">老师</el-radio>
+        </el-form-item>
+
         <el-form-item size="small" class="me-login-button">
           <el-button type="primary" @click.native.prevent="register()">注册</el-button>
         </el-form-item>
@@ -46,8 +51,9 @@
         userForm: {
           account: '',
           nickname: '',
-          password: ''
+          password: '',
         },
+        isTeacher:'N',
         rules: {
           account: [
             {required: true, message: '请输入手机号', trigger: 'blur'},
@@ -72,6 +78,7 @@
         params.append('username', this.userForm.account);
         params.append('nickname', this.userForm.nickname);
         params.append('password', this.userForm.password);
+        params.append('isTeacher',this.isTeacher);
         this.$axios.post('/register/RegisterSubmit',params)
           .then((successResponse)=>{
             this.info = JSON.stringify(successResponse.data)
