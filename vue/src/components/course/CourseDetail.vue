@@ -19,12 +19,13 @@
           </el-aside>
 
           <el-container>
-            <el-header style="text-align: right; font-size: 12px">
-              <span style="font: 18px large;font-family: Hiragino Sans GB;color: #409EFF;" >{{componentName}}</span>
+            <el-header style="text-align: right;">
+              <span style="font:18px large;font-family: Hiragino Sans GB;color: #409EFF;" >{{componentName}}</span>
+              <br>
+              <i v-show="!isStudent" style="font-size:30px" class="blue el-icon-circle-plus-outline"  @click="add(componentName)"></i>
             </el-header>
-
             <el-main>
-              <component v-bind:is="component" :courseId="courseId"></component>
+              <component ref="sonComponent" v-bind:is="component" :courseId="courseId"></component>
             </el-main>
           </el-container>
         </el-container>
@@ -35,6 +36,51 @@
         <span class="goTop cur" v-show="isGoTop" @click="goTop()"></span>
       </div>
     </div>
+    <el-dialog
+      title="添加课程通知"
+      :visible.sync="dialogVisible"
+      width="30%"
+      :before-close="handleClose">
+      <el-form>
+      <el-form-item label="通知名">
+        <el-input v-model="noticeInput" placeholder="请输入通知名"></el-input>
+      </el-form-item>
+      <el-form-item label="通知内容" >
+        <el-input
+          type="textarea"
+          :rows="2"
+          placeholder="请输入通知内容"
+          v-model="noticeTextarea">
+        </el-input>
+      </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="addnotice()">添 加</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog
+      title="添加课件"
+      :visible.sync="dialogVisible2"
+      width="30%"
+      :before-close="handleClose2">
+      <el-form>
+        <el-form-item label="课件" >
+          <el-upload
+            class="upload-demo"
+            action="#"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccess"
+            :before-upload="beforeAvatarUpload">
+            <el-button size="small" type="primary">点击上传</el-button>
+          </el-upload>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisible2 = false">取 消</el-button>
+    <el-button type="primary" @click="addCourseWare()">添 加</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -58,6 +104,14 @@
         HdInfoData: {},
         component:'CourseNotice',
         componentName:'课程通知',
+        fileList:[],
+        file:'',
+        dialogVisible2:false,
+        dialogVisible:false,
+        courseWareInput:'',
+        noticeInput:'',
+        noticeTextarea:'',
+        isStudent:true,
         isShow: false,
         scrolled: false,
         isSiH: true,
@@ -69,6 +123,75 @@
       window.addEventListener('scroll', this.handleScroll)
     },
     methods: {
+      handleAvatarSuccess(res, file) {
+        // this.imageUrl = URL.createObjectURL(file.raw);
+      },
+      beforeAvatarUpload(file) {
+        const isLt2M = file.size / 1024 / 1024 < 4;
+        if (!isLt2M) {
+          this.$message.error('上传文件大小不能超过 4MB!');
+        }
+        this.file = file;
+        return isLt2M;
+      },
+      handleRemove(file, fileList) {
+        console.log(file, fileList);
+      },
+      handlePreview(file) {
+        console.log(file);
+        this.file = file;
+      },
+      handleExceed(files, fileList) {
+        this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+      },
+      beforeRemove(file, fileList) {
+        return this.$confirm(`确定移除 ${ file.name }？`);
+      },
+      handleClose(done) {
+        this.dialogVisible=false;
+      },
+      handleClose2(done) {
+        this.dialogVisible2=false;
+      },
+      add(ComponentName){
+        if(ComponentName==='课程通知'){
+          this.dialogVisible=true;
+        }else{
+          this.dialogVisible2=true;
+        }
+      },
+      addnotice(){
+        var vm = this;
+        let params = new URLSearchParams();
+        params.append('name', this.noticeInput);
+        params.append('content', this.noticeTextarea);
+        params.append('courseId', this.$route.params.courseId);
+        this.$axios.post('/notice/addNotice',params)
+          .then((res)=>{
+            if (res.data.code === 200) {
+              alert("添加课程通知成功！");
+              vm.dialogVisible = false;
+              vm.$emit('refresh');
+              this.$refs.sonComponent.ShowHtml(1);
+            }
+          });
+      },
+      addCourseWare(){
+        var vm = this;
+        let params = new FormData();
+        params.append('file', this.file);
+        params.append('courseId', this.$route.params.courseId);
+        this.$axios.post('/courseware/addCourseWare',params)
+          .then((res)=>{
+            if (res.data.code === 200) {
+              alert("添加课件成功！");
+              vm.dialogVisible2 = false;
+              this.component = 'Courseware';
+              this.componentName = '课件'
+              this.$refs.sonComponent.ShowHtml(1);
+            }
+          });
+      },
       switchComp(index){
         if(index===0){
           this.component = 'CourseNotice';
@@ -95,6 +218,17 @@
           }
         }
         var timer = setInterval(gotoTop, 50)
+      },
+      getHtml(){
+        var vm = this;
+        let params = new URLSearchParams();
+        params.append('id', this.$route.params.courseId);
+        this.$axios.post('/course/getCourseById',params)
+          .then((res)=>{
+            if (res.data.code === 200) {
+              vm.HdInfoData = res.data.data
+            }
+          });
       },
       handleScroll () {
         this.scrolled = window.scrollY
@@ -132,9 +266,19 @@
         .then((res)=>{
           if (res.data.code === 200) {
             vm.HdInfoData = res.data.data
-            console.log("父组件")
           }
-        })
+        });
+      this.$axios.post('/getLoggedInfo')
+        .then((successResponse)=>{
+          this.responseResult = JSON.stringify(successResponse.data)
+          if (successResponse.data.code === 200) {
+            if(successResponse.data.data.type!=2){
+              vm.isStudent = false;
+            }else{
+              vm.isStudent = true;
+            }
+          }
+        }).catch(failResponse => {})
     }
   }
 </script>

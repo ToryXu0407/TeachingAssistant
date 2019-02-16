@@ -3,12 +3,12 @@ package controller;
 import annotation.UnCheckLogin;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
-import model.Courseware;
-import model.Notice;
-import model.Result;
-import model.ResultFactory;
+import com.jfinal.upload.UploadFile;
+import model.*;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,6 +18,7 @@ import java.util.List;
  * 课件
  */
 public class CoursewareController extends BaseController {
+    public static final Logger LOG=Logger.getLogger(CoursewareController.class);
     /**
      * 查找对应courseId的所有课件，以时间排序。
      */
@@ -64,5 +65,57 @@ public class CoursewareController extends BaseController {
         result = ResultFactory.buildFailResult(e.getMessage());
     }
     renderJson(result);
+    }
+    /**
+     * 删除通知
+     */
+    public void delCourseware(){
+        int id = getParaToInt("id");
+        Result result;
+        try{
+            Db.use("ta").deleteById("ta_courseware",id);
+            result = ResultFactory.buildSuccessResult(id);
+        }catch(Exception e){
+            e.printStackTrace();
+            LOG.error(e.getMessage(), e);
+            result = ResultFactory.buildFailResult(e.getMessage());
+        }
+        renderJson(result);
+    }
+
+    /**
+     * 添加课程课件
+     * 将文件上传到七牛云，并返回文件路径
+     */
+    @UnCheckLogin
+    public void addCourseWare(){
+        Result result;
+        try{
+            UploadFile file = getFile("file");
+            String fileName = file.getFileName();
+            String path = file.getUploadPath();
+            String name = fileName;
+            String courseId = getPara("courseId");
+            String imageUrl = qiniuyun.upload(path+'/'+fileName,fileName);
+            if(imageUrl==null){
+                throw new Exception("上传失败！");
+            }
+            LOG.info("addCourseWare上传 文件默认本地URL："+path);
+            Date date = new Date();
+            java.text.DateFormat format1 = new java.text.SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            String time = format1.format(date);
+            Record record = new Record();
+            record.set("name",name);
+            record.set("course_id",courseId);
+            record.set("url",imageUrl);
+            record.set("create_time",time);
+            Db.use("ta").save("ta_courseware",record);
+            result = ResultFactory.buildSuccessResult(imageUrl);
+        }catch(Exception e){
+            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
+            result = ResultFactory.buildFailResult(e.getMessage());
+        }
+        renderJson(result);
     }
 }

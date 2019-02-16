@@ -7,6 +7,7 @@ import interceptor.PermissionChecker;
 import model.Post;
 import model.Result;
 import model.ResultFactory;
+import org.apache.log4j.Logger;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ import java.util.List;
  * 回帖
  */
 public class PostController extends BaseController{
-
+    public static final Logger LOG=Logger.getLogger(PostController.class);
     /**
      * 根据articleId查看所属回帖
      */
@@ -116,7 +117,6 @@ public class PostController extends BaseController{
     /**
      * 新增回帖
      */
-    @UnCheckLogin
     public void updatePost() {
         Result result;
         Post post = getBean(Post.class,"");
@@ -164,12 +164,12 @@ public class PostController extends BaseController{
         renderJson(result);
     }
 
-    @UnCheckLogin
     public void delPost() {
         Result result;
         int id = getParaToInt("id");
         try{
             Db.deleteById("ta_post",id);
+            Db.update("delete from ta_post where parent_post_id="+id);
             result = ResultFactory.buildSuccessResult(null);
         }catch (Exception e){
             e.printStackTrace();

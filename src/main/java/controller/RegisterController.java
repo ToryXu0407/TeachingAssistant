@@ -9,12 +9,14 @@ import interceptor.PermissionChecker;
 import model.Result;
 import model.ResultFactory;
 import model.UserInfo;
+import org.apache.log4j.Logger;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @PermissionOwn(name="register")
 public class RegisterController extends BaseController {
+	public static final Logger LOG=Logger.getLogger(RegisterController.class);
     public static final String SALT="TeachingAssistant";
 
 	public void index() {
@@ -47,13 +49,16 @@ public class RegisterController extends BaseController {
 			Date currentTime = new Date();
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String dateString = formatter.format(currentTime);
+			//身份：0：管理员；1：老师；2：学生,管理员账号不通过注册。
+			int idStatus=2;
 			Record record = new Record();
 			record.set("username",username);
 			record.set("nickname",nickname);
 			record.set("password",password);
-			record.set("type",2);
+			if(isTeacher.equals("Y"))
+				idStatus=1;
+			record.set("type",idStatus);
 			record.set("create_time", dateString);
-			record.set("is_teacher",isTeacher);
 			Record record1 = Db.use("ta").findFirst("select * from ta_user where username= ? ",username);
 			if(record1!=null)
 			    throw new RuntimeException("用户名已存在!");
@@ -68,7 +73,6 @@ public class RegisterController extends BaseController {
 			userInfo.setType(record.getInt("type"));
 			userInfo.setCreateTime(record.get("create_time").toString());
 			userInfo.setHeadImage(record.getStr("head_image"));
-			userInfo.setIsTeacher(record.getStr("is_teacher"));
 			setSessionAttr(PermissionChecker.USER_ID, record.get("id"));
 			setSessionAttr(PermissionChecker.USER_USERNAME, username);
 			setSessionAttr(PermissionChecker.USER,userInfo);

@@ -1,7 +1,7 @@
 package controller;
 
 import com.jfinal.core.Controller;
-import com.jfinal.log.Log4jLog;
+import org.apache.log4j.Logger;
 import interceptor.PermissionChecker;
 import org.apache.commons.lang.StringUtils;
 import util.MD5Util;
@@ -13,7 +13,8 @@ import java.util.Map;
 
 public class BaseController extends Controller {
 
-	protected Log4jLog LOG= Log4jLog.getLog(BaseController.class);
+	public static final Logger LOG=Logger.getLogger(BaseController.class);
+
 	protected static final String MESSAGE				= "message";
 	protected static final String RESULT				= "result";
 	protected static final String RESULT_SUCCESS		= "success";
@@ -29,7 +30,7 @@ public class BaseController extends Controller {
 			throw new RuntimeException("密码不能为空");
 		}
 		
-		return MD5Util.encryptPassword(password,"JUJIBAO");
+		return MD5Util.encryptPassword(password,"TA");
 	}
 	
 	protected Integer getAdminID() {

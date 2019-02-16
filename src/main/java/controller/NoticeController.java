@@ -6,8 +6,10 @@ import com.jfinal.plugin.activerecord.Record;
 import model.Notice;
 import model.Result;
 import model.ResultFactory;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,6 +19,7 @@ import java.util.List;
  * 通知
  */
 public class NoticeController extends BaseController {
+    public static final Logger LOG=Logger.getLogger(NoticeController.class);
     /**
      * 查找对应courseId的所有通知，以时间排序。
      */
@@ -66,5 +69,48 @@ public class NoticeController extends BaseController {
         result = ResultFactory.buildFailResult(e.getMessage());
     }
     renderJson(result);
+    }
+
+    /**
+     * 删除通知
+     */
+    public void delNotice(){
+        int id = getParaToInt("id");
+        Result result;
+        try{
+            Db.use("ta").deleteById("ta_notice",id);
+            result = ResultFactory.buildSuccessResult(id);
+        }catch(Exception e){
+            e.printStackTrace();
+            LOG.error(e.getMessage(), e);
+            result = ResultFactory.buildFailResult(e.getMessage());
+        }
+        renderJson(result);
+    }
+
+    /**
+     * 添加通知
+     */
+    public void addNotice(){
+        Notice notice = getBean(Notice.class,"");
+        Result result;
+        Date date = new Date();
+        java.text.DateFormat format1 = new java.text.SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String time = format1.format(date);
+        notice.setCreateTime(time);
+        Record record = new Record();
+        record.set("name",notice.getName());
+        record.set("course_id",notice.getCourseId());
+        record.set("content",notice.getContent());
+        record.set("create_time",time);
+        try{
+            Db.use("ta").save("ta_notice",record);
+            result = ResultFactory.buildSuccessResult(notice);
+        }catch(Exception e){
+            e.printStackTrace();
+            LOG.error(e.getMessage(), e);
+            result = ResultFactory.buildFailResult(e.getMessage());
+        }
+        renderJson(result);
     }
 }

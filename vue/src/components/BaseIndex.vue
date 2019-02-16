@@ -2,8 +2,10 @@
   <el-container>
     <el-header>
       <el-carousel :interval="4000" type="card" height="300px" autoplay="autoplay" loop="loop">
-        <el-carousel-item v-for="(course,i) in courses" :key="i">
-          <img :src="course.image">
+        <el-carousel-item v-for="(list,i) in courses" :key="i">
+          <router-link :to="{ name: 'courseDetail', params: {'courseId':list.id ,'onPage':0}}" >
+            <img :src="list.image">
+          </router-link>
         </el-carousel-item>
       </el-carousel>
     </el-header>

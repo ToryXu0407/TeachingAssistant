@@ -1,11 +1,11 @@
 <template>
   <div id="CourseIndex" class="SocialIndex">
      <div class="SocialIndexHeader bgWhite" id="SocialIndexHeader">
-        <courseIndexHeader></courseIndexHeader>
+        <courseIndexHeader @refresh="refresh"></courseIndexHeader>
      </div>
      <div class="SocialIndexMain clearfix">
         <div class="MainList fl bgWhite">
-            <CourseIndexList></CourseIndexList>
+            <CourseIndexList ref="myCourseIndexList"></CourseIndexList>
         </div>
         <div class="MainMoudle fr" id="MainMoudle">
             <PeoInfo ref="myPeoInfo"></PeoInfo>
@@ -43,7 +43,7 @@
     },
     methods: {
       refresh(){
-        this.$refs.myPeoInfo.getLoggedInfo();
+        this.$refs.myCourseIndexList.CreatedHtml();
         this.$emit('refresh');
       },
       goTop: function () {

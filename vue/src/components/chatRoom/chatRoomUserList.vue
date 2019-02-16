@@ -7,7 +7,7 @@
       <ul>
         <li v-for="(list,temp) in users">
            <!--<router-link :to="{ name: 'post', params: {'articleId':list.id,'onPage':1}}" :title="list.label" :listId="list.id">-->
-            <i class="fl"><img src="list.headImage"></i>
+            <i class="fl"><img width="20px" height="20px"  :src="list.headImage"></i>
             <span class="fl" :title="list.nickname">{{list.nickname}}</span>
           <!--</router-link>-->
         </li>
@@ -25,10 +25,21 @@ export default {
       users: '',
     }
   },
+  props:{
+    chatRoomId:'',
+  },
   methods: {
 
-    publishMessage() {
-
+    getOnlineUsers() {
+      const vm = this;
+      let params = new URLSearchParams();
+      params.append('chatRoomId', this.chatRoomId);
+      this.$axios.post('/chat/getEnteredUsers', params)
+        .then(function (res) {
+          if(res.data.code===200){
+            vm.users = res.data.data;
+          }
+        })
     }
   },
   created: function () {

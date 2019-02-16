@@ -6,7 +6,7 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import interceptor.PermissionChecker;
 import model.*;
-import util.StringUtil;
+import org.apache.log4j.Logger;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,6 +20,7 @@ import java.util.List;
  */
 @PermissionOwn(name="index")
 public class ArticleController extends BaseController{
+    public static final Logger LOG=Logger.getLogger(ArticleController.class);
     /**
      * 显示帖子
      */
@@ -154,7 +155,6 @@ public class ArticleController extends BaseController{
     /**
      * 新增或更新帖子
      */
-    @UnCheckLogin
     public void updateArticle() {
         Result result;
         Article article = getBean(Article.class,"");
@@ -201,12 +201,12 @@ public class ArticleController extends BaseController{
     /**
      * 删帖
      */
-    @UnCheckLogin
     public void delArticle() {
         Result result;
         int id = getParaToInt("id");
         try{
             Db.deleteById("ta_article",id);
+            Db.use("ta").update("delete from ta_post where article_id="+id);
             result = ResultFactory.buildSuccessResult(null);
         }catch (Exception e){
             e.printStackTrace();
@@ -219,7 +219,6 @@ public class ArticleController extends BaseController{
     /**
      * 给主贴点赞
      */
-    @UnCheckLogin
     public void vote(){
         Result result;
         int articleId = getParaToInt("articleId");
@@ -242,6 +241,26 @@ public class ArticleController extends BaseController{
                 Db.use("ta").save("ta_vote",record1);
                 Db.use("ta").update("update ta_article set vote_count = vote_count+1 where id="+articleId);
             }
+            result = ResultFactory.buildSuccessResult(null);
+        }catch (Exception e){
+            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
+            result = ResultFactory.buildFailResult(e.getMessage());
+        }
+        renderJson(result);
+    }
+
+    /**
+     * 加精
+     */
+    public void addStick(){
+        Result result;
+        int id = getParaToInt("id");
+        try{
+            Record record = Db.findFirst("select * from ta_article where id ="+id);
+            String stickStatus =(record.getStr("is_sticky").equals("Y"))?"N":"Y";
+            record.set("is_sticky",stickStatus);
+            Db.update("ta_article",record);
             result = ResultFactory.buildSuccessResult(null);
         }catch (Exception e){
             e.printStackTrace();

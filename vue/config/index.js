@@ -12,13 +12,30 @@ module.exports = {
 		assetsPublicPath: '/',
 		// 路由接口代理配置
 		proxyTable: {
-			'/': {
-				target: 'http://localhost:8000',
-				changeOrigin: true,
-				pathRewrite: {
-					'^/': ''
-				}
-			}
+		  //本地配置
+      // '/':{
+		// 		target: 'http://localhost:8000',
+		// 		changeOrigin: true,
+      //   pathRewrite: {
+      //     '^/': ''
+      //   }
+		// 	},
+      //服务器配置
+        '/':{
+          target: 'http://120.79.213.75:8080/teachingAssistantWebsite',
+          changeOrigin: true,
+          pathRewrite: {
+            '^/': ''
+          }
+        },
+      //设置两个proxyTable好像不行。
+      //   '/upload/*':{
+      //   target: 'http://upload.qiniup.com/',
+      //   changeOrigin: true,
+      //   pathRewrite: {
+      //     '^/upload': ''
+      //   }
+      // }
 		},
 
 		// Various Dev Server settings

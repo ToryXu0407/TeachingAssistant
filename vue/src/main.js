@@ -12,10 +12,14 @@ import Moment from 'moment'
 
 Vue.prototype.moment = Moment;
 var axios = require('axios')
-axios.defaults.baseURL = 'http://localhost:8000'
+//本地配置
+// axios.defaults.baseURL = 'http://localhost:8000'
+//服务器配置
+axios.defaults.baseURL = 'http://120.79.213.75:8080/teachingAssistantWebsite'
 // 将API方法绑定到全局
 axios.defaults.withCredentials=true
 
+var qiniu = require('qiniu-js')
 Vue.prototype.$axios = axios
 Vue.config.productionTip = false
 Vue.use(iView, { locale });

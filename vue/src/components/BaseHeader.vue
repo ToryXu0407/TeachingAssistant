@@ -1,4 +1,5 @@
 <template>
+<div>
   <el-header class="me-area">
     <el-row class="me-header">
 
@@ -50,6 +51,7 @@
               <template slot="title">
                   <img class="me-header-picture" :src="user.headImage"/>
               </template>
+              <el-menu-item index="" @click="getInfo()"><i class="el-icon-arrow-left"></i>个人信息</el-menu-item>
               <el-menu-item index="" @click="logout"><i class="el-icon-back"></i>退出</el-menu-item>
             </el-submenu>
           </template>
@@ -59,6 +61,33 @@
     </el-row>
     <LoginPop v-show="showDialog" @on-cancel="closeLoginPop" @on-suceess="LoginSuccess"></LoginPop>
   </el-header>
+  <el-dialog
+    title="添加课程"
+    :visible.sync="dialogVisible"
+    width="30%"
+    :before-close="handleClose">
+    <el-form>
+      <el-form-item label="昵称" >
+        <el-input v-model="nickname"></el-input>
+      </el-form-item>
+      <el-form-item label="头像:点击修改" >
+        <el-upload
+          class="avatar-uploader"
+          action="#"
+          :show-file-list="false"
+          :on-success="handleAvatarSuccess"
+          :before-upload="beforeAvatarUpload">
+          <img width="250px" height="250px" v-if="imageUrl" :src="imageUrl" class="avatar">
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        </el-upload>
+      </el-form-item>
+    </el-form>
+    <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="updateInfo()">修 改</el-button>
+  </span>
+  </el-dialog>
+</div>
 
 </template>
 
@@ -80,39 +109,51 @@
       return {
         isLogin:false,
         user:'',
-        showDialog:false
+        showDialog:false,
+        imageUrl:'',
+        nickname:'',
+        dialogVisible:false,
       }
     },
     computed: {
-      // user() {
-      //   let login = this.$store.state.account.length != 0
-      //   let avatar = this.$store.state.avatar
-      //   return {
-      //     login, avatar
-      //   }
-      // }
     },
     created: function () {
-      var vm = this
-      this.$axios.post('/getLoggedInfo')
-        .then((successResponse)=>{
-          if (successResponse.data.code === 200) {
-            document.getElementById('pdLogin').value = 'true'
-            vm.user = successResponse.data.data;
-            if(vm.user.isTeacher==='Y')
-              document.getElementById('isTeacher').value = 'Y'
-            else{
-              document.getElementById('isTeacher').value = 'N'
-            }
-            vm.isLogin = true
-          }else{
-            document.getElementById('pdLogin').value = 'false'
-            document.getElementById('isTeacher').value = 'N'
-            vm.isLogin = false
-          }
-        }).catch(failResponse => {})
+
     },
     methods: {
+      handleClose(done) {
+        this.dialogVisible=false;
+      },
+      handleAvatarSuccess(res, file) {
+        this.imageUrl = URL.createObjectURL(file.raw);
+      },
+      beforeAvatarUpload(file) {
+        const isLt2M = file.size / 1024 / 1024 < 2;
+        if (!isLt2M) {
+          this.$message.error('上传头像图片大小不能超过 2MB!');
+        }
+        this.file = file;
+        return isLt2M;
+      },
+      getInfo(){
+        this.dialogVisible=true;
+      },
+      updateInfo:function(){
+        this.dialogVisible=false;
+        var vm =this;
+        var params = new FormData();
+        params.append("id",vm.user.userid);
+        params.append('file',this.file);
+        params.append('nickname',this.nickname);
+        console.log(this.file);
+        this.$axios.post('/updateUser', params)
+          .then(function (res) {
+            if(res.data.code===200){
+              console.log("修改个人信息成功!");
+              vm.getLoggedInfo();
+            }
+          });
+      },
       register(){
         this.$router.push("/register")
       },
@@ -133,15 +174,23 @@
             if (successResponse.data.code === 200) {
               document.getElementById('pdLogin').value = 'true'
               vm.user = successResponse.data.data;
-              if(vm.user.isTeacher==='Y')
+              if(vm.user.type===0){
                 document.getElementById('isTeacher').value = 'Y'
-              else{
+                document.getElementById('isAdmin').value = 'Y'
+              }else if(vm.user.type===1){
+                document.getElementById('isTeacher').value = 'Y'
+                document.getElementById('isAdmin').value = 'N'
+              }else{
                 document.getElementById('isTeacher').value = 'N'
+                document.getElementById('isAdmin').value = 'N'
               }
               vm.isLogin = true
+              vm.imageUrl = vm.user.headImage;
+              vm.nickname = vm.user.nickname;
             }else{
               document.getElementById('pdLogin').value = 'false'
               document.getElementById('isTeacher').value = 'N'
+              document.getElementById('isAdmin').value = 'N'
               vm.isLogin = false
             }
           }).catch(failResponse => {})
@@ -154,10 +203,15 @@
             if(successResponse.data.code===200){
               document.getElementById('pdLogin').value = 'false'
               document.getElementById('isTeacher').value = 'N'
+              document.getElementById('isAdmin').value = 'N'
               vm.$emit('refresh');
               }
         })
       }
+    },
+    mounted:function () {
+      var vm = this;
+      vm.getLoggedInfo();
     }
   }
 </script>

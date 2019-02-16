@@ -3,15 +3,9 @@
     <div class="MainList fl" id="MainList">
       <div class="ListPage Page-Top bgWhite">
         <!--<div>答疑聊天室-在线人数{{onlineNum}}</div>-->
-        <div>{{courseName}}</div>
+        <div>{{courseName}} {{startTime}}-{{endTime}}</div>
         <router-link class="goBack cur"  :to="{ name: 'chatroom'}" wn_tj_click_href wn_tj_click_gameId wn_tj_click_excel="previous_page" wn_tj_click_id><img src="../../images/icon14.png"/>返回</router-link>
       </div>
-
-      <!--<div class="ListPage Page-Bootom">-->
-        <!--<pagination :cur.sync="cur" :all.sync="all" :isJump.sync="isJump"  @listen="monitor"></pagination>-->
-        <!--<router-link class="goBack cur"  :to="{ name: 'social'}" wn_tj_click_href wn_tj_click_gameId wn_tj_click_excel="previous_page" wn_tj_click_id><img src="../../images/icon14.png"/>返回</router-link>-->
-      <!--</div>-->
-
       <div v-show="isStarted">
         <div class="content" id="content">
           <ul v-for="(list,temp) in conversationList">
@@ -57,7 +51,7 @@
     </div>
     <div class="MainMoudle fr" id="MainMoudle">
       <PeoInfo ref="myPeoInfo"></PeoInfo>
-      <!--<chatRoomUserList></chatRoomUserList>-->
+      <chatRoomUserList ref="mychatRoomUserList" :chatRoomId="chatRoomId"></chatRoomUserList>
       <!--<SocialIndexRecommend id ="SocialIndexRecommend"></SocialIndexRecommend>-->
       <span class="goTop cur" v-show="isGoTop" @click="goTop()"></span>
     </div>
@@ -218,7 +212,6 @@
         var start_date = new Date(this.startTime);
         var end_date = new Date(this.endTime);
         var now = new Date();
-        console.log(now);
         if(now<start_date){
           //console.log("未开始")
           this.isStarted = false;
@@ -308,10 +301,14 @@
         if ("WebSocket" in window)
         {
           // 打开一个 web socket
-          var ws = new WebSocket("ws://localhost:8000/websocket");
+          //本地配置
+          // var ws = new WebSocket("ws://localhost:8000/websocket");
+          //服务器配置
+          var ws = new WebSocket("ws://120.79.213.75:8080/teachingAssistantWebsite/websocket");
           this.ws = ws;
           ws.onopen = function()
           {
+
           };
 
           ws.onmessage = function (evt)
@@ -320,7 +317,6 @@
             var userid = data.from.userid;
             var isSelf = 0;
             var chatroomId = data.chatRoomId;
-            console.log("onMessage:"+chatroomId);
             //如果是其他聊天室的消息则不接收。
             if(chatroomId===vm.$route.params.chatRoomId)
             {
@@ -347,9 +343,11 @@
     },
 
     mounted: function () {
+      this.$refs.mychatRoomUserList.getOnlineUsers();
       var vm =this;
         this.timer = setInterval( () => {
           vm.getCurrentTime();
+          vm.$refs.mychatRoomUserList.getOnlineUsers();
         }, 1000);
       const s = document.createElement('script')
       s.type = 'text/javascript'

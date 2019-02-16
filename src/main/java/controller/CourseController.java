@@ -3,16 +3,15 @@ package controller;
 import annotation.UnCheckLogin;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
+import com.jfinal.upload.UploadFile;
 import interceptor.PermissionChecker;
-import model.Article;
-import model.Course;
-import model.Result;
-import model.ResultFactory;
+import model.*;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import org.apache.log4j.Logger;
 
 /**
  * @Author: toryxu
@@ -20,6 +19,7 @@ import java.util.List;
  * @Version 1.0
  */
 public class CourseController extends BaseController {
+    public static final Logger LOG=Logger.getLogger(CourseController.class);
     /**
      * 在主页上显示部分帖子
      */
@@ -60,7 +60,7 @@ public class CourseController extends BaseController {
                 if(articleNum%10==0)
                     totalPage = articleNum/pagesize;
                 else
-                    totalPage = articleNum/articleNum+1;
+                    totalPage = articleNum/pagesize+1;
                 result = ResultFactory.buildSuccessArticleResult(courses,totalPage);
             }else
                 result = ResultFactory.buildFailResult("null");
@@ -106,7 +106,6 @@ public class CourseController extends BaseController {
     /**
      * 新增或更新课程信息（管理员或教师）
      */
-    @UnCheckLogin
     public void updateCourse() {
         Result result;
         Course course = getBean(Course.class,"");
@@ -145,7 +144,6 @@ public class CourseController extends BaseController {
     /**
      * 删除课程
      */
-    @UnCheckLogin
     public void delCourse() {
         Result result;
         int id = getParaToInt("id");
@@ -187,4 +185,41 @@ public class CourseController extends BaseController {
         }
         renderJson(result);
     }
+
+    /**
+     * 添加课程
+     * 将图片上传到七牛云，并返回图片路径
+     */
+    public void addCourse(){
+        Result result;
+        try{
+            UploadFile file = getFile("file");
+            String fileName = file.getFileName();
+            String path = file.getUploadPath();
+            String courseName = getPara("courseName");
+            String description = getPara("description");
+            String imageUrl = qiniuyun.upload(path+'/'+fileName,fileName);
+            if(imageUrl==null){
+                throw new Exception("上传失败！");
+            }
+            LOG.debug("addCourse上传 图片默认本地URL："+path);
+            Date date = new Date();
+            java.text.DateFormat format1 = new java.text.SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            String time = format1.format(date);
+            Record record = new Record();
+            record.set("name",courseName);
+            record.set("description",description);
+            record.set("create_time",time);
+            record.set("view_count",0);
+            record.set("image",imageUrl);
+            Db.use("ta").save("ta_course",record);
+            result = ResultFactory.buildSuccessResult(imageUrl);
+        }catch(Exception e){
+            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
+            result = ResultFactory.buildFailResult(e.getMessage());
+        }
+        renderJson(result);
+    }
+
 }

@@ -17,6 +17,7 @@ import interceptor.PermissionChecker;
 import model.Chat;
 import model.Message;
 import model.UserInfo;
+import org.apache.log4j.Logger;
 
 /**
  * @Author: toryxu
@@ -25,9 +26,10 @@ import model.UserInfo;
  */
 @ServerEndpoint(value="/websocket",configurator = GetHttpSessionConfigurator.class)
 public class WebSocketController {
+    public static final Logger LOG=Logger.getLogger(WebSocketController.class);
     public static int onlineCount = 0;
     private static CopyOnWriteArraySet<WebSocketController> webSocketSet = new CopyOnWriteArraySet<WebSocketController>();
-    public static Map<String,Object> sessionMap=new HashMap<>();
+    public static Map<String,HttpSession> sessionMap=new HashMap<>();
     //与客户端的连接会话，需要通过它来给客户端发送数据
     private Session session;
     public WebSocketController() {
@@ -56,25 +58,31 @@ public class WebSocketController {
         java.text.DateFormat format1 = new java.text.SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String time = format1.format(date);
         int chatRoomId = (int) session1.getAttribute("chatRoomId");
+        int id = (int) session1.getAttribute(PermissionChecker.USER_ID);
+        UserInfo userInfo = new UserInfo();
+        Record userRecord = Db.use("ta").findById("ta_user",id);
+        userInfo.setNickname(userRecord.getStr("nickname"));
+        userInfo.setUsername(userRecord.getStr("username"));
+        userInfo.setType(userRecord.getInt("type"));
+        userInfo.setCreateTime(userRecord.get("create_time").toString());
+        userInfo.setHeadImage(userRecord.getStr("head_image"));
+        userInfo.setUserid(userRecord.getInt("id"));
         for(WebSocketController item: webSocketSet){
             Message msg = new Message();
             msg.setDate(time);
-            msg.setFrom((UserInfo) session1.getAttribute(PermissionChecker.USER));
+            msg.setFrom(userInfo);
             msg.setText(requestJson);
             msg.setChatRoomId(chatRoomId);
             item.session.getBasicRemote().sendText(JSON.toJSONString(msg));
+            LOG.info("websocket接收数据:"+JSON.toJSONString(msg));
         }
-        //将对话保存到数据库。
-        UserInfo userInfo = (UserInfo) session1.getAttribute(PermissionChecker.USER);
         String nickname = userInfo.getNickname();
         int userId = userInfo.getUserid();
-        String isTeacher = userInfo.getIsTeacher();
         Record record = new Record();
         record.set("chatroom_id",chatRoomId);
         record.set("user_id",userId);
         record.set("nickname",nickname);
         record.set("content",requestJson);
-        record.set("is_teacher",isTeacher);
         record.set("create_time",time);
         Db.use("ta").save("ta_chat",record);
         Db.use("ta").update("update ta_chatroom set chats_count = chats_count+1 where id="+chatRoomId);

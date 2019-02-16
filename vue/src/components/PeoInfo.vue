@@ -41,19 +41,27 @@ export default {
       this.$axios.post('/getLoggedInfo')
         .then((successResponse)=>{
           this.responseResult = JSON.stringify(successResponse.data)
-          console.log(this.responseResult)
           if (successResponse.data.code === 200) {
             this.info = successResponse.data.data
             document.getElementById('pdLogin').value = 'true'
-            if(successResponse.data.data.isTeacher==='Y')
+            var user = successResponse.data.data;
+            if(user.type===0)
+            {
               document.getElementById('isTeacher').value = 'Y'
-            else{
+            document.getElementById('isAdmin').value = 'Y'
+            }
+            else if(user.type===1){
+              document.getElementById('isTeacher').value = 'Y'
+              document.getElementById('isAdmin').value = 'N'
+            }else{
               document.getElementById('isTeacher').value = 'N'
+              document.getElementById('isAdmin').value = 'N'
             }
             this.isLogin = true
           }else{
             document.getElementById('pdLogin').value = 'false'
             document.getElementById('isTeacher').value = 'N'
+            document.getElementById('isAdmin').value = 'N'
             this.isLogin = false
           }
         }).catch(failResponse => {})
@@ -66,15 +74,24 @@ export default {
         if (successResponse.data.code === 200) {
           vm.info = successResponse.data.data
           document.getElementById('pdLogin').value = 'true'
-          if(successResponse.data.data.isTeacher==='Y')
+          var user = successResponse.data.data;
+          if(user.type===0){
             document.getElementById('isTeacher').value = 'Y'
-          else{
-            document.getElementById('isTeacher').value = 'N'
+          document.getElementById('isAdmin').value = 'Y'
           }
-          vm.isLogin = true
+        else if(user.type===1){
+            document.getElementById('isTeacher').value = 'Y'
+            document.getElementById('isAdmin').value = 'N'
+          }else{
+            document.getElementById('isTeacher').value = 'N'
+            document.getElementById('isAdmin').value = 'N'
+          }
+          this.isLogin = true
         }else{
           document.getElementById('pdLogin').value = 'false'
           document.getElementById('isTeacher').value = 'N'
+          document.getElementById('isAdmin').value = 'N'
+          this.isLogin = false
         }
       }).catch(failResponse => {})
   }

@@ -37,11 +37,18 @@ export default {
           if (successResponse.data.code === 200) {
             //登陆成功
             document.getElementById('pdLogin').value = 'true'
-            if(successResponse.data.data.isTeacher==='Y')
+            var user =successResponse.data.data;
+            if(user.type===0){
               document.getElementById('isTeacher').value = 'Y'
-            else{
+              document.getElementById('isAdmin').value = 'Y'
+            }else if(user.type===1){
+              document.getElementById('isTeacher').value = 'Y'
+              document.getElementById('isAdmin').value = 'N'
+            }else{
               document.getElementById('isTeacher').value = 'N'
+              document.getElementById('isAdmin').value = 'N'
             }
+            vm.isLogin = true
             // this.$router.push("/")
             vm.$emit('on-suceess');
           }

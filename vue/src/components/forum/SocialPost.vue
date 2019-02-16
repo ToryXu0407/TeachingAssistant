@@ -93,7 +93,7 @@
             if (successResponse.data.code === 200) {
               //登陆成功
               console.log("发帖成功");
-              this.$router.push({name: 'circle'})
+              this.$router.push({name: 'social'})
             }
           }).catch(failResponse => {})
       }

@@ -31,7 +31,7 @@
     data () {
       return {
         showDialog:false,
-        HdInfoData: {id: '1', name: '讨论社', descrption: '教学辅助网站论坛', icon: 'http://oss.yiqihappy.top/aa.jpg'}
+        HdInfoData: {id: '1', name: '讨论社', descrption: '教学辅助网站论坛', icon: 'http://oss.yiqihappy.top/forum.jpg'}
       }
     },
     watch: {

@@ -38,18 +38,6 @@
                       <div class="Hd-Floor fl"><span>楼主</span>{{DetailLandlord.createTime}}</div>
                       <div class="Hd-Moudle fr">
                         <ol>
-                          <!--管理员的置顶加精设为官方贴，因为管理员在新的一个项目，因此这里注释，论坛功能直接移植并加上管理员功能-->
-                          <!--<li v-if="DetailLandlord.is_admin">-->
-                          <!--<span class="PostManagement" @click="showPostManage()">帖子管理<i :class="{'rotate':isPostManage === true}"></i></span>-->
-                          <!--<div class="adminlist" v-show="isPostManage">-->
-                          <!--<p class="cur" @click="isAdmin(0)" id="isTop">{{DetailLandlord.is_top == 0 ? '置顶':'取消置顶'}}</p>-->
-                          <!--<p class="cur" @click="isAdmin(1)">{{DetailLandlord.public_tags === undefined || DetailLandlord.public_tags.length === 0 ? '加精' : '取消加精'}}</p>-->
-                          <!--<p class="cur" @click="isAdmin(4)" v-if="DetailLandlord.auth_level == 1">{{DetailLandlord.is_official == 0 ? '设为官方贴':'取消官方贴'}}</p>-->
-                          <!--<p class="cur" @click="isAdmin(5)" v-if="DetailLandlord.auth_level == 1 && DetailLandlord.is_faq == true && DetailLandlord.is_faq_setup === false">设为FAQ</p>-->
-                          <!--</div>-->
-                          <!--</li>-->
-                          <!--<li v-show="DetailLandlord.delete_private"><span class="Hd-Moudle-Del" @click="isAdmin(2)">删除</span></li>-->
-                          <!--<li v-show="!DetailLandlord.delete_private" v-if="false"><span class="Hd-Moudle-Report">举报</span></li>-->
                           <li @click="goBottom()"><span class="Hd-Moudle-Reply">回复</span></li>
                         </ol>
                       </div>
@@ -76,8 +64,8 @@
                       <div class="Hd-Floor fl"><span>{{list.position}}楼</span>{{list.createTime}}</div>
                       <div class="Hd-Moudle fr">
                         <ol>
-                          <li v-show="list.delete_private" @click="isAdmin(3, list.id)"><span class="Hd-Moudle-Del">删除</span></li>
-                          <li v-show="!list.delete_private" v-if="false"><span class="Hd-Moudle-Report">举报</span></li>
+                          <li v-show="isAdmin==='Y'" @click="delPost(list.id)"><span class="Hd-Moudle-Del">删除</span></li>
+                          <!--<li v-show="!list.delete_private" v-if="false"><span class="Hd-Moudle-Report">举报</span></li>-->
                           <li>
                             <span class="Hd-Moudle-Reply" v-show="list.isReplay" @click="ShowMoudleList(temp, list.replyNum, list.id)">回复<b v-if="list.replyNum > 0">（{{list.replyNum}}）</b></span>
                             <span class="Hd-Moudle-Reply" v-show="!list.isReplay" @click="HideMoudleList(temp)">收起回复<b v-if="list.replyNum > 0">（{{list.replyNum}}）</b></span>
@@ -232,6 +220,7 @@
     },
     data () {
       return {
+        isAdmin:'N',
         postId: '',
         showDialog:false,
         articleId:'',
@@ -269,6 +258,18 @@
       register(){
         this.$router.push("/register")
       },
+      delPost(id){
+        var vm = this;
+        let params = new URLSearchParams();
+        params.append('id',id);
+        this.$axios.post('/post/delPost', params)
+          .then(function (res) {
+            if(res.data.code===200){
+              alert("删除成功！");
+              vm.getPost();
+            }
+          })
+      },
       ShowLoginPop: function () {
         this.showDialog = true;
       },
@@ -287,26 +288,6 @@
           this.ShowLoginPop()
         }
         // window.location.href = 'http://www.iplaystone.com/static/web/login.html?history=' + encodeURIComponent(window.location.href)
-      },
-      isAdmin: function (temp, data) { // 删除 置顶 加精
-        this.isPopInfo.isMaskShow = true
-        this.isPopInfo.isPopShow = true
-        this.isPostManageMask = false
-        this.isPostManage = false
-        if (temp === 0) { // 置顶
-          this.isPopInfo.isPopTsShow = 0
-        } else if (temp === 1) { // 加精
-          this.isPopInfo.isPopTsShow = 1
-        } else if (temp === 2) { // 删除主贴
-          this.isPopInfo.isPopTsShow = 2
-        } else if (temp === 3) { // 删除评论
-          this.isPopInfo.isPopTsShow = 3
-          this.isPopInfo.commentId = data
-        } else if (temp === 4) { // 官方贴
-          this.isPopInfo.isPopTsShow = 4
-        } else if (temp === 5) { // FAQ贴
-          this.isPopInfo.isPopTsShow = 5
-        }
       },
       closeMask: function () {
         this.isPostManage = false
@@ -471,7 +452,6 @@
         this.DetailList[temp]['userId'] = t
       },
       JMoudleReply: function (userId, commentUserId, userNickName,temp, event, id) { // 回复
-        console.log("list.id:"+id+":commentUserId:"+commentUserId)
         if (document.getElementById('pdLogin').value === 'true') {
           this.DetailList[temp]['isMoudleListInput'] = true
           this.DetailList[temp]['listId'] = id
@@ -690,7 +670,6 @@
       this.$axios.post('/post/getPostsByArticleId',params)
         .then(function (res) {
           vm.DetailList = res.data.data
-          console.log("userId:"+res.data.data[0].userId)
           for (var i in res.data.data) {
             res.data.data[i]['UserNickName'] = ''
             res.data.data[i]['isMoudleListInput'] = false
@@ -803,10 +782,33 @@
       var _this = this
       document.getElementById('PostHtml').addEventListener('click', function () {
         this.editorContent = editor.txt.html()
-        console.log(this.editorContent)
         _this.getContent(editor.txt.html())
         // console.log('1')
       })
+        var vm = this
+        this.$axios.post('/getLoggedInfo')
+          .then((successResponse) => {
+            if (successResponse.data.code === 200) {
+              var user = successResponse.data.data;
+              document.getElementById('pdLogin').value = 'true'
+              if (user.type === 0) {
+                document.getElementById('isTeacher').value = 'Y'
+                document.getElementById('isAdmin').value = 'Y'
+              } else if (user.type === 1) {
+                document.getElementById('isTeacher').value = 'Y'
+                document.getElementById('isAdmin').value = 'N'
+              } else {
+                document.getElementById('isTeacher').value = 'N'
+                document.getElementById('isAdmin').value = 'N'
+              }
+            } else {
+              document.getElementById('pdLogin').value = 'false'
+              document.getElementById('isTeacher').value = 'N'
+              document.getElementById('isAdmin').value = 'N'
+            }
+            this.isAdmin =  document.getElementById('isAdmin').value;
+          }).catch(failResponse => {
+        })
     }
   }
 </script>

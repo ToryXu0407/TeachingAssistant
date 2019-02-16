@@ -4,6 +4,7 @@
     <div id="app" class="app clearfix">
       <input type="hidden" id="pdLogin" value="sdd"/>
       <input type="hidden" id="isTeacher" value="N"/>
+      <input type="hidden" id="isAdmin" value="N"/>
       <router-view :key="key" @refresh="refresh" v-if="isRouterAlive" @hidefooter="hidefooter" @showfooter="showfooter"></router-view>
       <base-footer v-show="footerShow"></base-footer>
     </div>
@@ -33,7 +34,6 @@ export default {
     'base-footer':BaseFooter
   },
   beforeRouteUpdate (to, from, next) {
-    console.log("beforeRouteUpdate")
     if(to.path == '/register'){
       this.footerShow = false
     }else{
@@ -62,21 +62,14 @@ export default {
   },
   mounted () {
     document.getElementById('pdLogin').value = 'false'
+
     // const s = document.createElement('script')
     // s.type = 'text/javascript'
     // s.src = 'http://static.snail.com/js/stone/v2/statistics_ty_v2.source.js'
     // document.body.appendChild(s)
   },
   created: function () {
-    // var vm = this
-    // this.$axios.post('/getLoggedInfo')
-    //   .then((successResponse)=>{
-    //     if (successResponse.data.code === 200) {
-    //       document.getElementById('pdLogin').value = 'true'
-    //     }else{
-    //       document.getElementById('pdLogin').value = 'false'
-    //     }
-    //   }).catch(failResponse => {})
+
   }
 }
 </script>

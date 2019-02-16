@@ -25,11 +25,28 @@ public class PermissionChecker implements Interceptor {
 
 
     private static final String[] NOT_NEED_CHECK_URLS = new String[]{"/", "",
-          //  "/perms/myaccount",
 
     };
-    private static final String[] NOT_NEED_CHECK_FIRST_URLS = new String[]{
-           // "/jfShopFind",
+    private static final String[] TEACHER_CHECK_FIRST_URLS = new String[]{
+            "/chat/addChatRoom",
+            "/course/addCourse",
+            "/courseware/delCourseware",
+            "/courseware/addCourseWare",
+            "/notice/delNotice",
+            "/notice/addNotice",
+            "/article/updateArticle",
+            "/article/vote",
+            "/course/updateCourse",
+            "/updateUser",
+            "/post/updatePost"
+    };
+
+    private static final String[] STUDENT_CHECK_FIRST_URLS = new String[]{
+            "/article/updateArticle",
+            "/article/vote",
+            "/course/updateCourse",
+            "/updateUser",
+            "/post/updatePost"
     };
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -58,17 +75,27 @@ public class PermissionChecker implements Interceptor {
             return;
         }
         String username = (String) session.getAttribute(USER_USERNAME);
-        //用户类型即Student/Teacher/Admin
-        String userType = (String) session.getAttribute(USER_TYPE);
-        if(requestUrl.contains(userType)){
+        //默认管理员账号只有一个
+        if ("admin".equals(username)) {
             me.invoke();
             return;
         }
-        //判断url是否属于可过滤的头url
-        for (String url : NOT_NEED_CHECK_FIRST_URLS) {
-            if (requestUrl.contains(url)) {
-                me.invoke();
-                return;
+        int userType = (int) session.getAttribute(USER_TYPE);
+        //如果是老师用户，且方法是老师所有权限内，invoke
+        if(userType==1){
+            for (String url : TEACHER_CHECK_FIRST_URLS) {
+                if (requestUrl.contains(url)) {
+                    me.invoke();
+                    return;
+                }
+            }
+            //学生同理
+        }else if(userType==2){
+            for (String url : STUDENT_CHECK_FIRST_URLS) {
+                if (requestUrl.contains(url)) {
+                    me.invoke();
+                    return;
+                }
             }
         }
         System.out.println("用户权限不够,不能进入:" + requestUrl + ",IP:" + ip);

@@ -5,14 +5,11 @@ import annotation.UnCheckLogin;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import interceptor.PermissionChecker;
-import model.ChatRoom;
-import model.Message;
-import model.Result;
-import model.ResultFactory;
+import model.*;
+import org.apache.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import javax.servlet.http.HttpSession;
+import java.util.*;
 
 /**
  * @Author: toryxu
@@ -21,13 +18,45 @@ import java.util.List;
  */
 @PermissionOwn(name="chat")
 public class ChatController extends BaseController{
+    public static final Logger LOG=Logger.getLogger(ChatController.class);
     /**
      * 获得进入聊天室的用户数量
      */
     @UnCheckLogin
     public void getEnteredUsers() {
         Result result;
-        result = ResultFactory.buildSuccessResult(WebSocketController.sessionMap.size());
+        try{
+            int chatRoomId = getParaToInt("chatRoomId");
+            List<UserInfo> userInfos = new ArrayList<>();
+            List<Integer> list = new ArrayList<>();
+            Map<String,HttpSession> sessionMap = WebSocketController.sessionMap;
+            for(String key:sessionMap.keySet()){
+                int id = (int) sessionMap.get(key).getAttribute("chatRoomId");
+                if(id==chatRoomId){
+                    list.add((Integer) sessionMap.get(key).getAttribute(PermissionChecker.USER_ID));
+                }
+            }
+            StringBuilder ret = new StringBuilder();
+            sqlKit.joinIds(list,ret);
+            if(ret.length()!=0){
+                List<Record> recordList = Db.use("ta").find("select * from ta_user where id in"+ret);
+                for(Record userRecord:recordList){
+                    UserInfo userInfo = new UserInfo();
+                    userInfo.setNickname(userRecord.getStr("nickname"));
+                    userInfo.setUsername(userRecord.getStr("username"));
+                    userInfo.setType(userRecord.getInt("type"));
+                    userInfo.setCreateTime(userRecord.get("create_time").toString());
+                    userInfo.setHeadImage(userRecord.getStr("head_image"));
+                    userInfo.setUserid(userRecord.getInt("id"));
+                    userInfos.add(userInfo);
+                }
+            }
+            result = ResultFactory.buildSuccessResult(userInfos);
+        }catch(Exception e){
+            e.printStackTrace();
+            LOG.error(e.getMessage(), e);
+            result = ResultFactory.buildFailResult(e.getMessage());
+        }
         renderJson(result);
     }
     /**
@@ -170,7 +199,6 @@ public class ChatController extends BaseController{
     /**
      * 创建聊天室
      */
-    @UnCheckLogin
     public void addChatRoom(){
         Result result;
         try{
@@ -196,6 +224,23 @@ public class ChatController extends BaseController{
         }catch(Exception e){
             e.printStackTrace();
             LOG.error(e.getMessage(), e);
+            result = ResultFactory.buildFailResult(e.getMessage());
+        }
+        renderJson(result);
+    }
+    /**
+     * 删除聊天室
+     */
+    public void delChatRoom() {
+        Result result;
+        int id = getParaToInt("id");
+        try{
+            Db.deleteById("ta_chatroom",id);
+            Db.use("ta").update("delete from ta_chat where chatroom_id="+id);
+            result = ResultFactory.buildSuccessResult(null);
+        }catch (Exception e){
+            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
             result = ResultFactory.buildFailResult(e.getMessage());
         }
         renderJson(result);

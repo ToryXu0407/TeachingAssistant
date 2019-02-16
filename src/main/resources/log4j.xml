@@ -12,7 +12,7 @@
 
 
 	<appender name="INFO-APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="file" value="/home/www/output/logs/ta_user/info.log" />
+		<param name="file" value="/home/www/output/logs/ta/info.log" />
 		<param name="append" value="true" />
 		<param name="encoding" value="utf-8" />
 		<param name="threshold" value="info" />
@@ -23,7 +23,7 @@
 	</appender>
 
 	<appender name="WARN-APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="file" value="/home/www/output/logs/ta_user/warn.log" />
+		<param name="file" value="/home/www/output/logs/ta/warn.log" />
 		<param name="Encoding" value="UTF-8" />
 		<param name="append" value="true" />
 		<param name="threshold" value="WARN" />
@@ -33,7 +33,7 @@
 	</appender>
 
 	<appender name="ERROR-APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="file" value="/home/www/output/logs/ta_user/error.log" />
+		<param name="file" value="/home/www/output/logs/ta/error.log" />
 		<param name="append" value="true" />
 		<param name="Encoding" value="UTF-8" />
 		<param name="threshold" value="error" />

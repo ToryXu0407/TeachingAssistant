@@ -29,7 +29,7 @@
       return {
         showDialog:false,
         isTeacher:'N',
-        HdInfoData: {id: '1', name: '答疑聊天室', descrption: '教学辅助网站论坛', icon: 'http://oss.yiqihappy.top/aa.jpg'}
+        HdInfoData: {id: '1', name: '答疑聊天室', descrption: '教学辅助网站论坛', icon: 'http://oss.yiqihappy.top/chat.jpg'}
       }
     },
     watch: {
@@ -46,6 +46,30 @@
         },
     },
     mounted: function () {
+      var vm = this
+      this.$axios.post('/getLoggedInfo')
+        .then((successResponse)=>{
+          if (successResponse.data.code === 200) {
+            document.getElementById('pdLogin').value = 'true'
+            vm.user = successResponse.data.data;
+            if(vm.user.type===0){
+              document.getElementById('isTeacher').value = 'Y'
+              document.getElementById('isAdmin').value = 'Y'
+            }else if(vm.user.type===1){
+              document.getElementById('isTeacher').value = 'Y'
+              document.getElementById('isAdmin').value = 'N'
+            }else{
+              document.getElementById('isTeacher').value = 'N'
+              document.getElementById('isAdmin').value = 'N'
+            }
+            vm.isLogin = true
+          }else{
+            document.getElementById('pdLogin').value = 'false'
+            document.getElementById('isTeacher').value = 'N'
+            document.getElementById('isAdmin').value = 'N'
+            vm.isLogin = false
+          }
+        }).catch(failResponse => {})
       this.isTeacher =  document.getElementById('isTeacher').value;
     }
   }

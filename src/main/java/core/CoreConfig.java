@@ -77,8 +77,8 @@ public class CoreConfig extends JFinalConfig {
 
 	@Override
 	public void configInterceptor(Interceptors me) {
-		//me.add(new VisitLogInterceptor());
-		//me.add(new PermissionChecker());
+		me.add(new VisitLogInterceptor());
+		me.add(new PermissionChecker());
 		//me.add(new PermissionBuild());
 		//me.add(new GlobalActionInterceptor());
 	}
