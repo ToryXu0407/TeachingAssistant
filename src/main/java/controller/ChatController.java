@@ -9,6 +9,7 @@ import model.*;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -216,7 +217,7 @@ public class ChatController extends BaseController{
             record.set("start_time",startTime);
             record.set("end_time",endTime);
             Date date = new Date();
-            java.text.DateFormat format1 = new java.text.SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String time = format1.format(date);
             record.set("create_time",time);
             Db.use("ta").save("ta_chatroom",record);

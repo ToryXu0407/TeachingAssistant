@@ -6,13 +6,12 @@ import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.upload.UploadFile;
-import com.qiniu.util.Auth;
 import interceptor.PermissionChecker;
-import interceptor.VisitLogInterceptor;
 import model.Result;
 import model.ResultFactory;
 import model.UserInfo;
-import model.qiniuyun;
+import util.MD5Util;
+import util.qiniuyun;
 import org.apache.log4j.Logger;
 
 
@@ -70,6 +69,7 @@ public class LoginController extends BaseController {
 			if (StrKit.isBlank(password)) {
 				throw new RuntimeException("密码不能为空");
 			}
+			password = MD5Util.encryptPassword(password,SALT);
 			//登录检测
 			Record userRecord = Db.use("ta").findFirst("select * from ta_user where username = ? and password = ?", username,password);
 			if (userRecord == null) {
@@ -123,6 +123,12 @@ public class LoginController extends BaseController {
 		removeSessionAttr(PermissionChecker.USER_USERNAME);
         Result result = ResultFactory.buildSuccessResult("注销成功!");
         renderJson(result);
+	}
+
+	public static void main(String[] args) {
+		String password ="321";
+		password = MD5Util.encryptPassword(password,SALT);
+		System.out.println(password);
 	}
 
 

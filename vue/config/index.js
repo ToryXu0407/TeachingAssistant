@@ -13,21 +13,29 @@ module.exports = {
 		// 路由接口代理配置
 		proxyTable: {
 		  //本地配置
+      '/':{
+				target: 'http://localhost:8000',
+				changeOrigin: true,
+        pathRewrite: {
+          '^/': ''
+        }
+			},
+      //服务器配置
+      //   '/':{
+      //     target: 'http://120.79.213.75:8080/teachingAssistantWebsite',
+      //     changeOrigin: true,
+      //     pathRewrite: {
+      //       '^/': ''
+      //     }
+      //   },
+      //docker
       // '/':{
-		// 		target: 'http://localhost:8000',
-		// 		changeOrigin: true,
+      //   target: 'http://120.79.213.75:8078/teachingAssistantWebsite',
+      //   changeOrigin: true,
       //   pathRewrite: {
       //     '^/': ''
       //   }
-		// 	},
-      //服务器配置
-        '/':{
-          target: 'http://120.79.213.75:8080/teachingAssistantWebsite',
-          changeOrigin: true,
-          pathRewrite: {
-            '^/': ''
-          }
-        },
+      // },
       //设置两个proxyTable好像不行。
       //   '/upload/*':{
       //   target: 'http://upload.qiniup.com/',
@@ -39,7 +47,7 @@ module.exports = {
 		},
 
 		// Various Dev Server settings
-		host: 'localhost', // can be overwritten by process.env.HOST
+		host: '0.0.0.0', // can be overwritten by process.env.HOST
 		port: 80, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
 		autoOpenBrowser: false,
 		errorOverlay: true,

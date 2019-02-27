@@ -302,9 +302,12 @@
         {
           // 打开一个 web socket
           //本地配置
-          // var ws = new WebSocket("ws://localhost:8000/websocket");
+          var ws = new WebSocket("ws://localhost:8000/websocket");
           //服务器配置
-          var ws = new WebSocket("ws://120.79.213.75:8080/teachingAssistantWebsite/websocket");
+          // var ws = new WebSocket("ws://120.79.213.75:8080/teachingAssistantWebsite/websocket");
+          //docker
+          // var ws = new WebSocket("ws://120.79.213.75:8078/teachingAssistantWebsite/websocket");
+
           this.ws = ws;
           ws.onopen = function()
           {
@@ -317,12 +320,14 @@
             var userid = data.from.userid;
             var isSelf = 0;
             var chatroomId = data.chatRoomId;
+            console.log(chatroomId);
             //如果是其他聊天室的消息则不接收。
-            if(chatroomId===vm.$route.params.chatRoomId)
+            if(chatroomId===vm.chatRoomId)
             {
               if(userid===vm.userid){
                 isSelf=1;
               }
+              console.log(data.text);
               vm.conversationList.push({message:data.text,isSelf:isSelf,date:data.date,nickname:data.from.nickname});
             }
             // alert("数据已接收..."+received_msg);
@@ -434,6 +439,7 @@
           alert("内容不能为空！");
         }else
         {
+          editor.txt.html('');
           _this.ws.send(_this.editorContent);
         }
         // console.log('1')

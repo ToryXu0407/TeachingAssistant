@@ -13,9 +13,11 @@ import Moment from 'moment'
 Vue.prototype.moment = Moment;
 var axios = require('axios')
 //本地配置
-// axios.defaults.baseURL = 'http://localhost:8000'
+axios.defaults.baseURL = 'http://localhost:8000'
 //服务器配置
-axios.defaults.baseURL = 'http://120.79.213.75:8080/teachingAssistantWebsite'
+// axios.defaults.baseURL = 'http://120.79.213.75:8080/teachingAssistantWebsite'
+//docker
+// axios.defaults.baseURL = 'http://120.79.213.75:8078/teachingAssistantWebsite'
 // 将API方法绑定到全局
 axios.defaults.withCredentials=true
 

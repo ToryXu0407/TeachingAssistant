@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.apache.log4j.Logger;
+import util.qiniuyun;
 
 /**
  * @Author: toryxu
@@ -204,7 +205,7 @@ public class CourseController extends BaseController {
             }
             LOG.debug("addCourse上传 图片默认本地URL："+path);
             Date date = new Date();
-            java.text.DateFormat format1 = new java.text.SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String time = format1.format(date);
             Record record = new Record();
             record.set("name",courseName);

@@ -83,7 +83,7 @@
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false">取 消</el-button>
+    <el-button @click=handleClose()>取 消</el-button>
     <el-button type="primary" @click="updateInfo()">修 改</el-button>
   </span>
   </el-dialog>
@@ -123,6 +123,7 @@
     methods: {
       handleClose(done) {
         this.dialogVisible=false;
+        this.imageUrl = this.user.headImage;
       },
       handleAvatarSuccess(res, file) {
         this.imageUrl = URL.createObjectURL(file.raw);
@@ -149,7 +150,6 @@
         this.$axios.post('/updateUser', params)
           .then(function (res) {
             if(res.data.code===200){
-              console.log("修改个人信息成功!");
               vm.getLoggedInfo();
             }
           });

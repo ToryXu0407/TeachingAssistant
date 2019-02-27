@@ -51,6 +51,8 @@ export default {
             vm.isLogin = true
             // this.$router.push("/")
             vm.$emit('on-suceess');
+          }else{
+            alert("用户名或密码错误！");
           }
         }).catch(failResponse => {})
     },

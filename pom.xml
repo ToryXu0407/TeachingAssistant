@@ -18,10 +18,12 @@
     <maven.compiler.source>1.7</maven.compiler.source>
     <maven.compiler.target>1.7</maven.compiler.target>
           <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-          <pro.jdbc.ta.url><![CDATA[jdbc:mysql://localhost:3306/db_ta?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull]]></pro.jdbc.ta.url>
+      <pro.jdbc.ta.url><![CDATA[jdbc:mysql://localhost:3306/db_ta?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull]]></pro.jdbc.ta.url>
+      <!--<pro.jdbc.ta.url><![CDATA[jdbc:mysql://localhost:3306/db_ta?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull]]></pro.jdbc.ta.url>-->
           <pro.jdbc.ta.username>root</pro.jdbc.ta.username>
           <pro.jdbc.ta.password>123456</pro.jdbc.ta.password>
-          <pro.jdbc.ta_log.url><![CDATA[jdbc:mysql://localhost:3306/db_ta_log?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull]]></pro.jdbc.ta_log.url>
+      <pro.jdbc.ta_log.url><![CDATA[jdbc:mysql://localhost:3306/db_ta_log?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull]]></pro.jdbc.ta_log.url>
+      <!--<pro.jdbc.ta_log.url><![CDATA[jdbc:mysql://localhost:3306/db_ta_log?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull]]></pro.jdbc.ta_log.url>-->
           <pro.jdbc.ta_log.username>root</pro.jdbc.ta_log.username>
           <pro.jdbc.ta_log.password>123456</pro.jdbc.ta_log.password>
       <pro.deMode>true</pro.deMode>

@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : 120.79.213.75
-Source Server Version : 50557
-Source Host           : 120.79.213.75:3306
+Source Server         : localhost
+Source Server Version : 50717
+Source Host           : localhost:3306
 Source Database       : db_ta
 
 Target Server Type    : MYSQL
-Target Server Version : 50557
+Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2019-02-16 15:17:56
+Date: 2019-02-27 21:14:55
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -28,22 +28,14 @@ CREATE TABLE `ta_user` (
   `create_time` date NOT NULL,
   `head_image` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of ta_user
 -- ----------------------------
-INSERT INTO `ta_user` VALUES ('1', 'admin', 'admin', '', '0', '2018-10-15', null);
-INSERT INTO `ta_user` VALUES ('2', 'toryxu', '123456', '', '2', '2018-10-15', null);
-INSERT INTO `ta_user` VALUES ('3', 'jakexu', '123456', 'jakexu', '2', '2018-10-17', null);
-INSERT INTO `ta_user` VALUES ('4', 'fuckbitch', '123456', '', '2', '2018-10-17', null);
-INSERT INTO `ta_user` VALUES ('5', 'fuckbitch2', '123456', '', '2', '2018-10-17', null);
-INSERT INTO `ta_user` VALUES ('6', 'fuckbitch23', '321', '', '2', '2018-10-17', null);
-INSERT INTO `ta_user` VALUES ('7', 'toryxu123', '123456', '', '2', '2018-10-17', null);
-INSERT INTO `ta_user` VALUES ('8', 'toryxu321', '123456', '', '2', '2018-10-17', null);
-INSERT INTO `ta_user` VALUES ('9', 'toryxu46581', '123456', '', '2', '2018-10-19', null);
-INSERT INTO `ta_user` VALUES ('10', 'toryxu465812', '123456', '', '2', '2018-10-19', null);
-INSERT INTO `ta_user` VALUES ('11', 'user', '123456', 'toryxu', '2', '2018-10-22', 'http://oss.yiqihappy.top/aa.jpg');
-INSERT INTO `ta_user` VALUES ('12', 'fuck', '123456', 'fuck', '2', '2019-01-16', null);
-INSERT INTO `ta_user` VALUES ('13', 'fuck1', '123456', 'fuck1', '2', '2019-01-16', null);
-INSERT INTO `ta_user` VALUES ('14', 'dsa', '123', 'sbsb4sb', '2', '2019-01-16', null);
+INSERT INTO `ta_user` VALUES ('1', 'admin', 'acb7a76895cfe68529a82a66c516ea7c', 'admin', '0', '2018-10-15', null);
+INSERT INTO `ta_user` VALUES ('2', 'toryxu', '580f4a3ecfe7486e9827023a432716ca', '', '2', '2018-10-15', null);
+INSERT INTO `ta_user` VALUES ('3', 'jakexu', '580f4a3ecfe7486e9827023a432716ca', 'jakexu', '2', '2018-10-17', 'http://oss.yiqihappy.top/de1fcb647b5ea2a9d28e40d087575adb1.jpg');
+INSERT INTO `ta_user` VALUES ('11', 'user', '580f4a3ecfe7486e9827023a432716ca', 'toryxu', '2', '2018-10-22', 'http://oss.yiqihappy.top/10c2eb0f2be96bc1ae27bec2852f8e58.jpg');
+INSERT INTO `ta_user` VALUES ('14', 'teacher1', '0b68198d9eea47129009fd4114b07e97', '许佳俊', '1', '2019-01-16', 'http://oss.yiqihappy.top/de1fcb647b5ea2a9d28e40d087575adb1.jpg');
+INSERT INTO `ta_user` VALUES ('15', '321', '13f881b6a10886f491998bc0b3979b2c', '321', '1', '2019-02-13', null);

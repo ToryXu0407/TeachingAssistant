@@ -1,4 +1,4 @@
-package model;
+package util;
 
 import annotation.UnCheckLogin;
 import com.google.gson.Gson;

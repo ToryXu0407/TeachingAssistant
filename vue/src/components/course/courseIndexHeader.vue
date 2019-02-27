@@ -10,7 +10,7 @@
             <h4 class="Htitle" :title="HdInfoData.description">{{HdInfoData.description}}</h4>
         </div>
     </div>
-    <div class="SiH-Href fr" v-show="isAdmin==='Y'" >
+    <div class="SiH-Href fr" v-show="isTeacher==='Y'" >
       <div class="SiH-Launch2 fr animation" @click="Add()">
         创建课程
       </div>
@@ -54,6 +54,7 @@
       return {
         dialogVisible:false,
         file:'',
+        isTeacher:'',
         imageUrl: '',
         showDialog:false,
         isAdmin:'N',
@@ -90,7 +91,6 @@
         params.append('courseName', this.courseName);
         params.append('file',this.file);
         params.append('description',this.description);
-        console.log(this.file);
         this.$axios.post('/course/addCourse', params)
           .then(function (res) {
             if(res.data.code===200){
@@ -141,6 +141,7 @@
             document.getElementById('isTeacher').value = 'N'
             document.getElementById('isAdmin').value = 'N'
           }
+          this.isTeacher =  document.getElementById('isTeacher').value;
           this.isAdmin =  document.getElementById('isAdmin').value;
         }).catch(failResponse => {
       })

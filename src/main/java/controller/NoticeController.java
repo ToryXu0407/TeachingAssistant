@@ -8,6 +8,7 @@ import model.Result;
 import model.ResultFactory;
 import org.apache.log4j.Logger;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -95,7 +96,7 @@ public class NoticeController extends BaseController {
         Notice notice = getBean(Notice.class,"");
         Result result;
         Date date = new Date();
-        java.text.DateFormat format1 = new java.text.SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String time = format1.format(date);
         notice.setCreateTime(time);
         Record record = new Record();

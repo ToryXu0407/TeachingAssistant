@@ -1,5 +1,6 @@
 package controller;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -55,7 +56,7 @@ public class WebSocketController {
         //session1是发送者的httpsession
         HttpSession session1 = (HttpSession) sessionMap.get(session.getId());
         Date date = new Date();
-        java.text.DateFormat format1 = new java.text.SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String time = format1.format(date);
         int chatRoomId = (int) session1.getAttribute("chatRoomId");
         int id = (int) session1.getAttribute(PermissionChecker.USER_ID);
