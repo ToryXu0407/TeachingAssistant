@@ -10,6 +10,7 @@ import model.Result;
 import model.ResultFactory;
 import model.UserInfo;
 import org.apache.log4j.Logger;
+import util.MD5Util;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -46,6 +47,7 @@ public class RegisterController extends BaseController {
 			if (StrKit.isBlank(password)) {
 				throw new RuntimeException("密码不能为空");
 			}
+			password = MD5Util.encryptPassword(password,SALT);
 			Date currentTime = new Date();
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String dateString = formatter.format(currentTime);
