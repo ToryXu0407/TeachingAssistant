@@ -57,6 +57,7 @@ public class RegisterController extends BaseController {
 			record.set("username",username);
 			record.set("nickname",nickname);
 			record.set("password",password);
+			record.set("head_image","http://www.iplaystone.com/static/common/images/loginPic.png");
 			if(isTeacher.equals("Y"))
 				idStatus=1;
 			record.set("type",idStatus);

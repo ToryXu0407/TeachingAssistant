@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import store from './store'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import iView from 'iview';
@@ -13,9 +14,9 @@ import Moment from 'moment'
 Vue.prototype.moment = Moment;
 var axios = require('axios')
 //本地配置
-axios.defaults.baseURL = 'http://localhost:8000'
+// axios.defaults.baseURL = 'http://localhost:8000'
 //服务器配置
-// axios.defaults.baseURL = 'http://120.79.213.75:8080/teachingAssistantWebsite'
+axios.defaults.baseURL = 'https://yiqihappy.top/teachingAssistantWebsite'
 //docker
 // axios.defaults.baseURL = 'http://120.79.213.75:8078/teachingAssistantWebsite'
 // 将API方法绑定到全局
@@ -31,6 +32,7 @@ window.eventBus = new Vue();
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

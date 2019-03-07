@@ -85,11 +85,44 @@
             if (successResponse.data.code === 200) {
               //登陆成功
               console.log("注册成功");
-              this.$emit('refresh');
+              vm.login (vm.userForm.account,vm.userForm.password) ;
+              vm.$emit('refresh');
               vm.$router.push({path: '/'})
               // console.log(document.getElementById('pdLogin').value);
               // document.getElementById('pdLogin').value = 'true'
               // vm.$emit('on-suceess');
+            }else{
+              alert("手机号或者昵称已存在！");
+            }
+          }).catch(failResponse => {})
+      },
+      login (username,password) {
+        const vm = this;
+        let params = new URLSearchParams();
+        params.append('username', username);
+        params.append('password', password);
+        this.$axios.post('/loginSubmit',params)
+          .then((successResponse)=>{
+            this.info = JSON.stringify(successResponse.data)
+            if (successResponse.data.code === 200) {
+              //登陆成功
+              document.getElementById('pdLogin').value = 'true'
+              var user =successResponse.data.data;
+              if(user.type===0){
+                document.getElementById('isTeacher').value = 'Y'
+                document.getElementById('isAdmin').value = 'Y'
+              }else if(user.type===1){
+                document.getElementById('isTeacher').value = 'Y'
+                document.getElementById('isAdmin').value = 'N'
+              }else{
+                document.getElementById('isTeacher').value = 'N'
+                document.getElementById('isAdmin').value = 'N'
+              }
+              vm.isLogin = true
+              // this.$router.push("/")
+              vm.$emit('on-suceess');
+            }else{
+              alert("用户名或密码错误！");
             }
           }).catch(failResponse => {})
       },

@@ -146,7 +146,6 @@
         params.append("id",vm.user.userid);
         params.append('file',this.file);
         params.append('nickname',this.nickname);
-        console.log(this.file);
         this.$axios.post('/updateUser', params)
           .then(function (res) {
             if(res.data.code===200){

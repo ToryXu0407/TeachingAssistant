@@ -296,15 +296,24 @@
         }).catch(failResponse => {})
       this.$emit('hidefooter');
       this.cur = this.$route.params.onPage
+       params = new URLSearchParams();
+      params.append('chatRoomId', this.$route.params.chatRoomId);
+      this.$axios.post('/chat/getChats',params)
+        .then((successResponse)=>{
+          if (successResponse.data.code === 200) {
+            vm.conversationList = successResponse.data.data;
+            clearInterval(this.timer);
+          }
+        }).catch(failResponse => {})
       window.addEventListener('scroll', this.handleScroll)
       var vm = this;
         if ("WebSocket" in window)
         {
           // 打开一个 web socket
           //本地配置
-          var ws = new WebSocket("ws://localhost:8000/websocket");
+          // var ws = new WebSocket("ws://localhost:8000/websocket");
           //服务器配置
-          // var ws = new WebSocket("ws://120.79.213.75:8080/teachingAssistantWebsite/websocket");
+          var ws = new WebSocket("ws://120.79.213.75:8080/teachingAssistantWebsite/websocket");
           //docker
           // var ws = new WebSocket("ws://120.79.213.75:8078/teachingAssistantWebsite/websocket");
 
@@ -327,7 +336,6 @@
               if(userid===vm.userid){
                 isSelf=1;
               }
-              console.log(data.text);
               vm.conversationList.push({message:data.text,isSelf:isSelf,date:data.date,nickname:data.from.nickname});
             }
             // alert("数据已接收..."+received_msg);

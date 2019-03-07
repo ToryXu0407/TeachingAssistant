@@ -30,7 +30,7 @@
           <li v-for="(list, i) in list" :data-listId="list.id" :name="list.id">
               <div class="Jitems">
                 <div class="Jitems-Title">
-                  <router-link :to="{ name: 'chatRoomDetail', params: {'chatRoomId':list.id }}" :title="list.courseName" :listId="list.id">{{list.courseName}}</router-link>
+                  <router-link :to="{ name: 'chatRoomDetail2', params: {'chatRoomId':list.id }}" :title="list.courseName" :listId="list.id">{{list.courseName}}</router-link>
                 </div>
                 <i   v-if="isAdmin==='Y'" @click="del(list.id)" style="font-size:20px;float: right;padding: 3px 0" class="el-icon-delete"></i>
                 <div class="Jitems-Info">
