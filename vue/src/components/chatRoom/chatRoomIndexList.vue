@@ -30,7 +30,8 @@
           <li v-for="(list, i) in list" :data-listId="list.id" :name="list.id">
               <div class="Jitems">
                 <div class="Jitems-Title">
-                  <router-link :to="{ name: 'chatRoomDetail2', params: {'chatRoomId':list.id,'teacherId':list.teacherId,'userId':userId }}" :title="list.courseName" :listId="list.id">{{list.courseName}}</router-link>
+                  <!--<router-link :to="{ name: 'chatRoomDetail2', params: {'chatRoomId':list.id,'teacherId':list.teacherId,'userId':userId }}" :title="list.courseName" :listId="list.id">{{list.courseName}}</router-link>-->
+                <a href="#" @click="initializeWebRtc(list.id,list.teacherId)">{{list.courseName}}</a>
                 </div>
                 <i   v-if="isAdmin==='Y'" @click="del(list.id)" style="font-size:20px;float: right;padding: 3px 0" class="el-icon-delete"></i>
                 <div class="Jitems-Info">
@@ -70,6 +71,7 @@
 <script>
 import pagination from '../pagination.vue'
 import EnlargePicture from '../EnlargePicture.vue'
+import SimpleWebRTC from 'simplewebrtc'
 export default {
   name: 'chatRoomIndexHot',
   components: {
@@ -118,6 +120,30 @@ export default {
     }
   },
   methods: {
+    initializeWebRtc(chatRoomId,teacherId){
+      var userid = this.userId;
+        if (userid === teacherId && userid !== '') {
+          console.log("老师老师");
+            window.webrtc = new SimpleWebRTC({
+              localVideoEl: '',
+              remoteVideosEl: '',
+              autoRequestMedia: true,
+              nick: userid
+            })
+          } else {
+            window.webrtc = new SimpleWebRTC({
+              localVideoEl: '',
+              remoteVideosEl: '',
+              autoRequestMedia: true,
+              media: {
+                video: false,
+                audio: false
+              },
+              nick: userid
+            })
+        }
+      this.$router.push({name:"chatRoomDetail2",params:{chatRoomId:chatRoomId}});
+    },
     handleClose(done) {
       this.dialogVisible=false;
     },
