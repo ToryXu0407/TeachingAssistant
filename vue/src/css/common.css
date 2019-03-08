@@ -1,0 +1,1157 @@
+html, body{
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  width: 100%;
+  /*height: 100%;*/
+  font-family: "Microsoft YaHei";
+}
+
+ul, li{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4{
+  font-size: 14px;
+  font-weight: 100;
+  padding: 0;
+  margin: 0;
+}
+
+a{
+  text-decoration: none;
+}
+
+input{
+  height: 38px;
+  outline: none;
+  border: 1px solid rgb(240, 241, 242);
+  background-color: rgb(240, 241, 242);
+  padding: 0 15px;
+  color: #8a8a99;
+}
+input:focus{
+  border: 1px solid #66A6FF;
+}
+.none{
+  display: none;
+}
+/*内容居中*/
+.stone_container{
+  position: relative;
+  width: 1200px;
+  margin: 0 auto;
+}
+
+/******************头部样式******************/
+#stone_header{
+  max-height: 70px;
+}
+#stone_header > *{
+  box-sizing: content-box;
+}
+.stone_header{
+  position: fixed;
+  height: 70px;
+  width: 100%;
+  z-index: 9;
+  /*background: url(../images/hdbg.jpg) no-repeat center;*/
+
+}
+
+.stone_heder_container{
+  height: 100%;
+}
+.stone_heder_top{
+  position: relative;
+  top:15px;
+  float: right;
+  max-width: 200px;
+  height: 37px;
+  line-height: 37px;
+}
+.stone_heder_top .stone_heder_top_text{
+  font-size: 12px;
+  font-family: "Microsoft YaHei";
+  color: rgb(100, 103, 122);
+}
+
+.stone_heaer_cont{
+  float: left;
+  width: 1060px;
+  height: 70px;
+}
+.stone_header .stone_header_logo,
+.stone_header .stone_header_menu,
+.stone_header .stone_header_search,
+.stone_header .stone_header_user{
+  float: left;
+  height: 100%;
+}
+
+.stone_header .stone_header_logo{
+  position: relative;
+  top:-3px;
+  display: inline-block;
+  width: 175px;
+  height: 100%;
+  background: url(http://www.iplaystone.com/static/common/images/LOGO.png) no-repeat 0 16px;
+}
+
+.stone_header .stone_header_menu{
+  position: relative;
+  top:1px;
+  font-size: 15px;
+  font-family: "Microsoft YaHei";
+  min-width: 545px;
+}
+
+.stone_header .stone_header_menu > li{
+  display: inline-block;
+  cursor: pointer;
+  line-height: 67px;
+  padding: 0 20px;
+}
+.stone_header .stone_header_menu > li.current,
+.stone_header .stone_header_menu > li:hover{
+  border-bottom: 2px solid #00aaff;
+}
+.stone_header .stone_header_menu > li > a{
+  color: rgb(179, 181, 199);
+  display: inline-block;
+}
+.stone_header .stone_header_menu > li.current a{
+  color:#fff;
+}
+.stone_header .stone_header_menu > li:hover a,
+.stone_header .stone_header_menu .stone_menu_current a{
+  color: #fff;
+}
+
+.stone_header .stone_serch{
+  position: relative;
+  float: left;
+  top:22px;
+  width: 180px;
+  height: 28px;
+  z-index: 99;
+}
+.stone_serch_input{
+  width: 100%;
+  height: 100%;
+}
+.stone_header .stone_serch .serch_input{
+  height: 28px;
+  padding:0 30px 0 15px;
+  border-radius: 30px;
+  border:1px solid #4c4d5c;
+  width: 135px;
+  background: none;
+  font-size: 12px;
+  font-family: "Microsoft YaHei";
+  color: rgb(133, 135, 148);
+  text-align: left;
+}
+.stone_header .stone_serch .serch_input::-webkit-input-placeholder{
+  color: rgb(133, 135, 148);
+}
+.stone_header .stone_serch .serch_input:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+  color: rgb(133, 135, 148);
+}
+.stone_header .stone_serch .serch_input::-moz-placeholder { /* Mozilla Firefox 19+ */
+  color: rgb(133, 135, 148);
+}
+.stone_header .stone_serch .serch_input:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: rgb(133, 135, 148);
+}
+.stone_header .stone_serch .serch_btn{
+  position: absolute;
+  width: 20px;
+  height: 28px;
+  top: 1px;
+  right: 8px;
+  cursor: pointer;
+  background: url(http://www.iplaystone.com/static/common/images/search.png) no-repeat center;
+}
+.stone_serch .bor{
+  position: absolute;
+  top:40px;
+  width: 178px;
+  min-height: 1px;
+  padding:10px 0;
+  border:1px solid rgb(204, 204, 204);
+  border-radius: 3px;
+  background-color: rgb(255, 255, 255);
+  box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.1);
+  z-index: 99;
+}
+.stone_serch .bor ul{
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+}
+.stone_serch .bor ul li{
+  display: inline-block;
+  padding:0 11px;
+  width:156px;
+  height: 31px;
+  line-height: 31px;
+}
+.stone_serch .bor ul li a{
+  text-align: left;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.stone_serch .bor ul li a i {
+  font-style: normal;
+}
+.stone_serch .bor ul li:hover{
+  background-color: rgb(237, 239, 240);
+}
+.stone_serch .bor ul li .rec_num{
+  position: relative;
+  top: 9px;
+  float: left;
+  margin-right: 10px;
+  display: inline-block;
+  width: 14px;
+  text-align: center;
+  height: 14px;
+  line-height: 14px;
+  background-color: rgb(214, 214, 214);
+  font-size: 12px;
+  font-family: "SimSun";
+  color: rgb(245, 246, 247);
+}
+.stone_serch .bor ul li .rec_text{
+  font-size: 12px;
+  font-family: "Microsoft YaHei";
+  color: #4d4d4d;
+  text-align: left;
+  display: inline-block;
+  width: 130px;
+  height: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.stone_serch .bor ul li:first-child .rec_text,
+.stone_serch .bor ul li:nth-child(2) .rec_text,
+.stone_serch .bor ul li:nth-child(3) .rec_text{
+  color: rgb(255, 102, 25);
+}
+.stone_serch .bor ul li:first-child .rec_num{
+  /*background: url(../images/rec_num1.png) no-repeat center;*/
+}
+.stone_serch .bor ul li:nth-child(2) .rec_num{
+  /*background: url(../images/rec_num2.png) no-repeat center;*/
+}
+.stone_serch .bor ul li:nth-child(3) .rec_num{
+  /*background: url(../images/rec_num3.png) no-repeat center;*/
+}
+
+.stone_serch .stone_serch_list{
+  padding-bottom: 5px;
+}
+.stone_serch_list h3{
+  font-size: 12px;
+  font-family: "Microsoft YaHei";
+  color: rgb(77, 77, 77);
+  font-weight: bold;
+  text-align: left;
+  height: 20px;
+  line-height: 20px;
+  padding-left: 11px;
+}
+.stone_serch_list .serch_line{
+  background: #e3e6ed;
+  width: 158px;
+  height: 1px;
+  margin: 5px auto;
+}
+.stone_serch_list li a{
+  color:#4d4d4d;
+}
+.stone_serch_list li a i{
+  color:#ff6619;
+}
+
+.serch_mask{
+  display: none;
+  position: fixed;
+  top:0;
+  left:0;
+  width: 100%;
+  height: 100%;
+  z-index: 98;
+}
+
+
+
+
+
+
+.stone_header .stone_header_user{
+  width: auto;
+  float: right;
+  line-height:37px;
+  color: rgba(255, 255, 255, 0.5);
+  height: 37px;
+  /*padding-top: 5px;*/
+}
+
+.stone_header .stone_user_btn,
+.stone_header .stone_user_info{
+  display: inline-block;
+  float: left;
+  height: 37px;
+}
+
+.stone_header .stone_user_btn{
+  position: relative;
+  float: right;
+  top: 24px;
+  right: 0;
+}
+
+.stone_header .stone_user_btn > span,
+.stone_header .stone_user_btn > a{
+  display: inline-block;
+  padding: 0 30px;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.stone_header .stone_user_btn .stone_btn_cart{
+  background: url('http://www.iplaystone.com/static/common/images/shopping.png') no-repeat;
+}
+
+.stone_header .stone_user_btn .stone_btn_client{
+  padding-right:0px;
+  background: url(http://www.iplaystone.com/static/common/images/download.png) no-repeat center left;
+}
+
+.stone_header .stone_user_info{
+  position: relative;
+}
+
+.stone_header .stone_user_info .stone_info_logined{
+  position: relative;
+  /*overflow: hidden;*/
+  width: auto;
+  height: 100%;
+  cursor: pointer;
+}
+.stone_header .stone_info_logined .stone_nickname{
+  font-size: 12px;
+  font-family: "Microsoft YaHei";
+  color: rgb(100, 103, 122);
+  display: inline-block;
+  height: 100%;
+  padding: 0 3px;
+  padding-right: 25px;
+  text-align: right;
+  line-height: 39px;
+  width: 110px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.stone_header .stone_info_logined .stone_nickname:hover{
+  color: rgb(142, 146, 173);
+}
+.stone_header .stone_user_info .stone_info_logined:hover{
+  /*background-color: #1b1b26;*/
+}
+
+.stone_header .stone_user_info .stone_info_logined:hover .stone_arrow{
+  transform: rotate(0deg);
+  -webkit-transform: rotate(0deg);
+}
+
+.stone_header .stone_user_info .stone_info_logined:hover .stone_user_dropdown{
+  display: block;
+}
+
+.stone_header .stone_user_info .stone_arrow{
+  position: absolute;
+  width: 10px;
+  height: 5px;
+  top: 17px;
+  right: 4px;
+  transition: all .1s linear;
+  transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+  background-image: url('http://www.iplaystone.com/static/common/images/arrow.png');
+}
+
+.stone_header .stone_info_logined .stone_user_dropdown{
+  position: absolute;
+  right: 0;
+  display: none;
+  top: 35px;
+  width: 135px;
+  line-height: 46px;
+  background: #fff;
+  z-index: 11;
+  color: #595959;
+  border: 1px solid #999999;
+}
+.stone_header .stone_info_logined .stone_user_dropdown > .stone_info_img,
+.stone_header .stone_info_logined .stone_user_dropdown .stone_info_img > img
+{
+  display: inline-block;
+  width: 36px;
+  height: 36px;
+  overflow: hidden;
+  border-radius: 50%;
+  margin:0 auto;
+}
+.stone_header .stone_info_logined .stone_user_dropdown > .stone_info_img{
+  position: relative;
+  top: 15px;
+  margin-left: 50px;
+}
+.stone_header .stone_info_logined .stone_user_dropdown > a,
+.stone_header .stone_info_logined .stone_user_dropdown > div{
+  padding: 0 15px;
+  display: block;
+  width: 135px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  text-align: center;
+  cursor: pointer;
+  color: #595959;
+  box-sizing: border-box;
+}
+.stone_header .stone_info_logined .stone_user_dropdown > .stone_no_hover{
+  color: #ff6619;
+  border-bottom: 1px solid #e3e6ed;
+}
+/*
+    .stone_header .stone_info_logined .stone_user_dropdown > a:hover,
+    .stone_header .stone_info_logined .stone_user_dropdown > div:hover{
+      background-color: #2B293E;
+      color: #c2bfc7;
+    }*/
+
+.stone_header .stone_user_info .stone_info_unlogined{
+  /*padding-left: 35px;*/
+}
+
+.stone_header .stone_user_info .stone_info_unlogined > span{
+  cursor: pointer;
+  border-right: 1px solid #3c3f50;
+  padding-right: 10px;
+}
+
+.stone_header .stone_user_info .stone_info_unlogined > a{
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.stone_header .stone_user_info .stone_info_nickname{
+  float: left;
+  display: block;
+  max-width: 80px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+
+}
+/*
+    .stone_header .stone_user_info .stone_info_img{
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      top: 20px;
+      right: 20px;
+    }*/
+
+.stone_no_hover:hover{
+  /*background-color: #242333!important;*/
+  /*color: rgba(198, 198, 209, 0.5)!important;*/
+}
+
+/******************登录弹窗样式******************/
+.login_pop{
+  display: none;
+  position: fixed;
+  right: 0;
+  left: 0;
+  top: 220px;
+  width: 340px;
+  margin: 0 auto;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+  background-color: #f5f6f8;
+  z-index: 100;
+}
+.banner .prev, .banner .next{
+  z-index: 8 !important;
+}
+
+.login_pop .login_pop_outer{
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding:40px;
+  box-sizing: border-box;
+}
+
+.login_pop .login_pop_cancle{
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 14px;
+  height: 14px;
+  /*background: url('../images/cancel.png');*/
+  cursor: pointer;
+}
+
+.login_pop .login_pop_title{
+  font-size: 14px;
+  color: white;
+  text-align: center;
+  margin-bottom: 30px;
+}
+.login_pop_title img{
+  display: inline-block;
+}
+.login_pop .login_pop_input{
+  position: relative;
+  width: 100%;
+  height: 58px;
+}
+
+.login_pop .login_pop_input .login_pop_error{
+  display: none;
+  height: 20px;
+  padding-left: 15px;
+  color: red;
+  background: url('http://www.iplaystone.com/static/common/images/error.png') left no-repeat;
+}
+
+.login_pop .login_pop_input > input{
+  width: 100%;
+  height: 38px;
+  border: 1px solid rgb(240, 241, 242);
+  background-color: rgb(240, 241, 242);
+  outline: none;
+  padding: 0 15px 0 30px;
+  color: rgb(128, 128, 128);
+  box-sizing: border-box;
+}
+.login_pop .login_pop_input > input:focus{
+  border-color:#00aaff;
+}
+
+.login_pop .login_pop_input .login_pop_icon{
+  position: absolute;
+  top: 13px;
+  left: 10px;
+  width: 13px;
+  height: 13px;
+}
+
+.login_pop .login_pop_input .login_pop_user{
+  /*background: url('../images/user.png') no-repeat;*/
+}
+
+.login_pop .login_pop_input .login_pop_pwd{
+  /*background: url('../images/key.png') no-repeat;*/
+}
+
+.login_pop .login_pop_btn{
+  width: 100%;
+  height: 46px;
+  margin: 30px 0 15px 0;
+}
+
+.login_pop .login_pop_btn > button{
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  background-color: white;
+  border: none;
+  color: white;
+  /*background: url('../images/btn_normal.png');*/
+  cursor: pointer;
+}
+
+/*    .login_pop .login_pop_btn > button:hover{
+      background: url('../images/btn_hover.png');
+    }*/
+
+.login_pop .login_pop_forget,
+.login_pop .login_pop_register {
+  font-size: 12px;
+}
+
+.login_pop .login_pop_forget{
+  /*float: left;*/
+  color: #808080;
+}
+
+.login_pop .login_pop_register{
+  /*float: right;*/
+  color: #5a9ddf;
+}
+.login_pop  .login_pop_box{
+  text-align: center;
+}
+.login_pop_box span{
+  display: inline-block;
+  height: 15px;
+  width: 1px;
+  background: #999;
+  margin: 0 20px;
+  position: relative;
+  top: 3px;
+}
+
+/******************遮罩样式******************/
+.stone_mask{
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 9;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+/******************底部样式******************/
+#stone_footer{
+  background-color: #edeef0;
+}
+
+.stone_footer{
+  max-height: 180px;
+}
+.stone_footer_container{
+  height: 100%;
+  padding: 40px 0;
+  box-sizing: border-box;
+}
+
+.stone_footer_container > h1{
+  text-align: center;
+  font-size: 12px;
+  font-family: "Microsoft YaHei";
+  color: rgb(179, 179, 179);
+}
+.stone_footer_container > h1:first-child{
+  font-size: 15px;
+}
+.stone_footer_container > h1:first-child .stont_footer_item{
+  border:none;
+  padding: 0;
+}
+.stont_footer_item{
+  display: inline-block;
+  position: relative;
+  padding: 0 15px;
+  height: 18px;
+  line-height: 18px;
+  font-size: 14px;
+  font-family: "Microsoft YaHei";
+  color: rgb(179, 179, 179);
+  border-right: 1px solid rgba(0,0,0, 0.15);
+  cursor: pointer;
+}
+
+
+.stont_footer_item:hover{
+  color: rgb(128, 128, 128);
+}
+
+.stont_footer_item:last-child{
+  border-right: none;
+}
+
+.stont_footer_weibo{
+  /*background: url('../images/wb.png') no-repeat center;*/
+  background-position: 0 0;
+}
+
+/*.stont_footer_weibo:hover{
+  background-position: 0 -31px;
+}*/
+
+.stont_footer_weixin{
+  margin-left: 5px;
+  /*background: url('../images/wx.png') no-repeat center;*/
+  background-position: 0 0;
+}
+
+/*.stont_footer_weixin:hover{
+  background-position: 0 -31px
+}
+*/
+
+.stont_footer_weixin,
+.stont_footer_weibo{
+  position: relative;
+  min-width: 30px;
+  height: 19px;
+  line-height: 20px;
+  padding-left:28px !important;
+}
+.stont_footer_weixin > div{
+  position: absolute;
+  top: -40px;
+  right: -126px;
+  width: 112px;
+  height: 122px;
+  display: none;
+  /*background: url(../images/weixin_code.png) no-repeat;*/
+  z-index: 2;
+}
+
+.stont_footer_weixin:hover div{
+  display: block;
+}
+
+.stone_footer_container .stone_footer_stone{
+  margin-top: 20px;
+  text-align: center;
+  color: #5e5e71;
+}
+
+.stone_footer_container .stone_footer_stone > span{
+  color: rgb(179, 179, 179);
+  font-size: 14px;
+  padding-left: 60px;
+  /*background: url('../images/footer_stone_logo.png') no-repeat left;*/
+}
+
+.margin_top_10{
+  margin-top: 10px;
+  font-size: 12px!important;
+}
+
+/******************body样式******************/
+.stone_body{
+  background-color: #f5f6f8;
+  overflow: hidden;
+  padding-top:50px;
+}
+
+/******************子菜单样式******************/
+.stone_subMenu,
+.stone_content{
+  float: left;
+  min-height: 820px;
+}
+
+.stone_subMenu{
+  width: 150px;
+  border-right: 1px solid #363652;
+  height: 100%;
+}
+
+.stone_content{
+  width: 1030px;    /*1180*/
+}
+
+/******************按钮样式******************/
+.stone_btn{
+  font-size: 16px;
+  height: 46px;
+  line-height: 46px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  border-radius: 3px;
+  text-align: center;
+}
+
+.stone_btn_submit{
+  width: 210px;
+  display: block;
+  /*background: url('../images/btn_normal.png');*/
+  background-position: 0 0;
+  margin: 20px auto 0 auto;
+  color: white;
+  transition: width .3s ease-in;
+}
+
+.stone_btn_submit:hover{
+  background-position: 0 -47px;
+}
+
+.stone_btn_resend{
+  position: relative;
+  width: 145px;
+  height: 40px;
+  line-height: 40px;
+  display: inline-block;
+  border: 1px solid #5A9DDF;
+  color: #5A9DDF;
+  cursor: pointer;
+  font-size: 14px;
+  text-align: center;
+  background-color: transparent;
+}
+
+.stone_btn_resend .stone_btn_resend_click{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /*background: url('../images/tranparent.png');*/
+  cursor: pointer!important;
+
+}
+
+.stone_btn_resend:hover{
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.stone_btn_resend_pressed{
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.stone_btn_resend_unable{
+  cursor: not-allowed;
+  background-color: rgba(255, 255, 255, 0.1)!important;
+  border: 1px solid #ddd;
+  color: #ddd;
+}
+
+.stone_btn_resend_unable > div{
+  display: none;
+}
+
+/**************输入框加提示样式**************/
+.stone_line{
+  position: relative;
+  width: 100%;
+  height: 58px;
+}
+
+.stone_line .stone_input_icon{
+  width: 100%;
+  height: 38px;
+  padding: 0 10px 0 35px;
+}
+
+.stone_line .stone_icon{
+  position: absolute;
+  top: 13px;
+  left: 13px;
+  width: 14px;
+  height: 14px;
+}
+
+.stone_line .stone_user{
+  /*background: url('../images/user.png') no-repeat;*/
+}
+
+.stone_line .stone_pwd{
+  /*background: url('../images/key.png') no-repeat;*/
+}
+
+.stone_input_error{
+  display: none;
+  /*background: url(../images/error.png) left no-repeat;*/
+  padding-left: 15px;
+  height: 20px;
+  line-height: 21px;
+  color: red;
+  clear: both;
+}
+
+/******************通用样式******************/
+.margin_top_15{
+  margin-top: 15px;
+}
+
+.margin_right_50{
+  margin-right: 50px;
+}
+
+.margin_left_30{
+  margin-left: 30px;
+}
+
+.margin_left_10{
+  margin-left: 10px;
+}
+.width_full{
+  width: 100%;
+}
+
+.width_half{
+  width: 50%;
+}
+
+.width_380{
+  width: 380px;
+}
+
+.width_320{
+  width: 320px;
+}
+.width_300{
+  width: 300px;
+}
+
+.width_315{
+  width: 300px;
+}
+
+.width_290{
+  width: 300px;
+}
+
+.width_215{
+  width: 215px;
+}
+
+.width_90{
+  width: 90px;
+}
+
+.block_center{
+  display: block;
+  margin: 0 auto;
+}
+
+.color_8a8a99{
+  color: #8a8a99;
+}
+
+.color_5a9ddf{
+  color: #5a9ddf;
+}
+
+.input_error{
+  border: 1px solid red!important;
+}
+
+.input_pass{
+  border: 1px solid #66A6FF!important;
+}
+
+.child_float_left{
+  overflow: hidden;
+}
+
+.child_float_left > *{
+  float: left;
+}
+
+/*版本过低提示*/
+.stone_version{
+  position: fixed;
+  display: none;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  background-color: #292a47;
+}
+
+.stone_version .stone_version_container{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 1180px;
+  height: 600px;
+  margin: auto;
+  background: url(http://www.iplaystone.com/static/common/images/version.png) ;
+}
+
+.stone_version .stone_version_container .stone_IE,
+.stone_version .stone_version_container .stone_chrome,
+.stone_version .stone_version_container .stone_continue{
+  display: inline-block;
+  position: absolute;
+  cursor: pointer;
+  z-index: 10;
+  /*border: 1px solid #F5F5F0;*/
+}
+
+.stone_version .stone_version_container .stone_IE,
+.stone_version .stone_version_container .stone_chrome{
+  width: 125px;
+  height: 125px;
+  top: 275px;
+}
+
+
+.stone_version .stone_version_container .stone_IE{
+  right: 385px;
+}
+
+.stone_version .stone_version_container .stone_chrome{
+  left: 380px;
+}
+
+.stone_version .stone_version_container .stone_continue{
+  width: 120px;
+  height: 40px;
+  left: 540px;
+  bottom: 90px;
+}
+
+/******************切换语言******************/
+.switch_lang{
+  position: absolute;
+  right: -5px;
+  top: 7px;
+  width: 110px;
+  color: #7a7a80;
+}
+
+.switch_lang .switch_lang_container{
+  position: relative;
+}
+
+.switch_lang_selecte{
+  display: none;
+  /*widows: 100%;*/
+  height: 91px;
+  padding-top: 10px;
+  background: url('http://www.iplaystone.com/static/common/images/login_bg.png') no-repeat center;
+}
+
+.switch_lang .switch_lang_container:hover .switch_lang_selecte{
+  display: block;
+}
+
+.switch_lang_line{
+  width: 100%;
+  display: block;
+  height: 35px;
+  line-height: 35px;
+  padding-left: 40px;
+  background: no-repeat 10px 13px;
+  cursor: pointer;
+  color: #7a7a80;
+}
+.switch_lang_lineto{
+  display: block;
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+  margin-left: 43px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.switch_lang_en_btn{
+  /*background-image: url(../images/enbtn.png);*/
+}
+
+.switch_lang_cn_btn{
+  /*background-image: url(../images/zhbtn.png);*/
+}
+.switch_lang_cn_btn:hover , .switch_lang_en_btn:hover{
+  background-position: 0 -27px;
+}
+.switch_lang_en{
+  background-image: url('http://www.iplaystone.com/static/common/images/en.png');
+}
+
+.switch_lang_cn{
+  background-image: url('http://www.iplaystone.com/static/common/images/cn.png');
+}
+
+.switch_lang_selecte .switch_lang_line:hover{
+  color: #acacbf;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+#text{
+  display: inline-block;
+  font-size: 15px;
+  font-family: "Microsoft YaHei";
+  /*color: rgb(132, 131, 145);*/
+  /*margin-left: 20px;*/
+  line-height: 38px;
+}
+
+
+/******************tab切换******************/
+.nav_tab{
+  position: relative;
+  width: 960px;
+  height: 40px;
+  margin:70px auto 20px;
+}
+.nav_tab span{
+  display: inline-block;
+  float: left;
+  min-width: 130px;
+  padding-left: 125px;
+  height: 40px;
+  line-height:49px;
+  text-align: center;
+  font-size: 16px;
+  font-family: "Microsoft YaHei";
+  color: rgb(64, 64, 64);
+  font-weight: bold;
+  /*background: url(../images/logo2.png) no-repeat left;*/
+}
+
+/************************客服************************/
+.stone_service{
+  /* display: none;*/
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 45px;
+  background-color: #232437;
+
+}
+
+.stone_service_contanier{
+
+}
+
+.stone_service_item{
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  width: 45px;
+  height: 45px;
+  font-size: 12px;
+  color: #abacb3;
+  padding-top: 30px;
+  box-sizing: border-box;
+  text-align: center;
+  cursor: pointer;
+  background: no-repeat 13px 8px;
+}
+
+.stone_service_service{
+  /*background-image: url('../images/service.png');*/
+}
+
+.stone_back_top{
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 45px;
+  cursor: pointer;
+  background: url('../images/top.png') no-repeat center;
+  background-color: #578dd9;
+}

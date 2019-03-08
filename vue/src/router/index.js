@@ -14,12 +14,13 @@ import Courseware from '@/components/course/Courseware'
 import ChatRoomIndex from '@/components/chatRoom/chatRoomIndex'
 import ChatRoomDetail from '@/components/chatRoom/chatRoomDetail'
 import ChatRoomDetail2 from '@/components/chatRoom/chatRoomDetail2'
+import SimpleWebRTC from 'simplewebrtc'
 
 Vue.use(Router)
 
 export default new Router({
-  routes: [
 
+  routes: [
     {
       path: '/',
       name: 'index',
@@ -76,12 +77,40 @@ export default new Router({
       component:ChatRoomDetail
     },
     {
-      path:'/chatRoomDetail2/:chatRoomId',
+      path:'/chatRoomDetail2/:chatRoomId:teacherId:userId',
       name:'chatRoomDetail2',
-      component:ChatRoomDetail2
-    }
-
-
-
+      component:ChatRoomDetail2,
+      beforeEnter: (to, from, next) => {
+        var userid  = to.params.userId;
+        var teacherId = to.params.teacherId;
+        if (userid === teacherId && userid !== '') {
+          console.log("老师老师");
+            window.webrtc = new SimpleWebRTC({
+              localVideoEl: '',
+              remoteVideosEl: '',
+              autoRequestMedia: true,
+              nick: userid
+            })
+          } else {
+            window.webrtc = new SimpleWebRTC({
+              localVideoEl: '',
+              remoteVideosEl: '',
+              autoRequestMedia: true,
+              media: {
+                video: false,
+                audio: false
+              },
+              nick: userid
+            })
+        }
+        next();
+        // ...
+      }
+    },
+    // Router.beforeEach((to, from, next) => {
+    //
+    //   // ...
+    // })
   ]
+
 })

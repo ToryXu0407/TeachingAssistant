@@ -75,5 +75,7 @@ export default {
 </script>
 
 <style >
-   @import './sass/stylesheets/SocialPublic.css'
+   @import './sass/stylesheets/SocialPublic.css';
+  @import './css/base.css';
+  @import './css/common.css';
 </style>
