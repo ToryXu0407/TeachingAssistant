@@ -71,6 +71,7 @@
 <script>
 import pagination from '../pagination.vue'
 import EnlargePicture from '../EnlargePicture.vue'
+import { mapMutations } from 'vuex'
 import SimpleWebRTC from 'simplewebrtc'
 export default {
   name: 'chatRoomIndexHot',
@@ -120,29 +121,39 @@ export default {
     }
   },
   methods: {
+    ...mapMutations({
+      setMeName: 'setMeName'
+    }),
     initializeWebRtc(chatRoomId,teacherId){
+      this.setMeName(this.userId);
       var userid = this.userId;
-        if (userid === teacherId && userid !== '') {
-          console.log("老师老师");
-            window.webrtc = new SimpleWebRTC({
-              localVideoEl: '',
-              remoteVideosEl: '',
-              autoRequestMedia: true,
-              nick: userid
-            })
-          } else {
-            window.webrtc = new SimpleWebRTC({
-              localVideoEl: '',
-              remoteVideosEl: '',
-              autoRequestMedia: true,
-              media: {
-                video: false,
-                audio: false
-              },
-              nick: userid
-            })
+      this.setMeName(this.userId);
+      //不等于任课老师id，这里先做一个类似判断
+      if (userid === teacherId && userid !== '') {
+        window.webrtc = new SimpleWebRTC({
+          localVideoEl: '',
+          remoteVideosEl: '',
+          autoRequestMedia: true,
+          nick: this.userId
+        })
+      }else{
+        window.webrtc = new SimpleWebRTC({
+          localVideoEl: '',
+          remoteVideosEl: '',
+          autoRequestMedia: true,
+          media: {
+            video: false,
+            audio: false
+          },
+          nick: this.userId
+        })
+      }
+      this.$router.push({
+        name: 'chatRoomDetail2',
+        params: {
+          chatRoomId: chatRoomId
         }
-      this.$router.push({name:"chatRoomDetail2",params:{chatRoomId:chatRoomId}});
+      })
     },
     handleClose(done) {
       this.dialogVisible=false;

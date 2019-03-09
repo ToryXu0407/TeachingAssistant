@@ -81,10 +81,7 @@ export default new Router({
       name:'chatRoomDetail2',
       component:ChatRoomDetail2,
     },
-    // Router.beforeEach((to, from, next) => {
-    //
-    //   // ...
-    // })
+
   ]
 
 })

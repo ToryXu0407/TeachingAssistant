@@ -13,21 +13,21 @@ module.exports = {
 		// 路由接口代理配置
 		proxyTable: {
 		  //本地配置
-      '/':{
-				target: 'http://localhost:8000',
-				changeOrigin: true,
-        pathRewrite: {
-          '^/': ''
-        }
-			},
+      // '/':{
+		// 		target: 'http://localhost:8000',
+		// 		changeOrigin: true,
+      //   pathRewrite: {
+      //     '^/': ''
+      //   }
+		// 	},
       //服务器配置
-      //   '/':{
-      //     target: 'https://yiqihappy.top/teachingAssistantWebsite',
-      //     changeOrigin: true,
-      //     pathRewrite: {
-      //       '^/': ''
-      //     }
-      //   },
+        '/':{
+          target: 'https://yiqihappy.top/teachingAssistantWebsite',
+          changeOrigin: true,
+          pathRewrite: {
+            '^/': ''
+          }
+        },
       //docker
       // '/':{
       //   target: 'http://120.79.213.75:8078/teachingAssistantWebsite',
