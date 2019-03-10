@@ -178,6 +178,7 @@
 .SocialIndexList .IndexListCont li .Jitems-Title {
   width: 100%;
   height: 30px;
+  font-size:20px;
 }
 /* line 152, ../sass/SocialIndexList.scss */
 .SocialIndexList .IndexListCont li .Jitems-Title a, .SocialIndexList .IndexListCont li .Jitems-Title i {
@@ -189,7 +190,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 16px;
+  font-size: 18px;
   color: #585858;
   text-align: left;
   margin-right: 5px;
@@ -268,6 +269,7 @@
 .SocialIndexList .IndexListCont li .Jitems-Info {
   width: 100%;
   height: 20px;
+  font-size:20px;
 }
 /* line 231, ../sass/SocialIndexList.scss */
 .SocialIndexList .IndexListCont li .Jitems-Info .JuserInfo {
@@ -279,7 +281,7 @@
   display: inline-block;
   position: relative;
   line-height: 20px;
-  font-size: 12px;
+  font-size:16px;
   color: #666666;
 }
 /* line 241, ../sass/SocialIndexList.scss */
@@ -293,7 +295,7 @@
 }
 /* line 249, ../sass/SocialIndexList.scss */
 .SocialIndexList .IndexListCont li .Jitems-Info .JuserInfo .JuserInfo-time {
-  font-size: 12px;
+  font-size: 14px;
   color: #a7a7a7;
   border-left: 1px solid #eeeeee;
   margin-left: 5px;
@@ -304,7 +306,7 @@
   display: inline-block;
   height: 20px;
   line-height: 20px;
-  font-size: 12px;
+  font-size: 14px;
   color: #a7a7a7;
   margin-top: 4px;
 }

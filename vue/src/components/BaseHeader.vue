@@ -12,10 +12,10 @@
       <el-col v-if="!simple" :span="16">
         <el-menu :router=true menu-trigger="click" active-text-color="#5FB878" :default-active="activeIndex"
                  mode="horizontal">
-          <el-menu-item index="/">首页</el-menu-item>
-          <el-menu-item index="/course">课程</el-menu-item>
-          <el-menu-item index="/social">讨论社</el-menu-item>
-          <el-menu-item index="/chatroom">答疑聊天室</el-menu-item>
+          <el-menu-item index="/"  style="font-size: 16px">首页</el-menu-item>
+          <el-menu-item index="/course" style="font-size: 16px">课程</el-menu-item>
+          <el-menu-item index="/social" style="font-size: 16px">讨论社</el-menu-item>
+          <el-menu-item index="/chatroom" style="font-size: 16px">答疑聊天室</el-menu-item>
           <!--<el-menu-item index="/category/all">文章分类</el-menu-item>-->
           <!--<el-menu-item index="/tag/all">标签</el-menu-item>-->
           <!--<el-menu-item index="/archives">文章归档</el-menu-item>-->
@@ -39,10 +39,10 @@
           <template v-if="!isLogin">
             <!--<el-menu-item index="/login">-->
             <el-menu-item index="">
-              <el-button type="text" @click="ShowLoginPop">登录</el-button>
+              <el-button type="text" @click="ShowLoginPop" style="font-size: 16px">登录</el-button>
             </el-menu-item>
             <el-menu-item index="" >
-              <el-button type="text" @click="register">注册</el-button>
+              <el-button type="text" @click="register" style="font-size: 16px">注册</el-button>
             </el-menu-item>
           </template>
 

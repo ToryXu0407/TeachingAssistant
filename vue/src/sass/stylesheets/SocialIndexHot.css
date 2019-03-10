@@ -21,6 +21,7 @@
   height: 20px;
   line-height: 20px;
   margin-bottom: 20px;
+  font-size:18px;
 }
 /* line 17, ../sass/SocialIndexHot.scss */
 .SocialIndexHot .HotList ul li:last-child {
@@ -41,7 +42,7 @@
 /* line 30, ../sass/SocialIndexHot.scss */
 .SocialIndexHot .HotList ul a {
   width: 100%;
-  font-size: 14px;
+  font-size: 15px;
 }
 /* line 34, ../sass/SocialIndexHot.scss */
 .SocialIndexHot .HotList ul i {

@@ -5,11 +5,11 @@
       <ul>
         <li v-for="(list, i) in list" :data-listId="list.id" :name="list.id">
           <div class="Jitems">
-            <div class="Jitems-Title">
+            <div class="Jitems-Title" style="font-size: 20px">
               <router-link :to="{ name: 'post', params: {'articleId':list.id ,'onPage':0}}" :title="list.label" :listId="list.id">{{list.label}}</router-link>
               <i class="icon-good" v-if="list.isSticky=='Y'" >精</i>
             </div>
-            <div class="Jitems-Info">
+            <div class="Jitems-Info" style="font-size: 16px">
               <div class="JuserInfo fl">
                 <a href="javascript:;" class="JuserInfo-people default" :title="list.nickname">
                   <img :src="list.headImage"/>
