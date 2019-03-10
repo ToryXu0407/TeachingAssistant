@@ -4,9 +4,11 @@ import annotation.PermissionOwn;
 import annotation.UnCheckLogin;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
+import com.jfinal.upload.UploadFile;
 import interceptor.PermissionChecker;
 import model.*;
 import org.apache.log4j.Logger;
+import util.qiniuyun;
 
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
@@ -189,6 +191,7 @@ public class ChatController extends BaseController{
             chatRoom.setCreateTime(record.get("create_time").toString());
             chatRoom.setCourseName(record.getStr("course_name"));
             chatRoom.setChatsCount(record.getInt("chats_count"));
+            chatRoom.setVideoUrl(record.getStr("video_url"));
             result = ResultFactory.buildSuccessResult(chatRoom);
         }catch(Exception e){
             e.printStackTrace();
@@ -280,6 +283,34 @@ public class ChatController extends BaseController{
         }catch(Exception e){
             e.printStackTrace();
             LOG.error(e.getMessage(), e);
+            result = ResultFactory.buildFailResult(e.getMessage());
+        }
+        renderJson(result);
+    }
+
+    /**
+     * 课程答疑结束后，将直播视频保存上传到七牛云，并返回文件路径
+     */
+    @UnCheckLogin
+    public void addVideoUrl(){
+        Result result;
+        try{
+            UploadFile file = getFile("file");
+            String fileName =file.getFileName();
+            String path = file.getUploadPath();
+            String chatRoomId = getPara("chatRoomId");
+            String imageUrl = qiniuyun.upload(path+'/'+fileName,fileName);
+            if(imageUrl==null){
+                throw new Exception("上传失败！");
+            }
+            Record record;
+            record = Db.use("ta").findById("ta_chatroom",chatRoomId);
+            record.set("video_url",imageUrl);
+            Db.use("ta").update("ta_chatroom",record);
+            result = ResultFactory.buildSuccessResult(imageUrl);
+        }catch(Exception e){
+            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
             result = ResultFactory.buildFailResult(e.getMessage());
         }
         renderJson(result);

@@ -30,4 +30,6 @@ public class ChatRoom {
     private String username;
 
     private String headImage;
+
+    private String videoUrl;
 }

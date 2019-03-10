@@ -14,15 +14,18 @@ import Moment from 'moment'
 Vue.prototype.moment = Moment;
 var axios = require('axios')
 //本地配置
-// axios.defaults.baseURL = 'http://localhost:8000'
+axios.defaults.baseURL = 'http://localhost:8000'
 //服务器配置
-axios.defaults.baseURL = 'https://yiqihappy.top/teachingAssistantWebsite'
+// axios.defaults.baseURL = 'https://yiqihappy.top/teachingAssistantWebsite'
 //docker
 // axios.defaults.baseURL = 'http://120.79.213.75:8078/teachingAssistantWebsite'
 // 将API方法绑定到全局
 axios.defaults.withCredentials=true
+import VideoPlayer from 'vue-video-player'
+require('video.js/dist/video-js.css')
+require('vue-video-player/src/custom-theme.css')
+Vue.use(VideoPlayer)
 
-var qiniu = require('qiniu-js')
 Vue.prototype.$axios = axios
 Vue.config.productionTip = false
 Vue.use(iView, { locale });
