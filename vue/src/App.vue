@@ -1,13 +1,32 @@
 <template>
   <div>
     <base-header ref="myBaseHeader" @refresh="refresh"></base-header>
-    <div id="app" class="app clearfix">
-      <input type="hidden" id="pdLogin" value="sdd"/>
-      <input type="hidden" id="isTeacher" value="N"/>
-      <input type="hidden" id="isAdmin" value="N"/>
-      <router-view :key="key" @refresh="refresh" v-if="isRouterAlive" @hidefooter="hidefooter" @showfooter="showfooter"></router-view>
-      <base-footer v-show="footerShow"></base-footer>
-    </div>
+      <div id="app" class="app clearfix">
+        <!--<vue-particles-->
+          <!--color="#dedede"-->
+          <!--:particleOpacity="0.7"-->
+          <!--:particlesNumber="80"-->
+          <!--shapeType="circle"-->
+          <!--:particleSize="4"-->
+          <!--linesColor="#dedede"-->
+          <!--:linesWidth="1"-->
+          <!--:lineLinked="true"-->
+          <!--:lineOpacity="0.4"-->
+          <!--:linesDistance="150"-->
+          <!--:moveSpeed="3"-->
+          <!--:hoverEffect="true"-->
+          <!--hoverMode="grab"-->
+          <!--:clickEffect="true"-->
+          <!--clickMode="push"-->
+        <!--&gt;-->
+        <!--</vue-particles>-->
+        <input type="hidden" id="pdLogin" value="sdd"/>
+        <input type="hidden" id="isTeacher" value="N"/>
+        <input type="hidden" id="isAdmin" value="N"/>
+        <router-view :key="key" @refresh="refresh" v-if="isRouterAlive" @hidefooter="hidefooter" @showfooter="showfooter"></router-view>
+        <base-footer v-show="footerShow"></base-footer>
+      </div>
+
   </div>
 
 </template>

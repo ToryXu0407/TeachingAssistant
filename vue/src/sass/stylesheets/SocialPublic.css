@@ -4,9 +4,9 @@ body {
   font-family: "Microsoft YaHei";
   padding: 0;
   margin: 0;
-  background: #F5F6F8 url(http://www.iplaystone.com/circle/img/bg.png) no-repeat center top;
+  background: url(../../img/timg.jpg) ;
   background-attachment: fixed;
-}
+}app
 
 /* line 10, ../sass/SocialPublic.scss */
 b {

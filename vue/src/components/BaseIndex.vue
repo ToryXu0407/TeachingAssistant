@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-header>
+    <el-header height="0px" width="0px">
       <el-carousel :interval="4000" type="card" height="300px" autoplay="autoplay" loop="loop">
         <el-carousel-item v-for="(list,i) in courses" :key="i">
           <router-link :to="{ name: 'courseDetail', params: {'courseId':list.id ,'onPage':0}}" >
@@ -10,10 +10,10 @@
       </el-carousel>
     </el-header>
     <el-container>
-    <el-aside style="width: 400px;margin-top: 260px;">
+    <el-aside style="width: 400px;margin-top: 315px;">
       <BaseForum></BaseForum>
     </el-aside>
-    <el-main style="width: 200px;margin-top: 260px;">
+    <el-main style="width: 200px;margin-top: 300px;">
       <BaseCourse style="margin-left: 100px;"></BaseCourse>
     </el-main>
     </el-container>

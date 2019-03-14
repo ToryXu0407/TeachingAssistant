@@ -1,5 +1,5 @@
 <template>
-  <div class="SocialIndexList" id="SocialIndexList" style="width:400px">
+  <div class="SocialIndexList" id="SocialIndexList" style="width:400px;">
     <a :href="'#/social'" style="font-size: 24px;font-weight: 600;">讨论社</a>
     <div class="IndexListCont">
       <ul>

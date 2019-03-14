@@ -9,22 +9,25 @@ import 'element-ui/lib/theme-chalk/index.css';
 import iView from 'iview';
 import locale from 'iview/dist/locale/en-US';
 import Moment from 'moment'
-
+import VideoPlayer from 'vue-video-player'
+import VueParticles from 'vue-particles'
 
 Vue.prototype.moment = Moment;
 var axios = require('axios')
 //本地配置
-axios.defaults.baseURL = 'http://localhost:8000'
+// axios.defaults.baseURL = 'http://localhost:8000'
 //服务器配置
-// axios.defaults.baseURL = 'https://yiqihappy.top/teachingAssistantWebsite'
+axios.defaults.baseURL = 'https://yiqihappy.top/teachingAssistantWebsite'
 //docker
 // axios.defaults.baseURL = 'http://120.79.213.75:8078/teachingAssistantWebsite'
 // 将API方法绑定到全局
 axios.defaults.withCredentials=true
-import VideoPlayer from 'vue-video-player'
+
 require('video.js/dist/video-js.css')
 require('vue-video-player/src/custom-theme.css')
+
 Vue.use(VideoPlayer)
+Vue.use(VueParticles)
 
 Vue.prototype.$axios = axios
 Vue.config.productionTip = false
