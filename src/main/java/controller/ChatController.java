@@ -101,38 +101,33 @@ public class ChatController extends BaseController{
             if(getParaToInt("pagesize")!=null)
                 pagesize = getParaToInt("pagesize");
             String sql = "select * from ta_chatroom where 1=1";
+            String addSql ="";
             //根据聊天室开启状态查询
             if(getParaToInt("status")!=null){
                 status = getParaToInt("status");
                 switch (status){
                     //未开始状态，开始时间大于当前时间
                     case 1:
-                        sql+=" and start_time>now() ";
+                        addSql+=" and start_time>now() ";
                         break;
                     //进行中状态，开始时间小于当前时间并且结束时间大于当前时间
                     case 0:
-                        sql+=" and start_time<now() and end_time>now()";
+                        addSql+=" and start_time<now() and end_time>now()";
                         break;
                     //已结束状态，结束时间小于当前时间
                     case 2:
-                        sql+=" and end_time<now()";
+                        addSql+=" and end_time<now()";
                         break;
                         default:
                             break;
                 }
             }
+            sql+=addSql;
             //根据查询内容搜索
             if(getPara("input")!=null&&!getPara("input").isEmpty()){
                 sql+=" and course_name like '%"+getPara("input")+"%'";
             }
-            String orderSql="";
-            //根据筛选条件热度/时间查询
-            if(getPara("order")!=null) {
-                if (getPara("order").equals("hot"))
-                    orderSql = " order by chats_count desc";
-            }else{
-                orderSql = " order by create_time desc";
-            }
+            String orderSql = " order by create_time desc";
             sql +=orderSql+" limit ?,?";
             List<ChatRoom> chatRooms = new ArrayList<>();
             List<Record> records = Db.use("ta")
@@ -155,7 +150,7 @@ public class ChatController extends BaseController{
                     chatRooms.add(chatRoom);
                 }
                 Record record = Db.use("ta")
-                        .findFirst("select count(*) as num from ta_chatroom");
+                        .findFirst("select count(*) as num from ta_chatroom where 1=1 "+addSql);
                 Long totalPage;
                 Long articleNum = record.getLong("num");
                 if(articleNum%pagesize==0)

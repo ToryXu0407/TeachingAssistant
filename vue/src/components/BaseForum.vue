@@ -1,7 +1,7 @@
 <template>
   <div class="SocialIndexList" id="SocialIndexList" style="width:400px;">
     <a :href="'#/social'" style="font-size: 24px;font-weight: 600;">讨论社</a>
-    <div class="IndexListCont">
+    <div class="IndexListCont" style="background-color: white">
       <ul>
         <li v-for="(list, i) in list" :data-listId="list.id" :name="list.id">
           <div class="Jitems">

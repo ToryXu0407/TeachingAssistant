@@ -364,7 +364,7 @@
         }, 1000);
       const s = document.createElement('script')
       s.type = 'text/javascript'
-      s.src = '//static.snail.com/js/stone/v2/statistics_ty_v2.source.js'
+      s.src = 'https://unpkg.com/wangeditor@3.1.1/release/wangEditor.min.js'
       document.body.appendChild(s)
       var editor = new E('#editorElem')
       editor.customConfig.menus = [

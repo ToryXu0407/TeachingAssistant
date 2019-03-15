@@ -41,8 +41,10 @@ public class ArticleController extends BaseController{
                 sql+=" and label like '%"+getPara("input")+"%'";
             }
             String orderSql="";
+            String addSql="";
             if(getPara("isSticky")!=null)
-                sql+=" and is_sticky='"+getPara("isSticky")+"'";
+                addSql=" and is_sticky='"+getPara("isSticky")+"'";
+            sql+=addSql;
             if(getPara("order")!=null) {
                 if (getPara("order").equals("hot"))
                     //暂时把热门的定义为回帖量最多的，之后改成最近某段时间最多的
@@ -83,7 +85,7 @@ public class ArticleController extends BaseController{
                     articles.add(article);
                 }
                 Record record = Db.use("ta")
-                        .findFirst("select count(*) as num from ta_article");
+                        .findFirst("select count(*) as num from ta_article where 1=1  "+addSql);
                 Long totalPage;
                 Long articleNum = record.getLong("num");
                 if(articleNum%pagesize==0)

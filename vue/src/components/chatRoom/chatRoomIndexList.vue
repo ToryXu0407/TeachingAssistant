@@ -118,6 +118,7 @@ export default {
       isJump: true,
       isSelectMask: false,
       userId:'',
+      teacherId:'',
     }
   },
   methods: {
@@ -126,34 +127,52 @@ export default {
     }),
     initializeWebRtc(chatRoomId,teacherId){
       this.setMeName(this.userId);
-      var userid = this.userId;
+      this.teacherId = teacherId;
       this.setMeName(this.userId);
       //不等于任课老师id，这里先做一个类似判断
-      if (userid === teacherId && userid !== '') {
-        window.webrtc = new SimpleWebRTC({
-          localVideoEl: '',
-          remoteVideosEl: '',
-          autoRequestMedia: true,
-          nick: this.userId
-        })
-      }else{
-        window.webrtc = new SimpleWebRTC({
-          localVideoEl: '',
-          remoteVideosEl: '',
-          autoRequestMedia: true,
-          media: {
-            video: false,
-            audio: false
-          },
-          nick: this.userId
-        })
-      }
-      this.$router.push({
-        name: 'chatRoomDetail2',
-        params: {
-          chatRoomId: chatRoomId
-        }
-      })
+      var vm = this;
+      let params = new URLSearchParams();
+      params.append('chatRoomId', chatRoomId);
+      this.$axios.post('/chat/setChatRoomId', params)
+        .then((successResponse) => {
+          if (successResponse.data.code === 200) {
+            var startTime = successResponse.data.data.startTime;
+            var endTime = successResponse.data.data.endTime;
+            var start_date = new Date(startTime);
+            var end_date = new Date(endTime);
+            var now = new Date();
+            if(vm.userId !==''){
+              if(start_date<now&&end_date>now){
+                if (vm.userId === vm.teacherId) {
+                  window.webrtc = new SimpleWebRTC({
+                    localVideoEl: '',
+                    remoteVideosEl: '',
+                    autoRequestMedia: true,
+                    nick: vm.userId
+                  })
+                } else {
+                  window.webrtc = new SimpleWebRTC({
+                    localVideoEl: '',
+                    remoteVideosEl: '',
+                    autoRequestMedia: true,
+                    media: {
+                      video: false,
+                      audio: false
+                    },
+                    nick: vm.userId
+                  })
+                }
+              }
+            }
+
+          }
+          this.$router.push({
+            name: 'chatRoomDetail2',
+            params: {
+              chatRoomId: chatRoomId
+            }
+          })
+          });
     },
     handleClose(done) {
       this.dialogVisible=false;
@@ -257,8 +276,8 @@ export default {
       let params = new URLSearchParams();
       params.append('page', page);
       params.append('pagesize', 10);
-      params.append('order',order);
-      params.append('status',status);
+      params.append('order',vm.order);
+      params.append('status',vm.current);
       params.append('input',this.input);
       this.$axios.post('/chat/getChatRooms', params)
         .then(function (res) {
