@@ -21,13 +21,13 @@ module.exports = {
       //   }
 		// 	},
       //服务器配置
-        '/':{
-          target: 'https://yiqihappy.top/teachingAssistantWebsite',
-          changeOrigin: true,
-          pathRewrite: {
-            '^/': ''
-          }
-        },
+      //   '/':{
+      //     target: 'https://yiqihappy.top/teachingAssistantWebsite',
+      //     changeOrigin: true,
+      //     pathRewrite: {
+      //       '^/': ''
+      //     }
+      //   },
       //docker
       // '/':{
       //   target: 'http://120.79.213.75:8078/teachingAssistantWebsite',

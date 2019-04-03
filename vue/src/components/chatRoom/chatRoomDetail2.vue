@@ -319,7 +319,7 @@
           //当聊天已结束,从数据库里获得所有数据并关闭定时器.
           this.isStarted = true;
           this.canChat = false;
-          if(typeof(window.webrtc.nick) != "undefined"){
+          if(typeof(window.webrtc) != "undefined"){
             window.webrtc.stopLocalVideo();
             window.webrtc.disconnect();
           }
@@ -400,7 +400,7 @@
                     src: vm.videoUrl
                   });
                 }else{
-                    window.webrtc.joinRoom(vm.chatRoomId+"fuck");
+                    window.webrtc.joinRoom(vm.chatRoomId+"hello");
                     window.webrtc.on('videoAdded', (video, peer) => {
                       vm.addPeer({video, peer})
                     })
@@ -616,10 +616,8 @@
       clearInterval(this.timer);
       this.ws.close();
       if(typeof(window.webrtc) != "undefined") {
-        if (typeof(window.webrtc.nick) != "undefined") {
           window.webrtc.stopLocalVideo();
           window.webrtc.disconnect();
-        }
       }
     }
   }

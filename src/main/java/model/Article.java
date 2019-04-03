@@ -3,6 +3,8 @@ package model;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 /**
  * @Author: toryxu
  * @Date: 2019/1/3 0003 14:29
@@ -11,7 +13,7 @@ import lombok.Setter;
  */
 @Setter
 @Getter
-public class Article {
+public class Article implements Serializable {
     //文章编号
     private int id;
 

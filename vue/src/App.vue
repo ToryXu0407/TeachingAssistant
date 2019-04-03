@@ -93,7 +93,7 @@ export default {
 }
 </script>
 
-<style >
+<style>
    @import './sass/stylesheets/SocialPublic.css';
   @import './css/base.css';
   @import './css/common.css';

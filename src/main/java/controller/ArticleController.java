@@ -7,10 +7,13 @@ import com.jfinal.plugin.activerecord.Record;
 import interceptor.PermissionChecker;
 import model.*;
 import org.apache.log4j.Logger;
+import redis.clients.jedis.Jedis;
+import util.SerializeUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -28,34 +31,117 @@ public class ArticleController extends BaseController{
     public void getArticle() {
         Result result;
         try {
-            int userid=0;
-            if(!String.valueOf(getSessionAttr(PermissionChecker.USER_ID)).equals("null"))
-                userid = getSessionAttr(PermissionChecker.USER_ID);
-            int page=0,pagesize=10;
-            if(getParaToInt("page")!=null)
-                page = getParaToInt("page")-1;
-            if(getParaToInt("pagesize")!=null)
-                pagesize = getParaToInt("pagesize");
-            String sql = "select * from ta_article where 1=1";
-            if(getPara("input")!=null){
-                sql+=" and label like '%"+getPara("input")+"%'";
-            }
-            String orderSql="";
-            String addSql="";
-            if(getPara("isSticky")!=null)
-                addSql=" and is_sticky='"+getPara("isSticky")+"'";
-            sql+=addSql;
-            if(getPara("order")!=null) {
-                if (getPara("order").equals("hot"))
-                    //暂时把热门的定义为回帖量最多的，之后改成最近某段时间最多的
-                    orderSql = " order by comment_count desc";
+            Jedis jedis = new Jedis("localhost");
+            Long articleLength = jedis.llen(("article").getBytes());
+            Long totalPage2 = Long.valueOf(jedis.get("articleTotalPage"));
+            if(articleLength>0&&totalPage2>=0){
+                List<Article> articles2 = new ArrayList<>();
+                for(int i =0;i<jedis.llen(("article").getBytes());i++){
+                    articles2.add((Article) SerializeUtil.unserialize(jedis.lpop(("article").getBytes())));
+                }
+                result = ResultFactory.buildSuccessArticleResult(articles2,totalPage2);
             }else{
-                orderSql=" order by create_time desc";
+                int userid=0;
+                if(!String.valueOf(getSessionAttr(PermissionChecker.USER_ID)).equals("null"))
+                    userid = getSessionAttr(PermissionChecker.USER_ID);
+                int page=0,pagesize=10;
+                if(getParaToInt("page")!=null)
+                    page = getParaToInt("page")-1;
+                if(getParaToInt("pagesize")!=null)
+                    pagesize = getParaToInt("pagesize");
+                String sql = "select * from ta_article where 1=1";
+                if(getPara("input")!=null){
+                    sql+=" and label like '%"+getPara("input")+"%'";
+                }
+                String orderSql="";
+                String addSql="";
+                if(getPara("isSticky")!=null)
+                    addSql=" and is_sticky='"+getPara("isSticky")+"'";
+                sql+=addSql;
+                if(getPara("order")!=null) {
+                    if (getPara("order").equals("hot"))
+                        //暂时把热门的定义为回帖量最多的，之后改成最近某段时间最多的
+                        orderSql = " order by comment_count desc";
+                }else{
+                    orderSql=" order by create_time desc";
+                }
+                sql +=orderSql+" limit ?,?";
+                List<Article> articles = new ArrayList<>();
+                List<Record> records = Db.use("ta")
+                        .find(sql,page*pagesize,pagesize);
+                //获得article、发布者信息和个人是否点赞信息
+                if (records.size() != 0) {
+                    for (Record record : records) {
+                        Article article = new Article();
+                        article.setId(record.getInt("id"));
+                        article.setUserId(record.getInt("user_id"));
+                        article.setCreateTime(record.get("create_time").toString());
+                        article.setIsSticky(record.getStr("is_sticky"));
+                        article.setLabel(record.getStr("label"));
+                        article.setContent(record.getStr("content"));
+                        article.setBrief(record.getStr("brief"));
+                        article.setViewCount(record.getInt("view_count"));
+                        article.setCommentCount(record.getInt("comment_count"));
+                        article.setVoteCount(record.getInt("vote_count"));
+                        Record record1 = Db.use("ta").
+                                findFirst("select * from ta_user where id="+record.getInt("user_id"));
+                        if(userid!=0){
+                            Record record2 = Db.use("ta").findFirst("select * from ta_vote where article_id=? and user_id=?",record.getInt("id"),userid);
+                            if(record2!=null)
+                                article.setIsVoted(true);
+                            else
+                                article.setIsVoted(false);
+                        }
+                        article.setUsername(record1.getStr("username"));
+                        article.setHeadImage(record1.getStr("head_image"));
+                        article.setNickname(record1.getStr("nickname"));
+                        articles.add(article);
+                        jedis.lpush("article".getBytes(),SerializeUtil.serialize(article));
+                    }
+                    Record record = Db.use("ta")
+                            .findFirst("select count(*) as num from ta_article where 1=1  "+addSql);
+                    Long totalPage;
+                    Long articleNum = record.getLong("num");
+                    if(articleNum%pagesize==0)
+                        totalPage = articleNum/pagesize;
+                    else
+                        totalPage = articleNum/pagesize+1;
+                    result = ResultFactory.buildSuccessArticleResult(articles,totalPage);
+                    jedis.set(("articleTotalPage"),totalPage+"");
+                }else
+                    result = ResultFactory.buildFailResult("null");
             }
-            sql +=orderSql+" limit ?,?";
+            }
+        catch(Exception e){
+            e.printStackTrace();
+            LOG.error(e.getMessage(), e);
+            result = ResultFactory.buildFailResult(e.getMessage());
+        }
+        renderJson(result);
+    }
+    /**
+     * 显示热门帖子
+     */
+    @UnCheckLogin
+    public void getHotArticle() {
+        Result result=null;
+        try {
+            int userid = 0;
+            if (!String.valueOf(getSessionAttr(PermissionChecker.USER_ID)).equals("null"))
+                userid = getSessionAttr(PermissionChecker.USER_ID);
+            int page = 0, pagesize = 10;
+//            Jedis jedis = new Jedis("localhost");
+
+            if (getParaToInt("page") != null)
+                page = getParaToInt("page") - 1;
+            if (getParaToInt("pagesize") != null)
+                pagesize = getParaToInt("pagesize");
+            String sql = "select * from ta_article where 1=1 order by comment_count desc";
+            //暂时把热门的定义为回帖量最多的，之后改成最近某段时间最多的
+//            String orderSql = orderSql = " order by comment_count desc";
             List<Article> articles = new ArrayList<>();
             List<Record> records = Db.use("ta")
-                    .find(sql,page*pagesize,pagesize);
+                    .find(sql, page * pagesize, pagesize);
             //获得article、发布者信息和个人是否点赞信息
             if (records.size() != 0) {
                 for (Record record : records) {
@@ -70,31 +156,15 @@ public class ArticleController extends BaseController{
                     article.setViewCount(record.getInt("view_count"));
                     article.setCommentCount(record.getInt("comment_count"));
                     article.setVoteCount(record.getInt("vote_count"));
-                    Record record1 = Db.use("ta").
-                            findFirst("select * from ta_user where id="+record.getInt("user_id"));
-                    if(userid!=0){
-                        Record record2 = Db.use("ta").findFirst("select * from ta_vote where article_id=? and user_id=?",record.getInt("id"),userid);
-                        if(record2!=null)
-                            article.setIsVoted(true);
-                        else
-                            article.setIsVoted(false);
-                    }
-                    article.setUsername(record1.getStr("username"));
-                    article.setHeadImage(record1.getStr("head_image"));
-                    article.setNickname(record1.getStr("nickname"));
                     articles.add(article);
+//                    jedis.lpush("hotarticles",article.getId()+"");
+//                    String hmset = jedis.hmset(article.getId(),article);
                 }
-                Record record = Db.use("ta")
-                        .findFirst("select count(*) as num from ta_article where 1=1  "+addSql);
-                Long totalPage;
-                Long articleNum = record.getLong("num");
-                if(articleNum%pagesize==0)
-                    totalPage = articleNum/pagesize;
-                else
-                    totalPage = articleNum/pagesize+1;
-                result = ResultFactory.buildSuccessArticleResult(articles,totalPage);
-            }else
+                result = ResultFactory.buildSuccessResult(articles);
+            }
+            else{
                 result = ResultFactory.buildFailResult("null");
+            }
         }catch(Exception e){
             e.printStackTrace();
             LOG.error(e.getMessage(), e);
@@ -102,7 +172,6 @@ public class ArticleController extends BaseController{
         }
         renderJson(result);
     }
-
     /**
      * 显示帖子内容
      */
